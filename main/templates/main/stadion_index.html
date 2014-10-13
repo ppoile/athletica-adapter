@@ -1,0 +1,9 @@
+{% if stadions_list %}
+    <ul>
+    {% for stadion in stadions_list %}
+        <li><a href="/main/stadion/{{ stadion.xstadion }}/">{{ stadion.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No stadions are available.</p>
+{% endif %}

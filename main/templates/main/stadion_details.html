@@ -1,0 +1,10 @@
+{% if stadion %}
+    <p>{{ stadion.name }}</p>
+    <ul>
+      <li>Id: {{ stadion.xstadion }}</li>
+      <li>Bahnen: {{ stadion.bahnen }}</li>
+      
+    </ul>
+{% else %}
+    <p>Stadion not available.</p>
+{% endif %}
