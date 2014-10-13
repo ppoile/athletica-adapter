@@ -1,5 +1,4 @@
-from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from main.models import Stadion
 
 def index(request):
@@ -11,9 +10,6 @@ def sindex(request):
     return render(request, "main/stadion_index.html", context)
 
 def sdetail(request, stadion_id):
-    try:
-        stadion = Stadion.objects.get(pk=stadion_id)
-    except Stadion.DoesNotExist:
-        raise Http404
+    stadion = get_object_or_404(Stadion, pk=stadion_id)
     context = dict(stadion=stadion)
     return render(request, "main/stadion_details.html", context)
