@@ -1,4 +1,5 @@
 {% if stadions_list %}
+    <h1>Stadien:</h1>
     <ul>
     {% for stadion in stadions_list %}
         <li><a href="/main/stadion/{{ stadion.xstadion }}/">{{ stadion.name }}</a></li>
