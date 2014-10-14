@@ -16,7 +16,7 @@ class Anlage(models.Model):
     xanlage = models.IntegerField(db_column='xAnlage', primary_key=True)  # Field name made lowercase.
     bezeichnung = models.CharField(db_column='Bezeichnung', max_length=20)  # Field name made lowercase.
     homologiert = models.CharField(db_column='Homologiert', max_length=1)  # Field name made lowercase.
-    xstadion = models.IntegerField(db_column='xStadion')  # Field name made lowercase.
+    xstadion = models.ForeignKey('Stadion', db_column='xStadion')
 
     class Meta:
         managed = False
