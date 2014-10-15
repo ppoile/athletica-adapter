@@ -18,9 +18,14 @@ class Anlage(models.Model):
     homologiert = models.CharField(db_column='Homologiert', max_length=1)  # Field name made lowercase.
     xstadion = models.ForeignKey('Stadion', db_column='xStadion')
 
+    def __str__(self):
+        return self.bezeichnung
+
     class Meta:
         managed = False
         db_table = 'anlage'
+        verbose_name_plural = "anlagen"
+        ordering = ["bezeichnung"]
 
 
 class Anmeldung(models.Model):
@@ -622,9 +627,13 @@ class Stadion(models.Model):
     ueber1000m = models.CharField(db_column='Ueber1000m', max_length=1)  # Field name made lowercase.
     halle = models.CharField(db_column='Halle', max_length=1)  # Field name made lowercase.
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         managed = False
         db_table = 'stadion'
+        verbose_name_plural = "stadien"
 
 
 class Staffel(models.Model):
