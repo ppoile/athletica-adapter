@@ -2,4 +2,11 @@
 <ul>
   <li>Id: {{ stadion.xstadion }}</li>
   <li>Bahnen: {{ stadion.bahnen }}</li>
+  <li>Anlagen:
+    <ul>
+      {% for anlage in anlagen %}
+      <li>{{ anlage}}</li>
+      {% endfor %}
+    </ul>
+  </li>
 </ul>

@@ -11,5 +11,6 @@ def sindex(request):
 
 def sdetail(request, stadion_id):
     stadion = get_object_or_404(Stadion, pk=stadion_id)
-    context = dict(stadion=stadion)
+    anlagen = [item.bezeichnung for item in stadion.anlage_set.all()]
+    context = dict(stadion=stadion, anlagen=anlagen)
     return render(request, "main/stadion_details.html", context)
