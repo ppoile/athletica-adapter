@@ -32,7 +32,7 @@ class Anmeldung(models.Model):
     bestleistungmk = models.FloatField(db_column='BestleistungMK')  # Field name made lowercase.
     vereinsinfo = models.CharField(db_column='Vereinsinfo', max_length=150)  # Field name made lowercase.
     xathlet = models.IntegerField(db_column='xAthlet')  # Field name made lowercase.
-    xmeeting = models.IntegerField(db_column='xMeeting')  # Field name made lowercase.
+    xmeeting = models.ForeignKey("Meeting", db_column='xMeeting')
     xkategorie = models.IntegerField(db_column='xKategorie', blank=True, null=True)  # Field name made lowercase.
     xteam = models.IntegerField(db_column='xTeam')  # Field name made lowercase.
     baseeffortmk = models.CharField(db_column='BaseEffortMK', max_length=1)  # Field name made lowercase.
