@@ -1,0 +1,10 @@
+{% if stadien %}
+    <h1>Stadien:</h1>
+    <ul>
+    {% for stadion in stadien %}
+        <li><a href="/stadion/{{ stadion.xstadion }}/">{{ stadion.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No stadions are available.</p>
+{% endif %}
