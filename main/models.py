@@ -384,6 +384,9 @@ class Kategorie(models.Model):
     aktiv = models.CharField(max_length=1)
     ukc = models.CharField(db_column='UKC', max_length=1, blank=True)  # Field name made lowercase.
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         managed = False
         db_table = 'kategorie'
