@@ -1,0 +1,10 @@
+{% if meetings %}
+    <h1>Meetings:</h1>
+    <ul>
+    {% for meeting in meetings %}
+        <li><a href="/meeting/{{ meeting.xmeeting }}/">{{ meeting.name }} ({{ meeting.datumvon.year }})</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No meetings are available.</p>
+{% endif %}
