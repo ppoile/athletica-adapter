@@ -8,7 +8,6 @@ def index(request):
 
 def detail(request, stadion_id):
     stadion = get_object_or_404(Stadion, pk=stadion_id)
-    anlagen = [item.bezeichnung for item in stadion.anlagen.all()]
-    context = dict(stadion=stadion, anlagen=anlagen)
+    context = dict(stadion=stadion)
     return render(request, "stadion/details.html", context)
 

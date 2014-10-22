@@ -5,7 +5,7 @@
   <li>Bahnen: {{ stadion.bahnen }}</li>
   <li>Anlagen:
     <ul>
-      {% for anlage in anlagen %}
+      {% for anlage in stadion.anlagen.all %}
       <li>{{ anlage}}</li>
       {% endfor %}
     </ul>
