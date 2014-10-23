@@ -2,7 +2,7 @@
     <h1>Stadien:</h1>
     <ul>
     {% for stadion in stadien %}
-        <li><a href="/stadion/{{ stadion.xstadion }}/">{{ stadion.name }}</a></li>
+        <li><a href="{% url 'index' stadion.xstadion %}/">{{ stadion.name }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
