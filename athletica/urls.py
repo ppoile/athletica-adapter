@@ -1,13 +1,10 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
-urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'athletica.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
-
+urlpatterns = patterns(
+    '',
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^main/', include('main.urls')),
-    url(r'^meeting/', include('meeting.urls')),
-    url(r'^stadion/', include('stadion.urls')),
+    url(r'^main/', include('main.urls', namespace="main")),
+    url(r'^meeting/', include('meeting.urls', namespace="meeting")),
+    url(r'^stadion/', include('stadion.urls', namespace="stadion")),
 )

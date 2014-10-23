@@ -6,5 +6,5 @@
   <li>Ort: {{ meeting.ort }}</li>
   <li>DatumVon: {{ meeting.datumvon }}</li>
   <li>DatumBis: {{ meeting.datumbis }}</li>
-  <li><a href="/meeting/{{ meeting.xmeeting }}/anmeldungen">Anmeldungen</a></li>
+  <li><a href="{% url 'meeting:anmeldungen' meeting.xmeeting %}">Anmeldungen</a></li>
 </ul>
