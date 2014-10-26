@@ -7,6 +7,7 @@ from stadion.models import Stadion
 
 class IndexView(generic.ListView):
     model = Stadion
+    context_object_name = "stadien"
     template_name = "stadion/index.html"
 
 class DetailView(generic.DetailView):
