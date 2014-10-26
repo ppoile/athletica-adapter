@@ -5,10 +5,9 @@ from django.views import generic
 from main.models import Anlage
 from stadion.models import Stadion
 
-def index(request):
-    stadien = Stadion.objects.all()
-    context = dict(stadien=stadien)
-    return render(request, "stadion/index.html", context)
+class IndexView(generic.ListView):
+    model = Stadion
+    template_name = "stadion/index.html"
 
 class DetailView(generic.DetailView):
     model = Stadion

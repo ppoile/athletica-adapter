@@ -1,7 +1,7 @@
-{% if stadien %}
+{% if object_list %}
     <h1>Stadien:</h1>
     <ul>
-    {% for stadion in stadien %}
+    {% for stadion in object_list %}
         <li><a href="{% url 'stadion:detail' stadion.xstadion %}">{{ stadion.name }}</a></li>
     {% endfor %}
     </ul>
