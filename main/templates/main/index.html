@@ -1,7 +1,7 @@
 {% if stadions_list %}
     <ul>
     {% for stadion in stadions_list %}
-        <li><a href="{% url 'index' stadion.xstadion %}/">{{ stadion.name }}</a></li>
+        <li><a href="{% url 'main:details' stadion.xstadion %}">{{ stadion.name }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
