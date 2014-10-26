@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.views import generic
 from main.models import Anlage
 from stadion.models import Stadion
 
@@ -9,10 +10,9 @@ def index(request):
     context = dict(stadien=stadien)
     return render(request, "stadion/index.html", context)
 
-def details(request, stadion_id):
-    stadion = get_object_or_404(Stadion, pk=stadion_id)
-    context = dict(stadion=stadion)
-    return render(request, "stadion/details.html", context)
+class DetailView(generic.DetailView):
+    model = Stadion
+    template_name = "stadion/detail.html"
 
 def vote(request, stadion_id):
     stadion = get_object_or_404(Stadion, pk=stadion_id)
