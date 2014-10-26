@@ -15,7 +15,7 @@ from django.db import models
 class Anlage(models.Model):
     xanlage = models.IntegerField(db_column='xAnlage', primary_key=True)  # Field name made lowercase.
     bezeichnung = models.CharField(db_column='Bezeichnung', max_length=20)  # Field name made lowercase.
-    homologiert = models.CharField(db_column='Homologiert', max_length=1)  # Field name made lowercase.
+    homologiert = models.CharField(db_column='Homologiert', max_length=1, choices=(('y', 'Yes'), ('n', 'No')), default='y')  # Field name made lowercase.
     stadion = models.ForeignKey('stadion.Stadion', db_column='xStadion', related_name="anlagen")
 
     def __str__(self):
