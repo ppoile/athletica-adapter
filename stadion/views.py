@@ -1,7 +1,8 @@
-from django.shortcuts import get_object_or_404, render
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.shortcuts import get_object_or_404, render
 from django.views import generic
+#from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from main.models import Anlage
 from stadion.models import Stadion
 
@@ -13,6 +14,19 @@ class IndexView(generic.ListView):
 class DetailView(generic.DetailView):
     model = Stadion
     template_name = "stadion/detail.html"
+
+class CreateView(generic.edit.CreateView):
+    model = Stadion
+    fields = ["name", "bahnen", "bahnengerade", "ueber1000m", "halle"]
+
+
+class UpdateView(generic.edit.UpdateView):
+    model = Stadion
+    fields = "__all__"
+
+class DeleteView(generic.edit.DeleteView):
+    model = Stadion
+    fields = "__all__"
 
 def vote(request, stadion_id):
     stadion = get_object_or_404(Stadion, pk=stadion_id)

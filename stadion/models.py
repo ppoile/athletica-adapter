@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.db import models
 
 class Stadion(models.Model):
@@ -10,6 +11,9 @@ class Stadion(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('stadion:index')
 
     class Meta:
         managed = False
