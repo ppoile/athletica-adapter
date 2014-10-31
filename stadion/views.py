@@ -6,25 +6,25 @@ from django.views import generic
 from main.models import Anlage
 from stadion.models import Stadion
 
-class IndexView(generic.ListView):
+class Index(generic.ListView):
     model = Stadion
     context_object_name = "stadien"
     template_name = "stadion/index.html"
 
-class DetailView(generic.DetailView):
+class Detail(generic.DetailView):
     model = Stadion
     template_name = "stadion/detail.html"
 
-class CreateView(generic.edit.CreateView):
+class Create(generic.edit.CreateView):
     model = Stadion
     fields = ["name", "bahnen", "bahnengerade", "ueber1000m", "halle"]
 
 
-class UpdateView(generic.edit.UpdateView):
+class Update(generic.edit.UpdateView):
     model = Stadion
     fields = "__all__"
 
-class DeleteView(generic.edit.DeleteView):
+class Delete(generic.edit.DeleteView):
     model = Stadion
     fields = "__all__"
 
