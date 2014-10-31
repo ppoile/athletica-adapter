@@ -10,7 +10,7 @@
 {% endif %}
 
 <h2>Anlagen:</h2>
-<form action="{% url 'stadion:vote' stadion.xstadion %}" method="post">
+<form action="{% url 'stadion:vote' stadion.id %}" method="post">
   {% csrf_token %}
   {% for anlage in stadion.anlagen.all %}
     <input type="radio" name="anlage" id="choice{{ forloop.counter }}" value="{{ anlage.xanlage }}" />

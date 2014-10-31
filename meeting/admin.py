@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from meeting.models import Meeting
+
+class MeetingAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(Meeting, MeetingAdmin)

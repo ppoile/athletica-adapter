@@ -1,7 +1,7 @@
 from django.db import models
 
 class Meeting(models.Model):
-    xmeeting = models.IntegerField(db_column='xMeeting', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xMeeting', primary_key=True)
     name = models.CharField(db_column='Name', max_length=60)  # Field name made lowercase.
     ort = models.CharField(db_column='Ort', max_length=20)  # Field name made lowercase.
     datumvon = models.DateField(db_column='DatumVon')  # Field name made lowercase.

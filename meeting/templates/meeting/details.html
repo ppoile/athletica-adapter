@@ -1,10 +1,10 @@
 <h1>{{ meeting.name }}</h1>
 <ul>
-  <li>Id: {{ meeting.xmeeting }}</li>
+  <li>Id: {{ meeting.id }}</li>
   <li>Meetingnummer: {{ meeting.nummer }}</li>
   <li>Organisator: {{ meeting.organisator }}</li>
   <li>Ort: {{ meeting.ort }}</li>
   <li>DatumVon: {{ meeting.datumvon }}</li>
   <li>DatumBis: {{ meeting.datumbis }}</li>
-  <li><a href="{% url 'meeting:anmeldungen' meeting.xmeeting %}">Anmeldungen</a></li>
+  <li><a href="{% url 'meeting:anmeldungen' meeting.id %}">Anmeldungen</a></li>
 </ul>

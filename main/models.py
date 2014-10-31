@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # This is an auto-generated Django model module.
 # You'll have to do the following manually to clean this up:
 #   * Rearrange models' order
@@ -13,12 +14,12 @@ from django.db import models
 
 
 class Anlage(models.Model):
-    xanlage = models.IntegerField(db_column='xAnlage', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xAnlage', primary_key=True)  # Field name made lowercase.
     bezeichnung = models.CharField(db_column='Bezeichnung', max_length=20)  # Field name made lowercase.
     homologiert = models.CharField(db_column='Homologiert', max_length=1, choices=(('y', 'Yes'), ('n', 'No')), default='y')  # Field name made lowercase.
     stadion = models.ForeignKey('stadion.Stadion', db_column='xStadion', related_name="anlagen")
 
-    def __str__(self):
+    def __unicode__(self):
         return self.bezeichnung
 
     class Meta:
@@ -29,7 +30,7 @@ class Anlage(models.Model):
 
 
 class Anmeldung(models.Model):
-    xanmeldung = models.IntegerField(db_column='xAnmeldung', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xAnmeldung', primary_key=True)  # Field name made lowercase.
     startnummer = models.IntegerField(db_column='Startnummer')  # Field name made lowercase.
     erstserie = models.CharField(db_column='Erstserie', max_length=1)  # Field name made lowercase.
     bezahlt = models.CharField(db_column='Bezahlt', max_length=1)  # Field name made lowercase.
@@ -46,6 +47,8 @@ class Anmeldung(models.Model):
     angemeldet = models.CharField(db_column='Angemeldet', max_length=1, blank=True)  # Field name made lowercase.
     vorjahrleistungmk = models.IntegerField(db_column='VorjahrLeistungMK', blank=True, null=True)  # Field name made lowercase.
 
+    def __unicode__(self):
+        return "%s: %s" % (self.meeting, self.athlet)
     class Meta:
         managed = False
         db_table = 'anmeldung'
@@ -53,14 +56,14 @@ class Anmeldung(models.Model):
 
 
 class Athlet(models.Model):
-    xathlet = models.IntegerField(db_column='xAthlet', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xAthlet', primary_key=True)  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=50)  # Field name made lowercase.
     vorname = models.CharField(db_column='Vorname', max_length=50)  # Field name made lowercase.
-    jahrgang = models.TextField(db_column='Jahrgang', blank=True)  # Field name made lowercase. This field type is a guess.
+    jahrgang = models.IntegerField(db_column='Jahrgang', blank=True)  # Field name made lowercase. This field type is a guess.
     verein = models.ForeignKey("Verein", db_column='xVerein', related_name="athleten")
     xverein2 = models.IntegerField(db_column='xVerein2')  # Field name made lowercase.
     lizenznummer = models.IntegerField(db_column='Lizenznummer')  # Field name made lowercase.
-    geschlecht = models.CharField(db_column='Geschlecht', max_length=1)  # Field name made lowercase.
+    geschlecht = models.CharField(db_column='Geschlecht', max_length=1, choices=(('m', 'Männlich'), ('w', 'Weiblich')))
     land = models.CharField(db_column='Land', max_length=3)  # Field name made lowercase.
     geburtstag = models.DateField(db_column='Geburtstag')  # Field name made lowercase.
     athleticagen = models.CharField(db_column='Athleticagen', max_length=1)  # Field name made lowercase.
@@ -73,16 +76,20 @@ class Athlet(models.Model):
     ort = models.CharField(db_column='Ort', max_length=50, blank=True)  # Field name made lowercase.
     email = models.CharField(db_column='Email', max_length=50, blank=True)  # Field name made lowercase.
 
-    def __str__(self):
-        return "%s %s" % (self.vorname, self.name)
+    def __unicode__(self):
+        value = "%s %s" % (self.vorname, self.name)
+        if self.verein:
+            value += " (%s)" % self.verein.name
+        return value
 
     class Meta:
         managed = False
         db_table = 'athlet'
+        verbose_name_plural = "athleten"
 
 
 class AuthGroup(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
+    id = models.AutoField(primary_key=True)
     name = models.CharField(unique=True, max_length=80)
 
     class Meta:
@@ -91,7 +98,7 @@ class AuthGroup(models.Model):
 
 
 class AuthGroupPermissions(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
+    id = models.AutoField(primary_key=True)
     group = models.ForeignKey(AuthGroup)
     permission = models.ForeignKey('AuthPermission')
 
@@ -101,7 +108,7 @@ class AuthGroupPermissions(models.Model):
 
 
 class AuthPermission(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
     content_type = models.ForeignKey('DjangoContentType')
     codename = models.CharField(max_length=100)
@@ -112,7 +119,7 @@ class AuthPermission(models.Model):
 
 
 class AuthUser(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
+    id = models.AutoField(primary_key=True)
     password = models.CharField(max_length=128)
     last_login = models.DateTimeField()
     is_superuser = models.IntegerField()
@@ -130,7 +137,7 @@ class AuthUser(models.Model):
 
 
 class AuthUserGroups(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
+    id = models.AutoField(primary_key=True)
     user = models.ForeignKey(AuthUser)
     group = models.ForeignKey(AuthGroup)
 
@@ -140,7 +147,7 @@ class AuthUserGroups(models.Model):
 
 
 class AuthUserUserPermissions(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
+    id = models.AutoField(primary_key=True)
     user = models.ForeignKey(AuthUser)
     permission = models.ForeignKey(AuthPermission)
 
@@ -162,7 +169,7 @@ class BaseAccount(models.Model):
 
 
 class BaseAthlete(models.Model):
-    id_athlete = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     license = models.IntegerField()
     license_paid = models.CharField(max_length=1)
     license_cat = models.CharField(max_length=4)
@@ -181,7 +188,7 @@ class BaseAthlete(models.Model):
 
 
 class BaseLog(models.Model):
-    id_log = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     type = models.CharField(max_length=50)
     update_time = models.DateTimeField()
     global_last_change = models.DateField()
@@ -192,7 +199,7 @@ class BaseLog(models.Model):
 
 
 class BasePerformance(models.Model):
-    id_performance = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     id_athlete = models.IntegerField()
     discipline = models.IntegerField()
     category = models.CharField(max_length=10)
@@ -213,7 +220,7 @@ class BasePerformance(models.Model):
 
 
 class BaseRelay(models.Model):
-    id_relay = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     is_athletica_gen = models.CharField(max_length=1)
     relay_name = models.CharField(max_length=255)
     category = models.CharField(max_length=10)
@@ -226,7 +233,7 @@ class BaseRelay(models.Model):
 
 
 class BaseSvm(models.Model):
-    id_svm = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     is_athletica_gen = models.CharField(max_length=1)
     svm_name = models.CharField(max_length=255)
     svm_category = models.CharField(max_length=10)
@@ -238,7 +245,7 @@ class BaseSvm(models.Model):
 
 
 class DisziplinDe(models.Model):
-    xdisziplin = models.IntegerField(db_column='xDisziplin', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xDisziplin', primary_key=True)
     kurzname = models.CharField(db_column='Kurzname', unique=True, max_length=15)  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=40)  # Field name made lowercase.
     anzeige = models.IntegerField(db_column='Anzeige')  # Field name made lowercase.
@@ -258,7 +265,7 @@ class DisziplinDe(models.Model):
 
 
 class DisziplinFr(models.Model):
-    xdisziplin = models.IntegerField(db_column='xDisziplin', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xDisziplin', primary_key=True)
     kurzname = models.CharField(db_column='Kurzname', unique=True, max_length=15)  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=40)  # Field name made lowercase.
     anzeige = models.IntegerField(db_column='Anzeige')  # Field name made lowercase.
@@ -278,7 +285,7 @@ class DisziplinFr(models.Model):
 
 
 class DisziplinIt(models.Model):
-    xdisziplin = models.IntegerField(db_column='xDisziplin', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xDisziplin', primary_key=True)
     kurzname = models.CharField(db_column='Kurzname', unique=True, max_length=15)  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=40)  # Field name made lowercase.
     anzeige = models.IntegerField(db_column='Anzeige')  # Field name made lowercase.
@@ -298,7 +305,7 @@ class DisziplinIt(models.Model):
 
 
 class DjangoAdminLog(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
+    id = models.AutoField(primary_key=True)
     action_time = models.DateTimeField()
     object_id = models.TextField(blank=True)
     object_repr = models.CharField(max_length=200)
@@ -313,7 +320,7 @@ class DjangoAdminLog(models.Model):
 
 
 class DjangoContentType(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     app_label = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
@@ -324,7 +331,7 @@ class DjangoContentType(models.Model):
 
 
 class DjangoMigrations(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
+    id = models.AutoField(primary_key=True)
     app = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
     applied = models.DateTimeField()
@@ -345,7 +352,7 @@ class DjangoSession(models.Model):
 
 
 class Faq(models.Model):
-    xfaq = models.IntegerField(db_column='xFaq', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xFaq', primary_key=True)
     frage = models.CharField(db_column='Frage', max_length=255)  # Field name made lowercase.
     antwort = models.TextField(db_column='Antwort')  # Field name made lowercase.
     zeigen = models.CharField(db_column='Zeigen', max_length=1)  # Field name made lowercase.
@@ -364,7 +371,7 @@ class Faq(models.Model):
 
 
 class Hoehe(models.Model):
-    xhoehe = models.IntegerField(db_column='xHoehe', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xHoehe', primary_key=True)
     hoehe = models.IntegerField(db_column='Hoehe')  # Field name made lowercase.
     xrunde = models.IntegerField(db_column='xRunde')  # Field name made lowercase.
     xserie = models.IntegerField(db_column='xSerie')  # Field name made lowercase.
@@ -375,7 +382,7 @@ class Hoehe(models.Model):
 
 
 class Kategorie(models.Model):
-    xkategorie = models.IntegerField(db_column='xKategorie', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xKategorie', primary_key=True)
     kurzname = models.CharField(db_column='Kurzname', unique=True, max_length=4)  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=30)  # Field name made lowercase.
     anzeige = models.IntegerField(db_column='Anzeige')  # Field name made lowercase.
@@ -385,16 +392,17 @@ class Kategorie(models.Model):
     aktiv = models.CharField(max_length=1)
     ukc = models.CharField(db_column='UKC', max_length=1, blank=True)  # Field name made lowercase.
 
-    def __str__(self):
+    def __unicode__(self):
         return self.name
 
     class Meta:
         managed = False
         db_table = 'kategorie'
+        verbose_name_plural = "kategorien"
 
 
 class KategorieSvm(models.Model):
-    xkategorie_svm = models.IntegerField(db_column='xKategorie_svm', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xKategorie_svm', primary_key=True)
     name = models.CharField(db_column='Name', max_length=100)  # Field name made lowercase.
     code = models.CharField(db_column='Code', max_length=5)  # Field name made lowercase.
 
@@ -408,9 +416,13 @@ class Land(models.Model):
     name = models.CharField(db_column='Name', max_length=100)  # Field name made lowercase.
     sortierwert = models.IntegerField(db_column='Sortierwert')  # Field name made lowercase.
 
+    def __unicode__(self):
+        return self.name
+
     class Meta:
         managed = False
         db_table = 'land'
+        verbose_name_plural = "länder"
 
 
 class Layout(models.Model):
@@ -451,7 +463,7 @@ class OmegaTyp(models.Model):
 
 
 class Region(models.Model):
-    xregion = models.IntegerField(db_column='xRegion', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xRegion', primary_key=True)
     name = models.CharField(db_column='Name', max_length=50)  # Field name made lowercase.
     anzeige = models.CharField(db_column='Anzeige', max_length=6)  # Field name made lowercase.
     sortierwert = models.IntegerField(db_column='Sortierwert')  # Field name made lowercase.
@@ -463,19 +475,20 @@ class Region(models.Model):
 
 
 class Resultat(models.Model):
-    xresultat = models.IntegerField(db_column='xResultat', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xResultat', primary_key=True)
     leistung = models.IntegerField(db_column='Leistung')  # Field name made lowercase.
     info = models.CharField(db_column='Info', max_length=5)  # Field name made lowercase.
     punkte = models.FloatField(db_column='Punkte')  # Field name made lowercase.
-    xserienstart = models.IntegerField(db_column='xSerienstart')  # Field name made lowercase.
+    serienstart = models.ForeignKey("Serienstart", db_column='xSerienstart')  # Field name made lowercase.
 
     class Meta:
         managed = False
         db_table = 'resultat'
+        verbose_name_plural = "resultate"
 
 
 class Runde(models.Model):
-    xrunde = models.IntegerField(db_column='xRunde', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xRunde', primary_key=True)
     datum = models.DateField(db_column='Datum')  # Field name made lowercase.
     startzeit = models.TimeField(db_column='Startzeit')  # Field name made lowercase.
     appellzeit = models.TimeField(db_column='Appellzeit')  # Field name made lowercase.
@@ -490,7 +503,7 @@ class Runde(models.Model):
     versuche = models.IntegerField(db_column='Versuche')  # Field name made lowercase.
     gruppe = models.CharField(db_column='Gruppe', max_length=2)  # Field name made lowercase.
     xrundentyp = models.IntegerField(db_column='xRundentyp', blank=True, null=True)  # Field name made lowercase.
-    xwettkampf = models.IntegerField(db_column='xWettkampf')  # Field name made lowercase.
+    wettkampf = models.ForeignKey("Wettkampf", db_column='xWettkampf')
     nurbestesresultat = models.CharField(db_column='nurBestesResultat', max_length=1)  # Field name made lowercase.
     statuschanged = models.CharField(db_column='StatusChanged', max_length=1)  # Field name made lowercase.
     endkampf = models.CharField(db_column='Endkampf', max_length=1)  # Field name made lowercase.
@@ -499,16 +512,23 @@ class Runde(models.Model):
     drehen = models.CharField(db_column='Drehen', max_length=20, blank=True)  # Field name made lowercase.
     statusuploadukc = models.IntegerField(db_column='StatusUploadUKC', blank=True, null=True)  # Field name made lowercase.
 
+    def __unicode__(self):
+        value = "%s" % self.wettkampf
+        if self.gruppe:
+            value = value[:-1] + ", Gruppe " + self.gruppe + value[-1:]
+        return value
+
     class Meta:
         managed = False
         db_table = 'runde'
+        verbose_name_plural = "runden"
 
 
 class Rundenlog(models.Model):
-    xrundenlog = models.IntegerField(db_column='xRundenlog', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xRundenlog', primary_key=True)
     zeit = models.DateTimeField(db_column='Zeit')  # Field name made lowercase.
     ereignis = models.CharField(db_column='Ereignis', max_length=255)  # Field name made lowercase.
-    xrunde = models.IntegerField(db_column='xRunde')  # Field name made lowercase.
+    runde = models.ForeignKey("Runde", db_column='xRunde')
 
     class Meta:
         managed = False
@@ -527,7 +547,7 @@ class Rundenset(models.Model):
 
 
 class RundentypDe(models.Model):
-    xrundentyp = models.IntegerField(db_column='xRundentyp', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xRundentyp', primary_key=True)
     typ = models.CharField(db_column='Typ', unique=True, max_length=2)  # Field name made lowercase.
     name = models.CharField(db_column='Name', unique=True, max_length=20)  # Field name made lowercase.
     wertung = models.IntegerField(db_column='Wertung', blank=True, null=True)  # Field name made lowercase.
@@ -539,7 +559,7 @@ class RundentypDe(models.Model):
 
 
 class RundentypFr(models.Model):
-    xrundentyp = models.IntegerField(db_column='xRundentyp', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xRundentyp', primary_key=True)
     typ = models.CharField(db_column='Typ', unique=True, max_length=2)  # Field name made lowercase.
     name = models.CharField(db_column='Name', unique=True, max_length=20)  # Field name made lowercase.
     wertung = models.IntegerField(db_column='Wertung', blank=True, null=True)  # Field name made lowercase.
@@ -551,7 +571,7 @@ class RundentypFr(models.Model):
 
 
 class RundentypIt(models.Model):
-    xrundentyp = models.IntegerField(db_column='xRundentyp', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xRundentyp', primary_key=True)
     typ = models.CharField(db_column='Typ', unique=True, max_length=2)  # Field name made lowercase.
     name = models.CharField(db_column='Name', unique=True, max_length=20)  # Field name made lowercase.
     wertung = models.IntegerField(db_column='Wertung', blank=True, null=True)  # Field name made lowercase.
@@ -563,30 +583,34 @@ class RundentypIt(models.Model):
 
 
 class Serie(models.Model):
-    xserie = models.IntegerField(db_column='xSerie', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xSerie', primary_key=True)
     bezeichnung = models.CharField(db_column='Bezeichnung', max_length=2)  # Field name made lowercase.
     wind = models.CharField(db_column='Wind', max_length=5, blank=True)  # Field name made lowercase.
     film = models.IntegerField(db_column='Film', blank=True, null=True)  # Field name made lowercase.
     status = models.IntegerField(db_column='Status')  # Field name made lowercase.
     handgestoppt = models.IntegerField(db_column='Handgestoppt')  # Field name made lowercase.
-    xrunde = models.IntegerField(db_column='xRunde')  # Field name made lowercase.
-    xanlage = models.IntegerField(db_column='xAnlage', blank=True, null=True)  # Field name made lowercase.
+    runde = models.ForeignKey("Runde", db_column='xRunde')  # Field name made lowercase.
+    anlage = models.ForeignKey("Anlage", db_column='xAnlage', blank=True, null=True)  # Field name made lowercase.
     tvname = models.CharField(db_column='TVName', max_length=70, blank=True)  # Field name made lowercase.
     maxathlet = models.IntegerField(db_column='MaxAthlet')  # Field name made lowercase.
+
+    def __unicode__(self):
+        return "%s (%s)" % (self.bezeichnung, self.runde)
 
     class Meta:
         managed = False
         db_table = 'serie'
+        verbose_name_plural = "serien"
 
 
 class Serienstart(models.Model):
-    xserienstart = models.IntegerField(db_column='xSerienstart', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xSerienstart', primary_key=True)
     position = models.IntegerField(db_column='Position')  # Field name made lowercase.
     bahn = models.IntegerField(db_column='Bahn')  # Field name made lowercase.
     rang = models.IntegerField(db_column='Rang')  # Field name made lowercase.
     qualifikation = models.IntegerField(db_column='Qualifikation')  # Field name made lowercase.
-    xserie = models.IntegerField(db_column='xSerie')  # Field name made lowercase.
-    xstart = models.IntegerField(db_column='xStart')  # Field name made lowercase.
+    serie = models.ForeignKey("Serie", db_column='xSerie')  # Field name made lowercase.
+    start = models.ForeignKey("Start", db_column='xStart')  # Field name made lowercase.
     rundezusammen = models.IntegerField(db_column='RundeZusammen')  # Field name made lowercase.
     bemerkung = models.CharField(db_column='Bemerkung', max_length=5)  # Field name made lowercase.
     position2 = models.IntegerField(db_column='Position2')  # Field name made lowercase.
@@ -600,7 +624,7 @@ class Serienstart(models.Model):
 
 
 class Staffel(models.Model):
-    xstaffel = models.IntegerField(db_column='xStaffel', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xStaffel', primary_key=True)
     name = models.CharField(db_column='Name', max_length=40)  # Field name made lowercase.
     xverein = models.IntegerField(db_column='xVerein')  # Field name made lowercase.
     xmeeting = models.IntegerField(db_column='xMeeting')  # Field name made lowercase.
@@ -626,17 +650,20 @@ class Staffelathlet(models.Model):
 
 
 class Start(models.Model):
-    xstart = models.IntegerField(db_column='xStart', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xStart', primary_key=True)
     anwesend = models.IntegerField(db_column='Anwesend')  # Field name made lowercase.
     bestleistung = models.IntegerField(db_column='Bestleistung')  # Field name made lowercase.
     bezahlt = models.CharField(db_column='Bezahlt', max_length=1)  # Field name made lowercase.
     erstserie = models.CharField(db_column='Erstserie', max_length=1)  # Field name made lowercase.
-    xwettkampf = models.IntegerField(db_column='xWettkampf')  # Field name made lowercase.
-    xanmeldung = models.IntegerField(db_column='xAnmeldung')  # Field name made lowercase.
-    xstaffel = models.IntegerField(db_column='xStaffel')  # Field name made lowercase.
+    wettkampf = models.ForeignKey("Wettkampf", db_column='xWettkampf')  # Field name made lowercase.
+    anmeldung = models.ForeignKey("Anmeldung", db_column='xAnmeldung')  # Field name made lowercase.
+    staffel = models.ForeignKey("Staffel", db_column='xStaffel')  # Field name made lowercase.
     baseeffort = models.CharField(db_column='BaseEffort', max_length=1)  # Field name made lowercase.
     vorjahrleistung = models.IntegerField(db_column='VorjahrLeistung', blank=True, null=True)  # Field name made lowercase.
     gruppe = models.CharField(db_column='Gruppe', max_length=2, blank=True)  # Field name made lowercase.
+
+    def __unicode__(self):
+        return "%s: %s" % (self.anmeldung, self.wettkampf)
 
     class Meta:
         managed = False
@@ -644,7 +671,7 @@ class Start(models.Model):
 
 
 class SysBackuptabellen(models.Model):
-    xbackup = models.IntegerField(db_column='xBackup', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xBackup', primary_key=True)
     tabelle = models.CharField(db_column='Tabelle', max_length=50, blank=True)  # Field name made lowercase.
     selectsql = models.TextField(db_column='SelectSQL', blank=True)  # Field name made lowercase.
 
@@ -654,7 +681,7 @@ class SysBackuptabellen(models.Model):
 
 
 class Team(models.Model):
-    xteam = models.IntegerField(db_column='xTeam', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xTeam', primary_key=True)
     name = models.CharField(db_column='Name', max_length=30)  # Field name made lowercase.
     athleticagen = models.CharField(db_column='Athleticagen', max_length=1)  # Field name made lowercase.
     xkategorie = models.IntegerField(db_column='xKategorie')  # Field name made lowercase.
@@ -668,7 +695,7 @@ class Team(models.Model):
 
 
 class Teamsm(models.Model):
-    xteamsm = models.IntegerField(db_column='xTeamsm', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xTeamsm', primary_key=True)
     name = models.CharField(db_column='Name', max_length=100)  # Field name made lowercase.
     xkategorie = models.IntegerField(db_column='xKategorie')  # Field name made lowercase.
     xverein = models.IntegerField(db_column='xVerein')  # Field name made lowercase.
@@ -694,13 +721,13 @@ class Teamsmathlet(models.Model):
 
 
 class Verein(models.Model):
-    xverein = models.IntegerField(db_column='xVerein', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xVerein', primary_key=True)
     name = models.CharField(db_column='Name', unique=True, max_length=100)  # Field name made lowercase.
     sortierwert = models.CharField(db_column='Sortierwert', max_length=100)  # Field name made lowercase.
     xcode = models.CharField(db_column='xCode', max_length=30)  # Field name made lowercase.
     geloescht = models.IntegerField(db_column='Geloescht')  # Field name made lowercase.
 
-    def __str__(self):
+    def __unicode__(self):
         return self.name
 
     class Meta:
@@ -709,7 +736,7 @@ class Verein(models.Model):
         verbose_name_plural = "vereine"
 
 class Videowand(models.Model):
-    xvideowand = models.IntegerField(db_column='xVideowand', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xVideowand', primary_key=True)
     xmeeting = models.IntegerField(db_column='xMeeting')  # Field name made lowercase.
     x = models.IntegerField(db_column='X')  # Field name made lowercase.
     y = models.IntegerField(db_column='Y')  # Field name made lowercase.
@@ -728,7 +755,7 @@ class Videowand(models.Model):
 
 
 class Wertungstabelle(models.Model):
-    xwertungstabelle = models.IntegerField(db_column='xWertungstabelle', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xWertungstabelle', primary_key=True)
     name = models.CharField(db_column='Name', max_length=255)  # Field name made lowercase.
 
     class Meta:
@@ -737,7 +764,7 @@ class Wertungstabelle(models.Model):
 
 
 class WertungstabellePunkte(models.Model):
-    xwertungstabelle_punkte = models.IntegerField(db_column='xWertungstabelle_Punkte', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xWertungstabelle_Punkte', primary_key=True)
     xwertungstabelle = models.IntegerField(db_column='xWertungstabelle')  # Field name made lowercase.
     xdisziplin = models.IntegerField(db_column='xDisziplin')  # Field name made lowercase.
     geschlecht = models.CharField(db_column='Geschlecht', max_length=1)  # Field name made lowercase.
@@ -750,7 +777,7 @@ class WertungstabellePunkte(models.Model):
 
 
 class Wettkampf(models.Model):
-    xwettkampf = models.IntegerField(db_column='xWettkampf', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xWettkampf', primary_key=True)
     typ = models.IntegerField(db_column='Typ')  # Field name made lowercase.
     haftgeld = models.FloatField(db_column='Haftgeld')  # Field name made lowercase.
     startgeld = models.FloatField(db_column='Startgeld')  # Field name made lowercase.
@@ -760,9 +787,9 @@ class Wettkampf(models.Model):
     info = models.CharField(db_column='Info', max_length=50, blank=True)  # Field name made lowercase.
     zeitmessung = models.IntegerField(db_column='Zeitmessung')  # Field name made lowercase.
     zeitmessungauto = models.IntegerField(db_column='ZeitmessungAuto')  # Field name made lowercase.
-    xkategorie = models.IntegerField(db_column='xKategorie')  # Field name made lowercase.
+    kategorie = models.ForeignKey("Kategorie", db_column='xKategorie')  # Field name made lowercase.
     xdisziplin = models.IntegerField(db_column='xDisziplin')  # Field name made lowercase.
-    xmeeting = models.IntegerField(db_column='xMeeting')  # Field name made lowercase.
+    meeting = models.ForeignKey("meeting.Meeting", db_column='xMeeting')  # Field name made lowercase.
     mehrkampfcode = models.IntegerField(db_column='Mehrkampfcode')  # Field name made lowercase.
     mehrkampfende = models.IntegerField(db_column='Mehrkampfende')  # Field name made lowercase.
     mehrkampfreihenfolge = models.IntegerField(db_column='Mehrkampfreihenfolge')  # Field name made lowercase.
@@ -770,13 +797,17 @@ class Wettkampf(models.Model):
     onlineid = models.IntegerField(db_column='OnlineId')  # Field name made lowercase.
     typaenderung = models.CharField(db_column='TypAenderung', max_length=50)  # Field name made lowercase.
 
+    def __unicode__(self):
+        return "%s (%s, %s)" % (self.punkteformel, self.info, self.kategorie)
+
     class Meta:
         managed = False
         db_table = 'wettkampf'
+        verbose_name_plural = "wettkämpfe"
 
 
 class Zeitmessung(models.Model):
-    xzeitmessung = models.IntegerField(db_column='xZeitmessung', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='xZeitmessung', primary_key=True)
     omega_verbindung = models.CharField(db_column='OMEGA_Verbindung', max_length=5)  # Field name made lowercase.
     omega_pfad = models.CharField(db_column='OMEGA_Pfad', max_length=255)  # Field name made lowercase.
     omega_server = models.CharField(db_column='OMEGA_Server', max_length=255)  # Field name made lowercase.
