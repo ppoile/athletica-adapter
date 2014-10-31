@@ -1,6 +1,8 @@
-<h1>{{ stadion.name }}</h1>
+{% load inplace_edit %}
+
+<h1>{% inplace_edit "stadion.name" %}</h1>
 <ul>
-  <li>Id: {{ stadion.xstadion }}</li>
+  <li>Id: {{ stadion.id }}</li>
   <li>Bahnen (gerade): {{ stadion.bahnengerade }}</li>
   <li>Bahnen: {{ stadion.bahnen }}</li>
 </ul>

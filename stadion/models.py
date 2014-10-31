@@ -2,7 +2,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 
 class Stadion(models.Model):
-    xstadion = models.IntegerField(db_column='xStadion', primary_key=True)  # Field name made lowercase.
+    id = models.IntegerField(db_column='xStadion', primary_key=True)  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=50)  # Field name made lowercase.
     bahnen = models.IntegerField(db_column='Bahnen')  # Field name made lowercase.
     bahnengerade = models.IntegerField(db_column='BahnenGerade')  # Field name made lowercase.
