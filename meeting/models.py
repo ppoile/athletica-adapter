@@ -12,7 +12,7 @@ class Meeting(models.Model):
     organisator = models.CharField(db_column='Organisator', max_length=200)  # Field name made lowercase.
     zeitmessung = models.CharField(db_column='Zeitmessung', max_length=5)  # Field name made lowercase.
     passwort = models.CharField(db_column='Passwort', max_length=50)  # Field name made lowercase.
-    xstadion = models.IntegerField(db_column='xStadion')  # Field name made lowercase.
+    stadion = models.ForeignKey("stadion.Stadion", db_column='xStadion', related_name="meetings")  # Field name made lowercase.
     xcontrol = models.IntegerField(db_column='xControl')  # Field name made lowercase.
     startgeld = models.FloatField(db_column='Startgeld')  # Field name made lowercase.
     startgeldreduktion = models.FloatField(db_column='StartgeldReduktion')  # Field name made lowercase.
