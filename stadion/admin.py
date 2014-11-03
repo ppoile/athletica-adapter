@@ -1,7 +1,9 @@
 from django.contrib import admin
 
-from main.models import Anlage
+from stadion.models import Anlage
 from stadion.models import Stadion
+
+admin.site.register(Anlage)
 
 class AnlageInline(admin.TabularInline):
     model = Anlage

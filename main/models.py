@@ -13,22 +13,6 @@ from __future__ import unicode_literals
 from django.db import models
 
 
-class Anlage(models.Model):
-    id = models.AutoField(db_column='xAnlage', primary_key=True)  # Field name made lowercase.
-    bezeichnung = models.CharField(db_column='Bezeichnung', max_length=20)  # Field name made lowercase.
-    homologiert = models.CharField(db_column='Homologiert', max_length=1, choices=(('y', 'Yes'), ('n', 'No')), default='y')  # Field name made lowercase.
-    stadion = models.ForeignKey('stadion.Stadion', db_column='xStadion', related_name="anlagen")
-
-    def __unicode__(self):
-        return self.bezeichnung
-
-    class Meta:
-        managed = False
-        db_table = 'anlage'
-        verbose_name_plural = "anlagen"
-        ordering = ["bezeichnung"]
-
-
 class Anmeldung(models.Model):
     id = models.AutoField(db_column='xAnmeldung', primary_key=True)  # Field name made lowercase.
     startnummer = models.IntegerField(db_column='Startnummer')  # Field name made lowercase.
@@ -590,7 +574,7 @@ class Serie(models.Model):
     status = models.IntegerField(db_column='Status')  # Field name made lowercase.
     handgestoppt = models.IntegerField(db_column='Handgestoppt')  # Field name made lowercase.
     runde = models.ForeignKey("Runde", db_column='xRunde')  # Field name made lowercase.
-    anlage = models.ForeignKey("Anlage", db_column='xAnlage', blank=True, null=True)  # Field name made lowercase.
+    anlage = models.ForeignKey("stadion.Anlage", db_column='xAnlage', blank=True, null=True)  # Field name made lowercase.
     tvname = models.CharField(db_column='TVName', max_length=70, blank=True)  # Field name made lowercase.
     maxathlet = models.IntegerField(db_column='MaxAthlet')  # Field name made lowercase.
 

@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.views import generic
 #from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from main.models import Anlage
+from stadion.models import Anlage
 from stadion.models import Stadion
 
 class Index(generic.ListView):

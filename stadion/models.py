@@ -1,13 +1,35 @@
 from django.core.urlresolvers import reverse
 from django.db import models
 
+class Anlage(models.Model):
+    id = models.AutoField(db_column='xAnlage', primary_key=True)
+    bezeichnung = models.CharField(db_column='Bezeichnung', max_length=20)
+    homologiert = models.CharField(db_column='Homologiert', max_length=1,
+                                   choices=(('y', 'Yes'), ('n', 'No')),
+                                   default='y')
+    stadion = models.ForeignKey('Stadion', db_column='xStadion',
+                                related_name="anlagen")
+
+    def __unicode__(self):
+        return self.bezeichnung
+
+    class Meta:
+        managed = False
+        db_table = 'anlage'
+        verbose_name_plural = "anlagen"
+        ordering = ["bezeichnung"]
+
+
 class Stadion(models.Model):
     id = models.AutoField(db_column='xStadion', primary_key=True)
-    name = models.CharField(db_column='Name', max_length=50)  # Field name made lowercase.
-    bahnen = models.IntegerField(db_column='Bahnen')  # Field name made lowercase.
-    bahnengerade = models.IntegerField(db_column='BahnenGerade')  # Field name made lowercase.
-    ueber1000m = models.CharField(db_column='Ueber1000m', max_length=1, choices=(('y', True), ('n', False)), default='n')  # Field name made lowercase.
-    halle = models.CharField(db_column='Halle', max_length=1, choices=(('y', True), ('n', False)), default='n')
+    name = models.CharField(db_column='Name', max_length=50)
+    bahnen = models.IntegerField(db_column='Bahnen')
+    bahnengerade = models.IntegerField(db_column='BahnenGerade')
+    ueber1000m = models.CharField(db_column='Ueber1000m', max_length=1,
+                                  choices=(('y', True), ('n', False)),
+                                  default='n')
+    halle = models.CharField(db_column='Halle', max_length=1,
+                             choices=(('y', True), ('n', False)), default='n')
 
     def __str__(self):
         return self.name
