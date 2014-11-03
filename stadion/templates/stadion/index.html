@@ -1,12 +1,12 @@
+<h1>Stadien:</h1>
 {% if stadien %}
-    <h1>Stadien:</h1>
-    <ul>
+  <ul>
     {% for stadion in stadien %}
-        <li><a href="{% url 'stadion:detail' stadion.id %}">{{ stadion.name }}</a></li>
+      <li><a href="{% url 'stadion:detail' stadion.id %}">{{ stadion.name }}</a></li>
     {% endfor %}
-    </ul>
+  </ul>
 {% else %}
-    <p>No stadions are available.</p>
+  <p>No stadions are available.</p>
 {% endif %}
 
 <form action="{% url 'stadion:add' %}" method="get">
