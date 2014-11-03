@@ -21,7 +21,8 @@ class Detail(generic.DetailView):
 
 class Delete(generic.edit.DeleteView):
     model = Stadion
-    fields = "__all__"
+    template_name = "stadion/confirm_delete.html"
+    success_url = reverse_lazy("stadion:index")
 
 class Update(generic.edit.UpdateView):
     model = Stadion
