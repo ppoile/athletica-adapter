@@ -8,3 +8,8 @@
 {% else %}
     <p>No stadions are available.</p>
 {% endif %}
+
+<form action="{% url 'stadion:add' %}" method="get">
+  {% csrf_token %}
+  <input type="submit" value="Add new Stadion..." />
+</form>
