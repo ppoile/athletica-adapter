@@ -1,15 +1,15 @@
 from django.shortcuts import get_object_or_404, render
+from django.views import generic
 from meeting.models import Meeting
 
-def index(request):
-    meetings = Meeting.objects.all()
-    context = dict(meetings=meetings)
-    return render(request, "meeting/index.html", context)
+class Index(generic.ListView):
+    model = Meeting
+    context_object_name = "meetings"
+    template_name = "meeting/index.html"
 
-def details(request, meeting_id):
-    meeting = get_object_or_404(Meeting, pk=meeting_id)
-    context = dict(meeting=meeting)
-    return render(request, "meeting/details.html", context)
+class Detail(generic.DetailView):
+    model = Meeting
+    template_name = "meeting/detail.html"
 
 def anmeldungen(request, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id)
