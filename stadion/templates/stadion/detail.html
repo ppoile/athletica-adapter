@@ -5,6 +5,11 @@
   <li>Bahnen: {{ stadion.bahnen }}</li>
 </ul>
 
+<form action="{% url 'stadion:delete' stadion.id %}" method="post">
+  {% csrf_token %}
+  <input type="submit" value="Delete" />
+</form>
+
 {% if error_message %}
   <p><strong>{{ error_message }}</strong></p>
 {% endif %}
