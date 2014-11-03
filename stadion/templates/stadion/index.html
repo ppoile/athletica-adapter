@@ -1,6 +1,6 @@
 {% extends "base.html" %}
-
 {% block content %}
+
 <h1>Stadien:</h1>
 {% if stadien %}
   <ul>
@@ -16,4 +16,7 @@
   {% csrf_token %}
   <input type="submit" value="Add new Stadion..." />
 </form>
+
+<a href="{% url 'root-index' %}">Back</a>
+
 {% endblock %}
