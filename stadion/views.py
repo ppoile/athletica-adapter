@@ -11,20 +11,19 @@ class Index(generic.ListView):
     context_object_name = "stadien"
     template_name = "stadion/index.html"
 
-class Detail(generic.DetailView):
-    model = Stadion
-    template_name = "stadion/detail.html"
-
 class Create(generic.edit.CreateView):
     model = Stadion
     fields = ["name", "bahnen", "bahnengerade", "ueber1000m", "halle"]
 
+class Detail(generic.DetailView):
+    model = Stadion
+    template_name = "stadion/detail.html"
 
-class Update(generic.edit.UpdateView):
+class Delete(generic.edit.DeleteView):
     model = Stadion
     fields = "__all__"
 
-class Delete(generic.edit.DeleteView):
+class Update(generic.edit.UpdateView):
     model = Stadion
     fields = "__all__"
 
