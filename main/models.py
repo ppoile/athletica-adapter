@@ -487,7 +487,7 @@ class Runde(models.Model):
     versuche = models.IntegerField(db_column='Versuche')  # Field name made lowercase.
     gruppe = models.CharField(db_column='Gruppe', max_length=2)  # Field name made lowercase.
     xrundentyp = models.IntegerField(db_column='xRundentyp', blank=True, null=True)  # Field name made lowercase.
-    wettkampf = models.ForeignKey("Wettkampf", db_column='xWettkampf')
+    wettkampf = models.ForeignKey("Wettkampf", db_column='xWettkampf', related_name="runden")
     nurbestesresultat = models.CharField(db_column='nurBestesResultat', max_length=1)  # Field name made lowercase.
     statuschanged = models.CharField(db_column='StatusChanged', max_length=1)  # Field name made lowercase.
     endkampf = models.CharField(db_column='Endkampf', max_length=1)  # Field name made lowercase.
@@ -573,7 +573,7 @@ class Serie(models.Model):
     film = models.IntegerField(db_column='Film', blank=True, null=True)  # Field name made lowercase.
     status = models.IntegerField(db_column='Status')  # Field name made lowercase.
     handgestoppt = models.IntegerField(db_column='Handgestoppt')  # Field name made lowercase.
-    runde = models.ForeignKey("Runde", db_column='xRunde')  # Field name made lowercase.
+    runde = models.ForeignKey("Runde", db_column='xRunde', related_name="serien")
     anlage = models.ForeignKey("stadion.Anlage", db_column='xAnlage', blank=True, null=True)  # Field name made lowercase.
     tvname = models.CharField(db_column='TVName', max_length=70, blank=True)  # Field name made lowercase.
     maxathlet = models.IntegerField(db_column='MaxAthlet')  # Field name made lowercase.
@@ -773,7 +773,7 @@ class Wettkampf(models.Model):
     zeitmessungauto = models.IntegerField(db_column='ZeitmessungAuto')  # Field name made lowercase.
     kategorie = models.ForeignKey("Kategorie", db_column='xKategorie')  # Field name made lowercase.
     xdisziplin = models.IntegerField(db_column='xDisziplin')  # Field name made lowercase.
-    meeting = models.ForeignKey("meeting.Meeting", db_column='xMeeting')  # Field name made lowercase.
+    meeting = models.ForeignKey("meeting.Meeting", db_column='xMeeting', related_name="wettkaempfe")
     mehrkampfcode = models.IntegerField(db_column='Mehrkampfcode')  # Field name made lowercase.
     mehrkampfende = models.IntegerField(db_column='Mehrkampfende')  # Field name made lowercase.
     mehrkampfreihenfolge = models.IntegerField(db_column='Mehrkampfreihenfolge')  # Field name made lowercase.
