@@ -593,7 +593,7 @@ class Serienstart(models.Model):
     bahn = models.IntegerField(db_column='Bahn')  # Field name made lowercase.
     rang = models.IntegerField(db_column='Rang')  # Field name made lowercase.
     qualifikation = models.IntegerField(db_column='Qualifikation')  # Field name made lowercase.
-    serie = models.ForeignKey("Serie", db_column='xSerie')  # Field name made lowercase.
+    serie = models.ForeignKey("Serie", db_column='xSerie', related_name="serienstarts")
     start = models.ForeignKey("Start", db_column='xStart')  # Field name made lowercase.
     rundezusammen = models.IntegerField(db_column='RundeZusammen')  # Field name made lowercase.
     bemerkung = models.CharField(db_column='Bemerkung', max_length=5)  # Field name made lowercase.
@@ -639,8 +639,8 @@ class Start(models.Model):
     bestleistung = models.IntegerField(db_column='Bestleistung')  # Field name made lowercase.
     bezahlt = models.CharField(db_column='Bezahlt', max_length=1)  # Field name made lowercase.
     erstserie = models.CharField(db_column='Erstserie', max_length=1)  # Field name made lowercase.
-    wettkampf = models.ForeignKey("Wettkampf", db_column='xWettkampf')  # Field name made lowercase.
-    anmeldung = models.ForeignKey("Anmeldung", db_column='xAnmeldung')  # Field name made lowercase.
+    wettkampf = models.ForeignKey("Wettkampf", db_column='xWettkampf', related_name="starts")
+    anmeldung = models.ForeignKey("Anmeldung", db_column='xAnmeldung', related_name="starts")
     staffel = models.ForeignKey("Staffel", db_column='xStaffel')  # Field name made lowercase.
     baseeffort = models.CharField(db_column='BaseEffort', max_length=1)  # Field name made lowercase.
     vorjahrleistung = models.IntegerField(db_column='VorjahrLeistung', blank=True, null=True)  # Field name made lowercase.
