@@ -72,74 +72,6 @@ class Athlet(models.Model):
         verbose_name_plural = "athleten"
 
 
-class AuthGroup(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(unique=True, max_length=80)
-
-    class Meta:
-        managed = False
-        db_table = 'auth_group'
-
-
-class AuthGroupPermissions(models.Model):
-    id = models.AutoField(primary_key=True)
-    group = models.ForeignKey(AuthGroup)
-    permission = models.ForeignKey('AuthPermission')
-
-    class Meta:
-        managed = False
-        db_table = 'auth_group_permissions'
-
-
-class AuthPermission(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=50)
-    content_type = models.ForeignKey('DjangoContentType')
-    codename = models.CharField(max_length=100)
-
-    class Meta:
-        managed = False
-        db_table = 'auth_permission'
-
-
-class AuthUser(models.Model):
-    id = models.AutoField(primary_key=True)
-    password = models.CharField(max_length=128)
-    last_login = models.DateTimeField()
-    is_superuser = models.IntegerField()
-    username = models.CharField(unique=True, max_length=30)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
-    email = models.CharField(max_length=75)
-    is_staff = models.IntegerField()
-    is_active = models.IntegerField()
-    date_joined = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'auth_user'
-
-
-class AuthUserGroups(models.Model):
-    id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(AuthUser)
-    group = models.ForeignKey(AuthGroup)
-
-    class Meta:
-        managed = False
-        db_table = 'auth_user_groups'
-
-
-class AuthUserUserPermissions(models.Model):
-    id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(AuthUser)
-    permission = models.ForeignKey(AuthPermission)
-
-    class Meta:
-        managed = False
-        db_table = 'auth_user_user_permissions'
-
-
 class BaseAccount(models.Model):
     account_code = models.CharField(max_length=30)
     account_name = models.CharField(max_length=255)
@@ -286,53 +218,6 @@ class DisziplinIt(models.Model):
     class Meta:
         managed = False
         db_table = 'disziplin_it'
-
-
-class DjangoAdminLog(models.Model):
-    id = models.AutoField(primary_key=True)
-    action_time = models.DateTimeField()
-    object_id = models.TextField(blank=True)
-    object_repr = models.CharField(max_length=200)
-    action_flag = models.IntegerField()
-    change_message = models.TextField()
-    content_type = models.ForeignKey('DjangoContentType', blank=True, null=True)
-    user = models.ForeignKey(AuthUser)
-
-    class Meta:
-        managed = False
-        db_table = 'django_admin_log'
-
-
-class DjangoContentType(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=100)
-    app_label = models.CharField(max_length=100)
-    model = models.CharField(max_length=100)
-
-    class Meta:
-        managed = False
-        db_table = 'django_content_type'
-
-
-class DjangoMigrations(models.Model):
-    id = models.AutoField(primary_key=True)
-    app = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    applied = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'django_migrations'
-
-
-class DjangoSession(models.Model):
-    session_key = models.CharField(primary_key=True, max_length=40)
-    session_data = models.TextField()
-    expire_date = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'django_session'
 
 
 class Faq(models.Model):
@@ -652,16 +537,6 @@ class Start(models.Model):
     class Meta:
         managed = False
         db_table = 'start'
-
-
-class SysBackuptabellen(models.Model):
-    id = models.AutoField(db_column='xBackup', primary_key=True)
-    tabelle = models.CharField(db_column='Tabelle', max_length=50, blank=True)  # Field name made lowercase.
-    selectsql = models.TextField(db_column='SelectSQL', blank=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'sys_backuptabellen'
 
 
 class Team(models.Model):
