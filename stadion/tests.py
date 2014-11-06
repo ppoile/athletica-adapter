@@ -2,7 +2,6 @@ from django.test import TestCase
 from stadion.models import Anlage
 from stadion.models import Stadion
 
-#Meeting.objects.get(id=2).wettkaempfe.first().runden.first().serie_set.first().serienstart_set.first().start.anmeldung.athlet.name
 
 class AnlagenTests(TestCase):
     def test_defaults(self):
