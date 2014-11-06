@@ -32,7 +32,8 @@ class Anmeldung(models.Model):
     vorjahrleistungmk = models.IntegerField(db_column='VorjahrLeistungMK', blank=True, null=True)  # Field name made lowercase.
 
     def __unicode__(self):
-        return "%s: %s" % (self.meeting, self.athlet)
+        return "%s %s" % (self.startnummer, self.athlet)
+
     class Meta:
         managed = False
         db_table = 'anmeldung'
@@ -61,10 +62,7 @@ class Athlet(models.Model):
     email = models.CharField(db_column='Email', max_length=50, blank=True)  # Field name made lowercase.
 
     def __unicode__(self):
-        value = "%s %s" % (self.vorname, self.name)
-        if self.verein:
-            value += " (%s)" % self.verein.name
-        return value
+        return "%s %s" % (self.vorname, self.name)
 
     class Meta:
         managed = False
@@ -348,7 +346,7 @@ class Resultat(models.Model):
     leistung = models.IntegerField(db_column='Leistung')  # Field name made lowercase.
     info = models.CharField(db_column='Info', max_length=5)  # Field name made lowercase.
     punkte = models.FloatField(db_column='Punkte')  # Field name made lowercase.
-    serienstart = models.ForeignKey("Serienstart", db_column='xSerienstart')  # Field name made lowercase.
+    serienstart = models.ForeignKey("Serienstart", db_column='xSerienstart', related_name="resultat")  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -479,7 +477,7 @@ class Serienstart(models.Model):
     rang = models.IntegerField(db_column='Rang')  # Field name made lowercase.
     qualifikation = models.IntegerField(db_column='Qualifikation')  # Field name made lowercase.
     serie = models.ForeignKey("Serie", db_column='xSerie', related_name="serienstarts")
-    start = models.ForeignKey("Start", db_column='xStart')  # Field name made lowercase.
+    start = models.ForeignKey("Start", db_column='xStart', related_name="serienstart")
     rundezusammen = models.IntegerField(db_column='RundeZusammen')  # Field name made lowercase.
     bemerkung = models.CharField(db_column='Bemerkung', max_length=5)  # Field name made lowercase.
     position2 = models.IntegerField(db_column='Position2')  # Field name made lowercase.
@@ -531,8 +529,8 @@ class Start(models.Model):
     vorjahrleistung = models.IntegerField(db_column='VorjahrLeistung', blank=True, null=True)  # Field name made lowercase.
     gruppe = models.CharField(db_column='Gruppe', max_length=2, blank=True)  # Field name made lowercase.
 
-    def __unicode__(self):
-        return "%s: %s" % (self.anmeldung, self.wettkampf)
+    #def __unicode__(self):
+    #    return "%s: %s" % (self.anmeldung, self.wettkampf)
 
     class Meta:
         managed = False
@@ -657,7 +655,7 @@ class Wettkampf(models.Model):
     typaenderung = models.CharField(db_column='TypAenderung', max_length=50)  # Field name made lowercase.
 
     def __unicode__(self):
-        return "%s (%s, %s)" % (self.punkteformel, self.info, self.kategorie)
+        return "%s (%s)" % (self.punkteformel, self.info)
 
     class Meta:
         managed = False
