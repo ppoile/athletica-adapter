@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.views import generic
 from meeting.models import Meeting
+from main.models import Start
 
 class Index(generic.ListView):
     model = Meeting
@@ -32,3 +33,26 @@ def wettkaempfe(request, meeting_id):
     context = dict(meeting_id=meeting_id, meeting_name=meeting_name,
                    wettkaempfe=wettkaempfe)
     return render(request, "meeting/wettkaempfe.html", context)
+
+
+def rangliste(request, meeting_id, wettkampf_info, kategorie_name):
+    meeting_starts = Start.objects.filter(wettkampf__meeting_id=meeting_id)
+    starts = meeting_starts.filter(wettkampf__info=wettkampf_info,
+                                   wettkampf__kategorie__name=kategorie_name)
+    resultate = dict()
+    for start in starts:
+        try:
+            resultate[start.anmeldung.athlet]
+        except KeyError:
+            resultate[start.anmeldung.athlet] = dict()
+        try:
+            resultate[start.anmeldung.athlet][start.wettkampf.punkteformel] = \
+                dict(leistung=start.serienstart.first().resultat.first().leistung,
+                     wind=start.serienstart.first().serie.wind,
+                     punkte=start.serienstart.first().resultat.first().punkte)
+        except AttributeError:
+            pass
+
+    context = dict(meeting_id=meeting_id, wettkampf_info=wettkampf_info,
+                   kategorie_name=kategorie_name, resultate=resultate)
+    return render(request, "meeting/rangliste.html", context)

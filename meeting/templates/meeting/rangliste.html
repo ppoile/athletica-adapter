@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Rangliste für {{ wettkampf_info }} ({{ kategorie_name }})</h1>
+
+<ul>
+  {% for entry in rangliste %}
+    <li>{{ entry }}</li>
+  {% empty %}
+    <p>No entries.</p>
+  {% endfor %}
+</ul>
+
+<p>{{ resultate }}</p>
+
+<a href="{% url 'meeting:wettkaempfe' meeting_id %}">Back to Wettkämpfe</a>
+
+{% endblock %}

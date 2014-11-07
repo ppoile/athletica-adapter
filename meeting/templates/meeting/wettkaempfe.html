@@ -5,6 +5,7 @@
 
 {% for wettkampf_name, wettkampf_liste in wettkaempfe.iteritems %}
   <h2>{{ wettkampf_name }}</h2>
+  <a href="{% url 'meeting:rangliste' meeting_id wettkampf_liste.0.info wettkampf_liste.0.kategorie.name %}">Rangliste</a>
   <ul>
     {% for wettkampf in wettkampf_liste %}
       <li>{{ wettkampf.punkteformel }}</li>
