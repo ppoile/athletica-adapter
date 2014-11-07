@@ -21,6 +21,14 @@ def anmeldungen(request, meeting_id):
 def wettkaempfe(request, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id)
     meeting_name="%s (%d)" % (meeting.name, meeting.datumvon.year)
-    wettkaempfe = meeting.wettkaempfe.all()
-    context = dict(meeting_name=meeting_name, wettkaempfe=wettkaempfe)
+    wettkaempfe = dict()
+    for wettkampf in meeting.wettkaempfe.all():
+        wettkampf_name = "%s (%s)" % (wettkampf.info, wettkampf.kategorie.name)
+        try:
+            wettkaempfe[wettkampf_name]
+        except KeyError:
+            wettkaempfe[wettkampf_name] = []
+        wettkaempfe[wettkampf_name].append(wettkampf)
+    context = dict(meeting_id=meeting_id, meeting_name=meeting_name,
+                   wettkaempfe=wettkaempfe)
     return render(request, "meeting/wettkaempfe.html", context)
