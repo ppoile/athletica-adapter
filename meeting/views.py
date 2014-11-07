@@ -17,3 +17,10 @@ def anmeldungen(request, meeting_id):
     anmeldungen = meeting.anmeldungen.all()
     context = dict(meeting_name=meeting_name, anmeldungen=anmeldungen)
     return render(request, "meeting/anmeldungen.html", context)
+
+def wettkaempfe(request, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id)
+    meeting_name="%s (%d)" % (meeting.name, meeting.datumvon.year)
+    wettkaempfe = meeting.wettkaempfe.all()
+    context = dict(meeting_name=meeting_name, wettkaempfe=wettkaempfe)
+    return render(request, "meeting/wettkaempfe.html", context)

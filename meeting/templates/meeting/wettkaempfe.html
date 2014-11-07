@@ -1,0 +1,17 @@
+<h1>Wettkaempfe für {{ meeting_name }}</h1>
+<ul>
+  <table class="table table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Wettkampf</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for wettkampf in wettkaempfe %}
+        <tr>
+          <td>{{ wettkampf.info }} ({{ wettkampf.kategorie.name }})</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</ul>

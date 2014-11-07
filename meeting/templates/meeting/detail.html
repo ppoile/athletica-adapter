@@ -11,6 +11,7 @@
   <li>DatumVon: {{ meeting.datumvon }}</li>
   <li>DatumBis: {{ meeting.datumbis }}</li>
   <li><a href="{% url 'meeting:anmeldungen' meeting.id %}">Anmeldungen</a></li>
+  <li><a href="{% url 'meeting:wettkaempfe' meeting.id %}">Wettkämpfe</a></li>
 </ul>
 
 <a href="{% url 'meeting:index' %}">Back to list</a>
