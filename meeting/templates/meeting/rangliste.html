@@ -4,6 +4,7 @@
 <h1>Rangliste für {{ wettkampf_info }} ({{ kategorie_name }})</h1>
 
 <p>{{ resultate }}</p>
+<p>{{ rangliste }}</p>
 
 {% for athlet, resultat_set in resultate.iteritems %}
   <h2>{{ athlet }} (Total: {{ resultat_set.punkte_total }})</h2>

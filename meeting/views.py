@@ -45,6 +45,9 @@ def rangliste(request, meeting_id, wettkampf_info, kategorie_name):
     #         }
     #     }
     # }
+    #
+    # rangliste = [<rang>, <name> <vorname>, <jahrgang>, <verein>, <land>,
+    #              <punkte>, <bemerkung>, <resultate>]
 
     meeting_starts = Start.objects.filter(wettkampf__meeting_id=meeting_id)
     starts = meeting_starts.filter(wettkampf__info=wettkampf_info,
@@ -52,38 +55,49 @@ def rangliste(request, meeting_id, wettkampf_info, kategorie_name):
     resultate = dict()
     for start in starts:
         athlet = start.anmeldung.athlet
-        key = "%s %s" % athlet.vorname, athlet.name)
+        key = "%s %s" % (athlet.name, athlet.vorname)
         try:
             resultate[key]
         except KeyError:
-            resultate[key] = dict()
+            resultate[key] = dict(punkte_total=0, disziplinen=dict())
         athleten_resultate = resultate[key]
-        athleten_punkte_total = 0
 
-        REAL_LEISTUNG_DIVISOR = {"60": 1000, "WEIT": 100, "KUGEL": 100, "HOCH": 100, "600": 1000}
+        REAL_LEISTUNG_DIVISOR = {"60": 1000, "WEIT": 100, "KUGEL": 100,
+                                 "HOCH": 100, "600": 1000}
+
         try:
             punkteformel = start.wettkampf.punkteformel
             divisor = REAL_LEISTUNG_DIVISOR[punkteformel]
             leistung = start.serienstart.first().resultat.first().leistung
-            if leistung == -1:
-                leistung = "n.a."
+            if leistung < 0:
+                leistung = "%s" % leistung
+                LEISTUNG_PUNKTE_MAPPING = { "-1": "n.a.", "-2": "aufg.",
+                                            "-3": "dis." }
+                punkte = LEISTUNG_PUNKTE_MAPPING.get("leistung")
             else:
                 leistung = float(leistung) / divisor
                 if divisor == 1000:
-                    leistung = "%.3f" % leistung
+                    leistung = "%.2f" % leistung
                 else:
                     leistung = "%.2f" % leistung
                 wind = start.serienstart.first().serie.wind
                 if wind not in ["", "----"] :
-                    leistung += "/%s"  % wind
+                    leistung += " / %s"  % wind
+            leistung = "(%s)" % leistung
             punkte = int(start.serienstart.first().resultat.first().punkte)
-            punkte_total += punkte
-            athleten_resultate[punkteformel] = \
+            athleten_resultate["punkte_total"] += punkte
+            athleten_resultate["disziplinen"][punkteformel] = \
                 dict(leistung=leistung, punkte=punkte)
-            resultate[start.anmeldung.athlet]["punkte_total"] = punkte_total
         except AttributeError:
             pass
 
+    rangliste = dict()
+    for athlet, item in resultate.iteritems():
+        rangliste[item["punkte_total"]] = (athlet, item)
+
+    #import pdb; pdb.set_trace()
+
     context = dict(meeting_id=meeting_id, wettkampf_info=wettkampf_info,
-                   kategorie_name=kategorie_name, resultate=resultate)
+                   kategorie_name=kategorie_name, resultate=resultate,
+                   rangliste=rangliste)
     return render(request, "meeting/rangliste.html", context)
