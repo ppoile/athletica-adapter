@@ -36,20 +36,51 @@ def wettkaempfe(request, meeting_id):
 
 
 def rangliste(request, meeting_id, wettkampf_info, kategorie_name):
+    # resultate = {
+    #     "Hans Muster": {
+    #         "punkte_total": 1234,
+    #         "resultate": {
+    #             100: {leistung: 9.81, wind: -0.3, punkte: 333}
+    #             WEIT: {leistung: 6.05, wind: +1.0, punkte: 733}
+    #         }
+    #     }
+    # }
+
     meeting_starts = Start.objects.filter(wettkampf__meeting_id=meeting_id)
     starts = meeting_starts.filter(wettkampf__info=wettkampf_info,
                                    wettkampf__kategorie__name=kategorie_name)
     resultate = dict()
     for start in starts:
+        athlet = start.anmeldung.athlet
+        key = "%s %s" % athlet.vorname, athlet.name)
         try:
-            resultate[start.anmeldung.athlet]
+            resultate[key]
         except KeyError:
-            resultate[start.anmeldung.athlet] = dict()
+            resultate[key] = dict()
+        athleten_resultate = resultate[key]
+        athleten_punkte_total = 0
+
+        REAL_LEISTUNG_DIVISOR = {"60": 1000, "WEIT": 100, "KUGEL": 100, "HOCH": 100, "600": 1000}
         try:
-            resultate[start.anmeldung.athlet][start.wettkampf.punkteformel] = \
-                dict(leistung=start.serienstart.first().resultat.first().leistung,
-                     wind=start.serienstart.first().serie.wind,
-                     punkte=start.serienstart.first().resultat.first().punkte)
+            punkteformel = start.wettkampf.punkteformel
+            divisor = REAL_LEISTUNG_DIVISOR[punkteformel]
+            leistung = start.serienstart.first().resultat.first().leistung
+            if leistung == -1:
+                leistung = "n.a."
+            else:
+                leistung = float(leistung) / divisor
+                if divisor == 1000:
+                    leistung = "%.3f" % leistung
+                else:
+                    leistung = "%.2f" % leistung
+                wind = start.serienstart.first().serie.wind
+                if wind not in ["", "----"] :
+                    leistung += "/%s"  % wind
+            punkte = int(start.serienstart.first().resultat.first().punkte)
+            punkte_total += punkte
+            athleten_resultate[punkteformel] = \
+                dict(leistung=leistung, punkte=punkte)
+            resultate[start.anmeldung.athlet]["punkte_total"] = punkte_total
         except AttributeError:
             pass
 

@@ -3,15 +3,20 @@
 
 <h1>Rangliste für {{ wettkampf_info }} ({{ kategorie_name }})</h1>
 
-<ul>
-  {% for entry in rangliste %}
-    <li>{{ entry }}</li>
+<p>{{ resultate }}</p>
+
+{% for athlet, resultat_set in resultate.iteritems %}
+  <h2>{{ athlet }} (Total: {{ resultat_set.punkte_total }})</h2>
+  <ul>
+  {% for disziplin, resultat in resultat_set.iteritems %}
+    <li>{{ disziplin}} ({{ resultat.leistung }}) {{ resultat.punkte }}</li>
   {% empty %}
     <p>No entries.</p>
   {% endfor %}
-</ul>
-
-<p>{{ resultate }}</p>
+  </ul>
+{% empty %}
+  <p>No entries.</p>
+{% endfor %}
 
 <a href="{% url 'meeting:wettkaempfe' meeting_id %}">Back to Wettkämpfe</a>
 
