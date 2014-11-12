@@ -1,7 +1,12 @@
 class RanglistenItem(object):
-    _REAL_LEISTUNG_DIVISOR = { "60": 1000, "WEIT": 100, "KUGEL": 100,
-                               "HOCH": 100, "600": 1000, "SPEER": 100, "DISKUS": 100, "110H": 1000, "1500": 1000, "STAB": 100, "400": 1000, "100": 1000, }
-    _LEISTUNG_MAPPING = { "-1": "n.a.", "-2": "aufg.", "-3": "dis." }
+    _REAL_LEISTUNG_DIVISOR = {
+        "60": 1000, "WEIT": 100, "KUGEL": 100, "HOCH": 100, "600": 1000,
+        "SPEER": 100, "DISKUS": 100, "110H": 1000, "1500": 1000, "STAB": 100,
+        "400": 1000, "100": 1000, "100H": 1000, "1000": 1000, "200": 1000,
+        "800": 1000, "80": 1000,
+    }
+
+    _LEISTUNG_MAPPING = { -1: "n.a.", -2: "aufg.", -3: "dis." }
 
     def __init__(self, name, vorname, jahrgang, verein, land, bem):
         self._name = "%s %s" % (name, vorname)
@@ -78,9 +83,18 @@ class Rangliste(object):
         item = self._get_item(start.anmeldung.athlet)
         punkteformel = start.wettkampf.punkteformel
         reihenfolge = start.wettkampf.mehrkampfreihenfolge
-        leistung = start.serienstart.first().resultat.first().leistung
-        wind = start.serienstart.first().serie.wind
-        punkte = int(start.serienstart.first().resultat.first().punkte)
+        try:
+            leistung = start.serienstart.first().resultat.first().leistung
+        except AttributeError:
+            leistung = -1
+        try:
+            wind = start.serienstart.first().serie.wind
+        except AttributeError:
+            wind = ""
+        try:
+            punkte = int(start.serienstart.first().resultat.first().punkte)
+        except AttributeError:
+            punkte = 0
         item.add_disziplin(punkteformel, reihenfolge, leistung, wind, punkte)
 
     def _get_item(self, athlet):
@@ -94,15 +108,26 @@ class Rangliste(object):
             item = RanglistenItem(athlet.name, athlet.vorname, athlet.jahrgang,
                                   athlet.verein, athlet.land, "")
             self._starts[athlet.id] = item
+            print athlet.id, athlet.name, athlet.vorname
         return item
 
     def get(self):
-        items = list()
-        rang = 1
+        items = dict()
         for athlet_id, start in self._starts.iteritems():
-            items.append((rang, start))
-            rang += 1
-        return items
+            items[start.punkte] = start
+
+        rangliste = []
+        last_item_punkte = None
+        rang = 0
+        for punkte, start in sorted(items.iteritems(), reverse=True):
+            if last_item_punkte is None or punkte < last_item_punkte:
+                rang += 1
+                last_item_punkte = punkte
+            else:
+                print "same punkte:", punkte
+
+            rangliste.append((rang, start))
+        return rangliste
 
     def __unicode__(self):
         return "Hello %s" % self._starts

@@ -348,6 +348,9 @@ class Resultat(models.Model):
     punkte = models.FloatField(db_column='Punkte')  # Field name made lowercase.
     serienstart = models.ForeignKey("Serienstart", db_column='xSerienstart', related_name="resultat")  # Field name made lowercase.
 
+    def __unicode__(self):
+        return "%s,%s" % (self.leistung, self.punkte)
+
     class Meta:
         managed = False
         db_table = 'resultat'
@@ -529,8 +532,8 @@ class Start(models.Model):
     vorjahrleistung = models.IntegerField(db_column='VorjahrLeistung', blank=True, null=True)  # Field name made lowercase.
     gruppe = models.CharField(db_column='Gruppe', max_length=2, blank=True)  # Field name made lowercase.
 
-    #def __unicode__(self):
-    #    return "%s: %s" % (self.anmeldung, self.wettkampf)
+    def __unicode__(self):
+        return "%s: %s" % (self.anmeldung, self.wettkampf)
 
     class Meta:
         managed = False
