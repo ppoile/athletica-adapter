@@ -3,8 +3,12 @@
 
 <h1>Rangliste für {{ wettkampf_info }} ({{ kategorie_name }})</h1>
 
-<p>{{ resultate }}</p>
-<p>{{ rangliste }}</p>
+<ul>
+  {% for start in rangliste.get_items %}
+    <li>{{ start.name }}, {{ start.punkte }}, {{ start.disziplinen_list_text }}
+  {% endfor %}
+</ul>
+
 
 {% for athlet, resultat_set in resultate.iteritems %}
   <h2>{{ athlet }} (Total: {{ resultat_set.punkte_total }})</h2>
