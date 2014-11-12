@@ -36,28 +36,14 @@ def wettkaempfe(request, meeting_id):
                    wettkaempfe=wettkaempfe)
     return render(request, "meeting/wettkaempfe.html", context)
 
-
 def rangliste(request, meeting_id, wettkampf_info, kategorie_name):
-    # resultate = {
-    #     "Hans Muster": {
-    #         "punkte_total": 1234,
-    #         "resultate": {
-    #             100: {leistung: 9.81, wind: -0.3, punkte: 333}
-    #             WEIT: {leistung: 6.05, wind: +1.0, punkte: 733}
-    #         }
-    #     }
-    # }
-    #
-    # rangliste = [<rang>, <name> <vorname>, <jahrgang>, <verein>, <land>,
-    #              <punkte>, <bemerkung>, <resultate>]
-
     meeting_starts = Start.objects.filter(wettkampf__meeting_id=meeting_id)
     starts = meeting_starts.filter(wettkampf__info=wettkampf_info,
                                    wettkampf__kategorie__name=kategorie_name)
     ordered_starts = starts.order_by("anmeldung__athlet")
     rangliste = Rangliste()
     for start in ordered_starts:
-        rangliste.addStart(start)
+        rangliste.add_start(start)
 
     context = dict(meeting_id=meeting_id, wettkampf_info=wettkampf_info,
                    kategorie_name=kategorie_name, rangliste=rangliste)

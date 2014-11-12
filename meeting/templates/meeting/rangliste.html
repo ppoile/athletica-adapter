@@ -4,24 +4,10 @@
 <h1>Rangliste für {{ wettkampf_info }} ({{ kategorie_name }})</h1>
 
 <ul>
-  {% for start in rangliste.get_items %}
-    <li>{{ start.name }}, {{ start.punkte }}, {{ start.disziplinen_list_text }}
+  {% for rang, start in rangliste.get %}
+    <li>{{ rang }}, {{ start.name }}, {{ start.jahrgang }}, {{ start.verein }}, {{ start.land }}, {{ start.punkte }}, {{ start.bem }}, {{ start.disziplinen_list_text }}
   {% endfor %}
 </ul>
-
-
-{% for athlet, resultat_set in resultate.iteritems %}
-  <h2>{{ athlet }} (Total: {{ resultat_set.punkte_total }})</h2>
-  <ul>
-  {% for disziplin, resultat in resultat_set.iteritems %}
-    <li>{{ disziplin}} ({{ resultat.leistung }}) {{ resultat.punkte }}</li>
-  {% empty %}
-    <p>No entries.</p>
-  {% endfor %}
-  </ul>
-{% empty %}
-  <p>No entries.</p>
-{% endfor %}
 
 <a href="{% url 'meeting:wettkaempfe' meeting_id %}">Back to Wettkämpfe</a>
 

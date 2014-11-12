@@ -1,5 +1,3 @@
-
-
 class RanglistenItem(object):
     _REAL_LEISTUNG_DIVISOR = { "60": 1000, "WEIT": 100, "KUGEL": 100,
                                "HOCH": 100, "600": 1000, "SPEER": 100, "DISKUS": 100, "110H": 1000, "1500": 1000, "STAB": 100, "400": 1000, "100": 1000, }
@@ -7,18 +5,12 @@ class RanglistenItem(object):
 
     def __init__(self, name, vorname, jahrgang, verein, land, bem):
         self._name = "%s %s" % (name, vorname)
-        self._jahrgang = jahrgang % 100
+        self._jahrgang = "%02d" % (jahrgang % 100)
         self._verein = verein
         self._land = land
         self._bem = bem
         self._disziplinen = dict()
         self._punkte = 0
-
-    def add_disziplin(self, punkteformel, leistung, wind, punkte):
-        assert self._disziplinen.get(punkteformel) is None
-        self._disziplinen[punkteformel] = dict(leistung=leistung, wind=wind,
-                                               punkte=punkte)
-        self._punkte += punkte
 
     @property
     def name(self):
@@ -44,11 +36,17 @@ class RanglistenItem(object):
     def punkte(self):
         return self._punkte
 
+    def add_disziplin(self, punkteformel, reihenfolge, leistung, wind, punkte):
+        assert self._disziplinen.get(punkteformel) is None
+        self._disziplinen[(reihenfolge, punkteformel)] = \
+            dict(leistung=leistung, wind=wind, punkte=punkte)
+        self._punkte += punkte
+
     @property
     def disziplinen_list_text(self):
         disziplinen_texts = []
-        for formel, resultat in self._disziplinen.iteritems():
-            disziplinen_texts.append(self._get_disziplinen_text(formel, **resultat))
+        for (reihenfolge, punkteformel), resultat in sorted(self._disziplinen.iteritems()):
+            disziplinen_texts.append(self._get_disziplinen_text(punkteformel, **resultat))
         text = ", ".join(disziplinen_texts)
         return text
 
@@ -76,25 +74,34 @@ class Rangliste(object):
     def __init__(self):
         self._starts = dict()
 
-    def addStart(self, start):
-        athlet = start.anmeldung.athlet
-        if athlet.id in self._starts:
-            item = self._starts[athlet.id]
-        else:
-            item = RanglistenItem(athlet.name, athlet.vorname, 2000,
-                                  "TV Uster", "SUI", "")
-            self._starts[athlet.id] = item
-
+    def add_start(self, start):
+        item = self._get_item(start.anmeldung.athlet)
         punkteformel = start.wettkampf.punkteformel
+        reihenfolge = start.wettkampf.mehrkampfreihenfolge
         leistung = start.serienstart.first().resultat.first().leistung
         wind = start.serienstart.first().serie.wind
         punkte = int(start.serienstart.first().resultat.first().punkte)
-        item.add_disziplin(punkteformel, leistung, wind, punkte)
+        item.add_disziplin(punkteformel, reihenfolge, leistung, wind, punkte)
 
-    def get_items(self):
+    def _get_item(self, athlet):
+        """get ranglisten item
+
+        Get existing or new ranglisten item.
+        """
+        try:
+            item = self._starts[athlet.id]
+        except KeyError:
+            item = RanglistenItem(athlet.name, athlet.vorname, athlet.jahrgang,
+                                  athlet.verein, athlet.land, "")
+            self._starts[athlet.id] = item
+        return item
+
+    def get(self):
         items = list()
+        rang = 1
         for athlet_id, start in self._starts.iteritems():
-            items.append(start)
+            items.append((rang, start))
+            rang += 1
         return items
 
     def __unicode__(self):
