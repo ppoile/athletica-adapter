@@ -1,10 +1,8 @@
 class RanglistenItem(object):
-    _REAL_LEISTUNG_DIVISOR = {
-        "60": 1000, "WEIT": 100, "KUGEL": 100, "HOCH": 100, "600": 1000,
-        "SPEER": 100, "DISKUS": 100, "110H": 1000, "1500": 1000, "STAB": 100,
-        "400": 1000, "100": 1000, "100H": 1000, "1000": 1000, "200": 1000,
-        "800": 1000, "80": 1000,
-    }
+    def _get_leistung_divisor(self, disziplin):
+        if disziplin[0].isdigit():
+            return 1000
+        return 100
 
     _LEISTUNG_MAPPING = { -1: "n.a.", -2: "aufg.", -3: "dis." }
 
@@ -43,28 +41,28 @@ class RanglistenItem(object):
     def punkte(self):
         return self._punkte
 
-    def add_disziplin(self, punkteformel, reihenfolge, leistung, wind, punkte):
-        assert self._disziplinen.get(punkteformel) is None
-        self._disziplinen[(reihenfolge, punkteformel)] = \
+    def add_disziplin(self, disziplin, reihenfolge, leistung, wind, punkte):
+        assert self._disziplinen.get(disziplin) is None
+        self._disziplinen[(reihenfolge, disziplin)] = \
             dict(leistung=leistung, wind=wind, punkte=punkte)
         self._punkte += punkte
 
     @property
     def disziplinen_list_text(self):
         disziplinen_texts = []
-        for (reihenfolge, punkteformel), resultat in sorted(self._disziplinen.iteritems()):
-            disziplinen_texts.append(self._get_disziplinen_text(punkteformel, **resultat))
+        for (reihenfolge, disziplin), resultat in sorted(self._disziplinen.iteritems()):
+            disziplinen_texts.append(self._get_disziplinen_text(disziplin, **resultat))
         text = ", ".join(disziplinen_texts)
         return text
 
-    def _get_disziplinen_text(self, formel, leistung, wind, punkte):
-        text = "%s" % formel
+    def _get_disziplinen_text(self, disziplin, leistung, wind, punkte):
+        text = "%s" % disziplin
         if leistung in self._LEISTUNG_MAPPING:
             text += " (%s, %s)" % (leistung, self._LEISTUNG_MAPPING[leistung])
             assert punkte == 0
             return text
 
-        divisor = self._REAL_LEISTUNG_DIVISOR[formel]
+        divisor = self._get_leistung_divisor(disziplin)
         leistung = float(leistung) / divisor
         text += " (%.2f" % leistung
         if wind not in ["", "----"] :
@@ -86,7 +84,7 @@ class Rangliste(object):
 
     def add_start(self, start):
         item = self._get_item(start.anmeldung.athlet)
-        punkteformel = start.wettkampf.punkteformel
+        disziplin = start.wettkampf.disziplin.kurzname
         reihenfolge = start.wettkampf.mehrkampfreihenfolge
         try:
             leistung = start.serienstart.first().resultat.first().leistung
@@ -100,7 +98,7 @@ class Rangliste(object):
             punkte = int(start.serienstart.first().resultat.first().punkte)
         except AttributeError:
             punkte = 0
-        item.add_disziplin(punkteformel, reihenfolge, leistung, wind, punkte)
+        item.add_disziplin(disziplin, reihenfolge, leistung, wind, punkte)
 
     def _get_item(self, athlet):
         """get ranglisten item

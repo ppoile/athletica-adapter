@@ -648,7 +648,7 @@ class Wettkampf(models.Model):
     zeitmessung = models.IntegerField(db_column='Zeitmessung')  # Field name made lowercase.
     zeitmessungauto = models.IntegerField(db_column='ZeitmessungAuto')  # Field name made lowercase.
     kategorie = models.ForeignKey("Kategorie", db_column='xKategorie')  # Field name made lowercase.
-    xdisziplin = models.IntegerField(db_column='xDisziplin')  # Field name made lowercase.
+    disziplin = models.ForeignKey("DisziplinDe", db_column='xDisziplin')
     meeting = models.ForeignKey("meeting.Meeting", db_column='xMeeting', related_name="wettkaempfe")
     mehrkampfcode = models.IntegerField(db_column='Mehrkampfcode')  # Field name made lowercase.
     mehrkampfende = models.IntegerField(db_column='Mehrkampfende')  # Field name made lowercase.
