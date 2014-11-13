@@ -12,6 +12,8 @@ class RanglistenItem(object):
         self._name = "%s %s" % (name, vorname)
         self._jahrgang = "%02d" % (jahrgang % 100)
         self._verein = verein
+        if land == "-":
+            land = ""
         self._land = land
         self._bem = bem
         self._disziplinen = dict()
@@ -66,6 +68,9 @@ class RanglistenItem(object):
         leistung = float(leistung) / divisor
         text += " (%.2f" % leistung
         if wind not in ["", "----"] :
+            wind = wind.rstrip(" m")
+            wind = wind.replace(",", ".")
+            wind = float(wind)
             text += " / %s"  % wind
         punkte = int(punkte)
         text += ", %s)"  % punkte
