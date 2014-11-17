@@ -83,27 +83,20 @@ class Rangliste(object):
         self._starts = dict()
 
     def add_start(self, start):
-        wettkampf = start.wettkampf
-        disziplin = wettkampf.disziplin.kurzname
-        reihenfolge = wettkampf.mehrkampfreihenfolge
+        disziplin = start.wettkampf.disziplin.kurzname
+        reihenfolge = start.wettkampf.mehrkampfreihenfolge
         serienstart = start.serienstart.first()
         if serienstart is None:
             return
 
-        resultate = serienstart.resultat
-        try:
-            resultat = resultate.exclude(info__iendswith="x").order_by("-punkte").first()
+        resultate = serienstart.resultat.order_by("-punkte").all()
+        for resultat in resultate:
             leistung = resultat.leistung
-        except AttributeError:
-            leistung = -1
-        try:
             wind = serienstart.serie.wind
-        except AttributeError:
-            wind = ""
-        try:
             punkte = int(resultat.punkte)
-        except AttributeError:
-            punkte = 0
+            if not resultat.info.lower().endswith("x"):
+                break
+
         item = self._get_item(start.anmeldung.athlet)
         item.add_disziplin(disziplin, reihenfolge, leistung, wind, punkte)
 
