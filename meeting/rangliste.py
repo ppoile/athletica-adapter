@@ -92,8 +92,7 @@ class Rangliste(object):
 
         resultate = serienstart.resultat
         try:
-            resultat = resultate.exclude(info__iendswith="x").
-                order_by("-punkte").first()
+            resultat = resultate.exclude(info__iendswith="x").order_by("-punkte").first()
             leistung = resultat.leistung
         except AttributeError:
             leistung = -1
@@ -124,19 +123,19 @@ class Rangliste(object):
     def get(self):
         items = dict()
         for athlet_id, start in self._starts.iteritems():
-            items[start.punkte] = start
+            try:
+                item = items[start.punkte]
+            except KeyError:
+                item = []
+                items[start.punkte] = item
+            item.append(start)
 
         rangliste = []
-        last_item_punkte = None
-        rang = 0
-        for punkte, start in sorted(items.iteritems(), reverse=True):
-            if last_item_punkte is None or punkte < last_item_punkte:
-                rang += 1
-                last_item_punkte = punkte
-            else:
-                print "same punkte:", punkte
-
-            rangliste.append((rang, start))
+        rang = 1
+        for punkte, starts in sorted(items.iteritems(), reverse=True):
+            for start in starts:
+                rangliste.append((rang, start))
+            rang += len(starts)
         return rangliste
 
     def __unicode__(self):
