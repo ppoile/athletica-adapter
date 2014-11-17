@@ -83,16 +83,17 @@ class Rangliste(object):
         self._starts = dict()
 
     def add_start(self, start):
-        item = self._get_item(start.anmeldung.athlet)
         wettkampf = start.wettkampf
         disziplin = wettkampf.disziplin.kurzname
         reihenfolge = wettkampf.mehrkampfreihenfolge
         serienstart = start.serienstart.first()
         if serienstart is None:
-            import pdb; pdb.set_trace()
+            return
+
         resultate = serienstart.resultat
         try:
-            resultat = resultate.exclude(info__iendswith="x").order_by("-punkte").first()
+            resultat = resultate.exclude(info__iendswith="x").
+                order_by("-punkte").first()
             leistung = resultat.leistung
         except AttributeError:
             leistung = -1
@@ -104,6 +105,7 @@ class Rangliste(object):
             punkte = int(resultat.punkte)
         except AttributeError:
             punkte = 0
+        item = self._get_item(start.anmeldung.athlet)
         item.add_disziplin(disziplin, reihenfolge, leistung, wind, punkte)
 
     def _get_item(self, athlet):
