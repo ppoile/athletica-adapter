@@ -77,6 +77,48 @@ class RanglistenItem(object):
     def __unicode__(self):
         return "<Hello>"
 
+    def __cmp__(self, other):
+        # compare number of completed disziplines
+        value = cmp(self._num_valid_disziplinen(), other._num_valid_disziplinen())
+        print "1: cmp(%d, %d) => %d" % (self._num_valid_disziplinen(),
+                                        other._num_valid_disziplinen(), value)
+        if value != 0:
+            return value
+
+        # compare punkte
+        value = cmp(self.punkte, other.punkte)
+        print "2: cmp(%d, %d) => %d" % (self.punkte, other.punkte, value)
+        if value != 0:
+            return value
+
+        # compare diszipline wins
+        wins = 0
+        other_wins = 0
+        for reihenfolge_disziplin, resultat in self._disziplinen.iteritems():
+            tmp = cmp(resultat["leistung"], other._disziplinen[reihenfolge_disziplin]["leistung"])
+            if tmp > 0:
+                wins += 1
+            if tmp < 0:
+                other_wins += 1
+        value = cmp(wins, other_wins)
+        print "3: cmp(%d, %d) => %d" % (wins, other_wins, value)
+        if value != 0:
+            return value
+
+        # compare highest punkte
+        punkte = [item["punkte"] for item in self._disziplinen.values()]
+        other_punkte = [item["punkte"] for item in other._disziplinen.values()]
+        value = cmp(punkte, other_punkte)
+        print "4: cmp(%s, %s) => %d" % (punkte, other_punkte, value)
+        return value
+
+    def _num_valid_disziplinen(self):
+        num = 0
+        for disziplin in self._disziplinen.values():
+            if disziplin["leistung"] not in [-1, -3]:
+                num += 1
+        return num
+
 
 class Rangliste(object):
     def __init__(self):
@@ -114,22 +156,12 @@ class Rangliste(object):
         return item
 
     def get(self):
-        items = dict()
-        for athlet_id, start in self._starts.iteritems():
-            try:
-                item = items[start.punkte]
-            except KeyError:
-                item = []
-                items[start.punkte] = item
-            item.append(start)
-
+        items = sorted(self._starts.values(), reverse=True)
         rangliste = []
-        rang = 1
-        for punkte, starts in sorted(items.iteritems(), reverse=True):
-            for start in starts:
-                rangliste.append((rang, start))
-            rang += len(starts)
+        for item in items:
+            if len(rangliste) > 0 and item == rangliste[-1][1]:
+                rang = rangliste[-1][0]
+            else:
+                rang = len(rangliste) + 1
+            rangliste.append((rang, item))
         return rangliste
-
-    def __unicode__(self):
-        return "Hello %s" % self._starts
