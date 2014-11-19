@@ -41,17 +41,27 @@ class RanglistenItem(object):
     def punkte(self):
         return self._punkte
 
-    def add_disziplin(self, disziplin, reihenfolge, leistung, wind, punkte):
+    def add_disziplin(self, disziplin, reihenfolge, last_disziplin, leistung,
+                      wind, punkte):
         assert self._disziplinen.get(disziplin) is None
         self._disziplinen[(reihenfolge, disziplin)] = \
-            dict(leistung=leistung, wind=wind, punkte=punkte)
+            dict(leistung=leistung, wind=wind, punkte=punkte,
+                 last_disziplin=last_disziplin)
         self._punkte += punkte
 
     @property
     def disziplinen_list_text(self):
         disziplinen_texts = []
+        last_disziplinen_text = None
         for (reihenfolge, disziplin), resultat in sorted(self._disziplinen.iteritems()):
-            disziplinen_texts.append(self._get_disziplinen_text(disziplin, **resultat))
+            last_disziplin = resultat.pop("last_disziplin")
+            disziplinen_text = self._get_disziplinen_text(disziplin, **resultat)
+            if last_disziplin:
+                last_disziplinen_text = disziplinen_text
+            else:
+                disziplinen_texts.append(disziplinen_text)
+        if last_disziplinen_text is not None:
+            disziplinen_texts.append(last_disziplinen_text)
         text = ", ".join(disziplinen_texts)
         return text
 
@@ -130,6 +140,7 @@ class Rangliste(object):
     def add_start(self, start):
         disziplin = start.wettkampf.disziplin.kurzname
         reihenfolge = start.wettkampf.mehrkampfreihenfolge
+        last_disziplin = start.wettkampf.mehrkampfende
         serienstart = start.serienstart.first()
         if serienstart is None:
             return
@@ -143,7 +154,7 @@ class Rangliste(object):
                 break
 
         item = self._get_item(start.anmeldung.athlet)
-        item.add_disziplin(disziplin, reihenfolge, leistung, wind, punkte)
+        item.add_disziplin(disziplin, reihenfolge, last_disziplin, leistung, wind, punkte)
 
     def _get_item(self, athlet):
         """get ranglisten item
