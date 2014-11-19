@@ -63,22 +63,14 @@ class RanglistenItem(object):
             return text
 
         divisor = self._get_leistung_divisor(disziplin)
-        #if divisor == 1000:
-        #    import pdb; pdb.set_trace()
-        leistung = float(leistung) / divisor
         if divisor == 1000:
-            hours = int(leistung / 3600)
-            minutes = int((leistung % 3600) / 60)
-            seconds = leistung % 60
-            timestring = ""
-            if hours > 0:
-                timestring += "%d:" % hours
-            if minutes > 0:
-                timestring += "%d:" % minutes
-            timestring += "%.2f" % seconds
+            hours, remainder = divmod(float(leistung) / divisor, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            timestring = ("%d:%d:%.2f" % (hours, minutes, seconds)).lstrip("0:")
+            #print "hours=%d, minutes=%d, seconds=%.3f => %s" % (hours, minutes, seconds, timestring)
             text += " (%s" % timestring
         else:
-            text += " (%.2f" % leistung
+            text += " (%.2f" % (float(leistung) / divisor)
         if wind not in ["", "----"] :
             wind = wind.rstrip(" m")
             wind = wind.replace(",", ".")
