@@ -80,9 +80,6 @@ class RanglistenItem(object):
         text += ", %s)"  % punkte
         return text
 
-    def __unicode__(self):
-        return "<Hello>"
-
     def __cmp__(self, other):
         # compare number of completed disziplines
         value = cmp(self._num_valid_disziplinen(), other._num_valid_disziplinen())
