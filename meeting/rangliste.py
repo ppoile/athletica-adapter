@@ -80,14 +80,14 @@ class RanglistenItem(object):
     def __cmp__(self, other):
         # compare number of completed disziplines
         value = cmp(self._num_valid_disziplinen(), other._num_valid_disziplinen())
-        print "1: cmp(%d, %d) => %d" % (self._num_valid_disziplinen(),
-                                        other._num_valid_disziplinen(), value)
+        #print "1: cmp(%d, %d) => %d" % (self._num_valid_disziplinen(),
+        #                                other._num_valid_disziplinen(), value)
         if value != 0:
             return value
 
         # compare punkte
         value = cmp(self.punkte, other.punkte)
-        print "2: cmp(%d, %d) => %d" % (self.punkte, other.punkte, value)
+        #print "2: cmp(%d, %d) => %d" % (self.punkte, other.punkte, value)
         if value != 0:
             return value
 
@@ -101,7 +101,7 @@ class RanglistenItem(object):
             if tmp < 0:
                 other_wins += 1
         value = cmp(wins, other_wins)
-        print "3: cmp(%d, %d) => %d" % (wins, other_wins, value)
+        #print "3: cmp(%d, %d) => %d" % (wins, other_wins, value)
         if value != 0:
             return value
 
@@ -109,7 +109,7 @@ class RanglistenItem(object):
         punkte = [item["punkte"] for item in self._disziplinen.values()]
         other_punkte = [item["punkte"] for item in other._disziplinen.values()]
         value = cmp(punkte, other_punkte)
-        print "4: cmp(%s, %s) => %d" % (punkte, other_punkte, value)
+        #print "4: cmp(%s, %s) => %d" % (punkte, other_punkte, value)
         return value
 
     def _num_valid_disziplinen(self):
