@@ -53,9 +53,11 @@ class RanglistenItem(object):
     def disziplinen_list_text(self):
         disziplinen_texts = []
         last_disziplinen_text = None
-        for (reihenfolge, disziplin), resultat in sorted(self._disziplinen.iteritems()):
+        for (reihenfolge, disziplin), resultat in sorted(
+                self._disziplinen.iteritems()):
             last_disziplin = resultat.pop("last_disziplin")
-            disziplinen_text = self._get_disziplinen_text(disziplin, **resultat)
+            disziplinen_text = self._get_disziplinen_text(disziplin,
+                                                          **resultat)
             if last_disziplin:
                 last_disziplinen_text = disziplinen_text
             else:
@@ -66,6 +68,8 @@ class RanglistenItem(object):
         return text
 
     def _get_disziplinen_text(self, disziplin, leistung, wind, punkte):
+        if disziplin == "WEIT":
+            import pdb; pdb.set_trace()
         text = "%s" % disziplin
         if leistung in self._LEISTUNG_MAPPING:
             text += " (%s, %s)" % (leistung, self._LEISTUNG_MAPPING[leistung])
@@ -76,8 +80,10 @@ class RanglistenItem(object):
         if divisor == 1000:
             hours, remainder = divmod(float(leistung) / divisor, 3600)
             minutes, seconds = divmod(remainder, 60)
-            timestring = ("%d:%d:%.2f" % (hours, minutes, seconds)).lstrip("0:")
-            #print "hours=%d, minutes=%d, seconds=%.3f => %s" % (hours, minutes, seconds, timestring)
+            timestring = "%d:%d:%.2f" % (hours, minutes, seconds)
+            timestring = timestring.lstrip("0:")
+            #print "hours=%d, minutes=%d, seconds=%.3f => %s" % (
+            #    hours, minutes, seconds, timestring)
             text += " (%s" % timestring
         else:
             text += " (%.2f" % (float(leistung) / divisor)
@@ -92,7 +98,8 @@ class RanglistenItem(object):
 
     def __cmp__(self, other):
         # compare number of completed disziplines
-        value = cmp(self._num_valid_disziplinen(), other._num_valid_disziplinen())
+        value = cmp(self._num_valid_disziplinen(),
+                    other._num_valid_disziplinen())
         #print "1: cmp(%d, %d) => %d" % (self._num_valid_disziplinen(),
         #                                other._num_valid_disziplinen(), value)
         if value != 0:
@@ -108,7 +115,8 @@ class RanglistenItem(object):
         wins = 0
         other_wins = 0
         for reihenfolge_disziplin, resultat in self._disziplinen.iteritems():
-            tmp = cmp(resultat["leistung"], other._disziplinen[reihenfolge_disziplin]["leistung"])
+            tmp = cmp(resultat["leistung"],
+                      other._disziplinen[reihenfolge_disziplin]["leistung"])
             if tmp > 0:
                 wins += 1
             if tmp < 0:
@@ -154,7 +162,8 @@ class Rangliste(object):
                 break
 
         item = self._get_item(start.anmeldung.athlet)
-        item.add_disziplin(disziplin, reihenfolge, last_disziplin, leistung, wind, punkte)
+        item.add_disziplin(disziplin, reihenfolge, last_disziplin, leistung,
+                           wind, punkte)
 
     def _get_item(self, athlet):
         """get ranglisten item
