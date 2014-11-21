@@ -183,9 +183,11 @@ class Rangliste(object):
         items = sorted(self._starts.values(), reverse=True)
         rangliste = []
         for item in items:
-            if len(rangliste) > 0 and item == rangliste[-1][1]:
+            if item._num_valid_disziplinen() < len(item._disziplinen):
+                rang = ""
+            elif len(rangliste) > 0 and item == rangliste[-1][1]:
                 rang = rangliste[-1][0]
             else:
-                rang = len(rangliste) + 1
+                rang = "%d." % (len(rangliste) + 1)
             rangliste.append((rang, item))
         return rangliste
