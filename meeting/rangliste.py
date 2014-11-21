@@ -68,8 +68,6 @@ class RanglistenItem(object):
         return text
 
     def _get_disziplinen_text(self, disziplin, leistung, wind, punkte):
-        if disziplin == "WEIT":
-            import pdb; pdb.set_trace()
         text = "%s" % disziplin
         if leistung in self._LEISTUNG_MAPPING:
             text += " (%s, %s)" % (leistung, self._LEISTUNG_MAPPING[leistung])
@@ -148,6 +146,7 @@ class Rangliste(object):
     def add_start(self, start):
         disziplin = start.wettkampf.disziplin.kurzname
         reihenfolge = start.wettkampf.mehrkampfreihenfolge
+        windmessung = start.wettkampf.windmessung
         last_disziplin = start.wettkampf.mehrkampfende
         serienstart = start.serienstart.first()
         if serienstart is None:
@@ -156,7 +155,11 @@ class Rangliste(object):
         resultate = serienstart.resultat.order_by("-punkte").all()
         for resultat in resultate:
             leistung = resultat.leistung
-            wind = serienstart.serie.wind
+            wind = ""
+            if windmessung:
+                wind = serienstart.serie.wind
+                if wind == "":
+                    wind = resultat.info
             punkte = int(resultat.punkte)
             if not resultat.info.lower().endswith("x"):
                 break
