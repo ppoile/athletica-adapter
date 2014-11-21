@@ -84,7 +84,7 @@ class RanglistenItem(object):
         else:
             text += " (%.2f" % (float(leistung) / divisor)
         if wind not in ["", "----"] :
-            wind = wind.rstrip(" m")
+            wind = wind.rstrip(" m*")
             wind = wind.replace(",", ".")
             wind = float(wind)
             text += " / %s"  % wind
