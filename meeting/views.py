@@ -1,7 +1,10 @@
+# -*- coding: utf-8 -*-
+
 from django.shortcuts import get_object_or_404, render
 from django.views import generic
 from meeting.models import Meeting
 from main.models import Start
+from main.models import Wettkampf
 from meeting.rangliste import RanglistenItem, Rangliste
 
 
@@ -37,6 +40,20 @@ def wettkaempfe(request, meeting_id):
     return render(request, "meeting/wettkaempfe.html", context)
 
 def rangliste(request, meeting_id, wettkampf_info, kategorie_name):
+    meeting_wettkaempfe = Wettkampf.objects.filter(meeting_id=meeting_id)
+    wettkaempfe = meeting_wettkaempfe.filter(
+        info=wettkampf_info, kategorie__name=kategorie_name)
+    num_wettkaempfe = wettkaempfe.count()
+    num_wettkaempfe_info_mapping = {
+        4: "Vier",
+        5: u"Fünf",
+        6: "Sechs",
+        7: "Sieben",
+        10: "Zehn",
+    }
+    wettkampf_name = "%s, %skampf" % (
+        kategorie_name, num_wettkaempfe_info_mapping[num_wettkaempfe])
+
     meeting_starts = Start.objects.filter(wettkampf__meeting_id=meeting_id)
     starts = meeting_starts.filter(wettkampf__info=wettkampf_info,
                                    wettkampf__kategorie__name=kategorie_name)
@@ -45,6 +62,6 @@ def rangliste(request, meeting_id, wettkampf_info, kategorie_name):
     for start in ordered_starts:
         rangliste.add_start(start)
 
-    context = dict(meeting_id=meeting_id, wettkampf_info=wettkampf_info,
-                   kategorie_name=kategorie_name, rangliste=rangliste)
+    context = dict(meeting_id=meeting_id, wettkampf_name=wettkampf_name,
+                   rangliste=rangliste)
     return render(request, "meeting/rangliste.html", context)
