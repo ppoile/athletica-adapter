@@ -10,8 +10,6 @@ class RanglistenItem(object):
         self._name = "%s %s" % (name, vorname)
         self._jahrgang = "%02d" % (jahrgang % 100)
         self._verein = verein
-        if land == "-":
-            land = ""
         self._land = land
         self._bem = bem
         self._disziplinen = dict()
