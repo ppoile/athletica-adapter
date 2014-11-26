@@ -47,33 +47,33 @@ def wettkaempfe(request, meeting_id):
                    wettkaempfe=wettkaempfe)
     return render(request, "meeting/wettkaempfe.html", context)
 
+_num_wettkaempfe_info_mapping = {
+    4: "Vier",
+    5: u"Fünf",
+    6: "Sechs",
+    7: "Sieben",
+    10: "Zehn",
+}
+
 def rangliste(request, meeting_id, wettkampf_info, kategorie_name):
     meeting_wettkaempfe = Wettkampf.objects.filter(meeting_id=meeting_id)
     wettkaempfe = meeting_wettkaempfe.filter(
         info=wettkampf_info, kategorie__name=kategorie_name)
     num_wettkaempfe = wettkaempfe.count()
-    num_wettkaempfe_info_mapping = {
-        4: "Vier",
-        5: u"Fünf",
-        6: "Sechs",
-        7: "Sieben",
-        10: "Zehn",
-    }
     wettkampf_name = "%s, %skampf" % (
-        kategorie_name, num_wettkaempfe_info_mapping[num_wettkaempfe])
+        kategorie_name, _num_wettkaempfe_info_mapping[num_wettkaempfe])
 
     meeting_starts = Start.objects.filter(wettkampf__meeting_id=meeting_id)
-    starts = meeting_starts.filter(wettkampf__info=wettkampf_info,
-                                   wettkampf__kategorie__name=kategorie_name)
-    ordered_starts = starts.order_by("anmeldung__athlet")
+    wettkampf_starts = meeting_starts.filter(
+        wettkampf__info=wettkampf_info,
+        wettkampf__kategorie__name=kategorie_name)
+
     rangliste = Rangliste()
-    for start in ordered_starts:
-        rangliste.add_start(start)
+    rangliste.add_starts(wettkampf_starts)
 
     context = dict(meeting_id=meeting_id, wettkampf_info=wettkampf_info,
                    kategorie_name=kategorie_name,
-                   wettkampf_name=wettkampf_name,
-                   rangliste=rangliste)
+                   wettkampf_name=wettkampf_name, rangliste=rangliste)
     return render(request, "meeting/rangliste.html", context)
 
 def rangliste_pdf(request, meeting_id, wettkampf_info, kategorie_name):
@@ -81,23 +81,15 @@ def rangliste_pdf(request, meeting_id, wettkampf_info, kategorie_name):
     wettkaempfe = meeting_wettkaempfe.filter(
         info=wettkampf_info, kategorie__name=kategorie_name)
     num_wettkaempfe = wettkaempfe.count()
-    num_wettkaempfe_info_mapping = {
-        4: "Vier",
-        5: u"Fünf",
-        6: "Sechs",
-        7: "Sieben",
-        10: "Zehn",
-    }
     wettkampf_name = "%s, %skampf" % (
-        kategorie_name, num_wettkaempfe_info_mapping[num_wettkaempfe])
+        kategorie_name, _num_wettkaempfe_info_mapping[num_wettkaempfe])
 
     meeting_starts = Start.objects.filter(wettkampf__meeting_id=meeting_id)
-    starts = meeting_starts.filter(wettkampf__info=wettkampf_info,
-                                   wettkampf__kategorie__name=kategorie_name)
-    ordered_starts = starts.order_by("anmeldung__athlet")
+    wettkampf_starts = meeting_starts.filter(
+        wettkampf__info=wettkampf_info,
+        wettkampf__kategorie__name=kategorie_name)
     rangliste = Rangliste()
-    for start in ordered_starts:
-        rangliste.add_start(start)
+    rangliste.add_starts(wettkampf_starts)
 
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="rangliste.pdf"'

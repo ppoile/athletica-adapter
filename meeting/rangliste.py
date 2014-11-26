@@ -141,7 +141,11 @@ class Rangliste(object):
     def __init__(self):
         self._starts = dict()
 
-    def add_start(self, start):
+    def add_starts(self, starts):
+        for start in starts:
+            self._add_start(start)
+
+    def _add_start(self, start):
         disziplin = start.wettkampf.disziplin.kurzname
         reihenfolge = start.wettkampf.mehrkampfreihenfolge
         windmessung = start.wettkampf.windmessung
