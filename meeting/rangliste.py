@@ -1,3 +1,5 @@
+import math
+
 class Rangliste(object):
     def __init__(self):
         self._items = dict()
@@ -222,7 +224,9 @@ class MilliSecondsLeistungDisziplin(DisziplinBase):
     def _get_leistung_as_string(self):
         hours, rem = divmod(float(self.leistung) / self._leistung_divisor, 3600)
         minutes, seconds = divmod(rem, 60)
-        timestring = "%d:%d:%.2f" % (hours, minutes, seconds)
+        # round to next hundredth of a second
+        rounded_seconds = math.ceil(seconds * 100) / 100
+        timestring = "%d:%d:%.2f" % (hours, minutes, rounded_seconds)
         timestring = timestring.lstrip("0:")
         #print "hours=%d, minutes=%d, seconds=%.3f => %s" % (
         #    hours, minutes, seconds, timestring)
