@@ -2,11 +2,13 @@
 
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
+from django.template import Context
 from django.views import generic
 from main.models import Start
 from main.models import Wettkampf
 from meeting.models import Meeting
 from meeting.rangliste import RanglistenItem, Rangliste
+import os
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_LEFT, TA_RIGHT, TA_CENTER, TA_JUSTIFY
 from reportlab.lib.pagesizes import A3, A4, landscape, portrait
@@ -14,6 +16,9 @@ from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import cm
 from reportlab.pdfgen import canvas
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Frame, Spacer
+from webodt.cache import CacheManager
+from webodt.helpers import get_mimetype
+import webodt.shortcuts
 
 
 class Index(generic.ListView):
@@ -112,4 +117,50 @@ def rangliste_pdf(request, meeting_id, wettkampf_info, kategorie_name):
 
     doc.build(elements)
 
+    return response
+
+def rangliste_odt(request, meeting_id, wettkampf_info, kategorie_name):
+    meeting_wettkaempfe = Wettkampf.objects.filter(meeting_id=meeting_id)
+    wettkaempfe = meeting_wettkaempfe.filter(
+        info=wettkampf_info, kategorie__name=kategorie_name)
+    num_wettkaempfe = wettkaempfe.count()
+    wettkampf_name = "%s, %skampf" % (
+        kategorie_name, _num_wettkaempfe_info_mapping[num_wettkaempfe])
+
+    meeting_starts = Start.objects.filter(wettkampf__meeting_id=meeting_id)
+    wettkampf_starts = meeting_starts.filter(
+        wettkampf__info=wettkampf_info,
+        wettkampf__kategorie__name=kategorie_name)
+    rangliste = Rangliste()
+    rangliste.add_starts(wettkampf_starts)
+
+    context = dict(meeting_id=meeting_id, wettkampf_info=wettkampf_info,
+                   kategorie_name=kategorie_name,
+                   wettkampf_name=wettkampf_name, rangliste=rangliste)
+
+    #import pdb; pdb.set_trace()
+    return render_to_response(
+        template_name='meeting/templates/meeting/rangliste.odt',
+        dictionary=context)
+
+
+def render_to_response(template_name, dictionary=None, context_instance=None,
+                       filename=None, format='odt', cache=CacheManager,
+                       preprocessors=None, inline=None):
+    """
+    Using same options as `render_to`, return `django.http.HttpResponse`
+    object. The document is automatically removed when the last byte of the
+    response is read.
+    """
+    mimetype = get_mimetype(format)
+    content_fd = webodt.shortcuts.render_to(format, template_name, dictionary, context_instance,
+        delete_on_close=True, cache=cache, preprocessors=preprocessors
+    )
+    response = HttpResponse(webodt.shortcuts._ifile(content_fd), content_type=mimetype)
+    if not filename:
+        filename = os.path.basename(template_name)
+        filename += '.%s' % format
+    response['Content-Disposition'] = (
+        inline and 'inline' or 'attachment; filename="%s"' % filename
+    )
     return response

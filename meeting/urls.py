@@ -9,4 +9,5 @@ urlpatterns = patterns('',
     url(r'^(?P<meeting_id>\d+)/wettkaempfe/$', views.wettkaempfe, name='wettkaempfe'),
     url(r'^(?P<meeting_id>\d+)/wettkaempfe/(?P<wettkampf_info>.+?)/(?P<kategorie_name>.+?)/rangliste/$', views.rangliste, name='rangliste'),
     url(r'^(?P<meeting_id>\d+)/wettkaempfe/(?P<wettkampf_info>.+?)/(?P<kategorie_name>.+?)/rangliste-pdf/$', views.rangliste_pdf, name='rangliste-pdf'),
+    url(r'^(?P<meeting_id>\d+)/wettkaempfe/(?P<wettkampf_info>.+?)/(?P<kategorie_name>.+?)/rangliste-odt/$', views.rangliste_odt, name='rangliste-odt'),
 )
