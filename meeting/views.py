@@ -138,7 +138,6 @@ def rangliste_odt(request, meeting_id, wettkampf_info, kategorie_name):
                    kategorie_name=kategorie_name,
                    wettkampf_name=wettkampf_name, rangliste=rangliste)
 
-    #import pdb; pdb.set_trace()
     return render_to_response(
         template_name='meeting/templates/meeting/rangliste.odt',
         dictionary=context)
@@ -159,7 +158,6 @@ def render_to_response(template_name, dictionary=None, context_instance=None,
     response = HttpResponse(webodt.shortcuts._ifile(content_fd), content_type=mimetype)
     if not filename:
         filename = os.path.basename(template_name)
-        filename += '.%s' % format
     response['Content-Disposition'] = (
         inline and 'inline' or 'attachment; filename="%s"' % filename
     )
