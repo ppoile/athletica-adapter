@@ -177,56 +177,51 @@ xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2">
               <text:p text:style-name="P6">Bem.</text:p>
             </table:table-cell>
           </table:table-row>
-          <table:table-row>
-            <table:table-cell office:value-type="string">
-              <text:p text:style-name="P7">{% xmlfor rang, start in
-              rangliste.get %}{{ rang }}</text:p>
-            </table:table-cell>
-            <table:table-cell office:value-type="string">
-              <text:p text:style-name="P7">{{ start.name
-              }}</text:p>
-            </table:table-cell>
-            <table:table-cell office:value-type="string">
-              <text:p text:style-name="P7">{{ start.jahrgang
-              }}</text:p>
-            </table:table-cell>
-            <table:table-cell office:value-type="string">
-              <text:p text:style-name="P3">{{ start.verein
-              }}</text:p>
-            </table:table-cell>
-            <table:table-cell office:value-type="string">
-              <text:p text:style-name="P3">{{ start.land
-              }}</text:p>
-            </table:table-cell>
-            <table:table-cell office:value-type="string">
-              <text:p text:style-name="P7">{{ start.punkte
-              }}</text:p>
-            </table:table-cell>
-            <table:table-cell office:value-type="string">
-              <text:p text:style-name="P7">{{ start.bem }}</text:p>
-            </table:table-cell>
-          </table:table-row>
-          <table:table-row>
-            <table:table-cell office:value-type="string">
-              <text:p text:style-name="Normal" />
-            </table:table-cell>
-            <table:table-cell table:number-columns-spanned="3"
-            office:value-type="string">
-              <text:p text:style-name="P8">{{
-              start.disziplinen_list_text }}</text:p>
-            </table:table-cell>
-            <table:covered-table-cell />
-            <table:covered-table-cell />
-            <table:table-cell office:value-type="string">
-              <text:p text:style-name="P4" />
-            </table:table-cell>
-            <table:table-cell office:value-type="string">
-              <text:p text:style-name="Normal" />
-            </table:table-cell>
-            <table:table-cell office:value-type="string">
-              <text:p text:style-name="P7">{% endxmlfor %}</text:p>
-            </table:table-cell>
-          </table:table-row>
+          <table:table-rows>
+            <table:table-row>
+              <table:table-cell office:value-type="string">
+                <text:p text:style-name="P7">{% xmlfor rang, start in rangliste.get %}{{ rang }}</text:p>
+              </table:table-cell>
+              <table:table-cell office:value-type="string">
+                <text:p text:style-name="P7">{{ start.name }}</text:p>
+              </table:table-cell>
+              <table:table-cell office:value-type="string">
+                <text:p text:style-name="P7">{{ start.jahrgang }}</text:p>
+              </table:table-cell>
+              <table:table-cell office:value-type="string">
+                <text:p text:style-name="P3">{{ start.verein }}</text:p>
+              </table:table-cell>
+              <table:table-cell office:value-type="string">
+                <text:p text:style-name="P3">{{ start.land }}</text:p>
+              </table:table-cell>
+              <table:table-cell office:value-type="string">
+                <text:p text:style-name="P7">{{ start.punkte }}</text:p>
+              </table:table-cell>
+              <table:table-cell office:value-type="string">
+                <text:p text:style-name="P7">{{ start.bem }}</text:p>
+              </table:table-cell>
+            </table:table-row>
+            <table:table-row>
+              <table:table-cell office:value-type="string">
+                <text:p text:style-name="Normal" />
+              </table:table-cell>
+              <table:table-cell table:number-columns-spanned="3"
+              office:value-type="string">
+                <text:p text:style-name="P8">{{ start.disziplinen_list_text }}</text:p>
+              </table:table-cell>
+              <table:covered-table-cell />
+              <table:covered-table-cell />
+              <table:table-cell office:value-type="string">
+                <text:p text:style-name="P4" />
+              </table:table-cell>
+              <table:table-cell office:value-type="string">
+                <text:p text:style-name="Normal" />
+              </table:table-cell>
+              <table:table-cell office:value-type="string">
+                <text:p text:style-name="P7">{% endxmlfor %}</text:p>
+              </table:table-cell>
+            </table:table-row>
+          </table:table-rows>
         </table:table>
         <text:p text:style-name="P1" />
       </text:section>
