@@ -154,29 +154,31 @@ xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2">
           <table:table-column table:style-name="Table1.E" />
           <table:table-column table:style-name="Table1.F" />
           <table:table-column table:style-name="Table1.G" />
-          <table:table-row>
-            <table:table-cell office:value-type="string">
-              <text:p text:style-name="P6">Rang</text:p>
-            </table:table-cell>
-            <table:table-cell office:value-type="string">
-              <text:p text:style-name="P6">Name</text:p>
-            </table:table-cell>
-            <table:table-cell office:value-type="string">
-              <text:p text:style-name="P6">Jg.</text:p>
-            </table:table-cell>
-            <table:table-cell office:value-type="string">
-              <text:p text:style-name="P6">Verein</text:p>
-            </table:table-cell>
-            <table:table-cell office:value-type="string">
-              <text:p text:style-name="P2">Land</text:p>
-            </table:table-cell>
-            <table:table-cell office:value-type="string">
-              <text:p text:style-name="P2">Punkte</text:p>
-            </table:table-cell>
-            <table:table-cell office:value-type="string">
-              <text:p text:style-name="P6">Bem.</text:p>
-            </table:table-cell>
-          </table:table-row>
+          <table:table-header-rows>
+            <table:table-row>
+              <table:table-cell office:value-type="string">
+                <text:p text:style-name="P6">Rang</text:p>
+              </table:table-cell>
+              <table:table-cell office:value-type="string">
+                <text:p text:style-name="P6">Name</text:p>
+              </table:table-cell>
+              <table:table-cell office:value-type="string">
+                <text:p text:style-name="P6">Jg.</text:p>
+              </table:table-cell>
+              <table:table-cell office:value-type="string">
+                <text:p text:style-name="P6">Verein</text:p>
+              </table:table-cell>
+              <table:table-cell office:value-type="string">
+                <text:p text:style-name="P2">Land</text:p>
+              </table:table-cell>
+              <table:table-cell office:value-type="string">
+                <text:p text:style-name="P2">Punkte</text:p>
+              </table:table-cell>
+              <table:table-cell office:value-type="string">
+                <text:p text:style-name="P6">Bem.</text:p>
+              </table:table-cell>
+            </table:table-row>
+          </table:table-header-rows>
           <table:table-rows>
             <table:table-row>
               <table:table-cell office:value-type="string">
