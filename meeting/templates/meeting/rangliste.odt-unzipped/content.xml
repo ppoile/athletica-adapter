@@ -51,29 +51,36 @@ xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2">
   </office:font-face-decls>
   <office:automatic-styles>
     <style:style style:name="Table1" style:family="table">
-      <style:table-properties style:width="6.4375in"
-      table:align="left" />
+      <style:table-properties style:width="15.917cm"
+      table:align="margins" />
     </style:style>
     <style:style style:name="Table1.A" style:family="table-column">
-      <style:table-column-properties style:column-width="0.5563in" />
+      <style:table-column-properties style:column-width="0.893cm"
+      style:rel-column-width="506*" />
     </style:style>
     <style:style style:name="Table1.B" style:family="table-column">
-      <style:table-column-properties style:column-width="2.1306in" />
+      <style:table-column-properties style:column-width="6.369cm"
+      style:rel-column-width="3611*" />
     </style:style>
     <style:style style:name="Table1.C" style:family="table-column">
-      <style:table-column-properties style:column-width="0.2486in" />
+      <style:table-column-properties style:column-width="0.64cm"
+      style:rel-column-width="363*" />
     </style:style>
     <style:style style:name="Table1.D" style:family="table-column">
-      <style:table-column-properties style:column-width="1.7521in" />
-    </style:style>
-    <style:style style:name="Table1.E" style:family="table-column">
-      <style:table-column-properties style:column-width="0.5681in" />
+      <style:table-column-properties style:column-width="5.091cm"
+      style:rel-column-width="2886*" />
     </style:style>
     <style:style style:name="Table1.F" style:family="table-column">
-      <style:table-column-properties style:column-width="0.616in" />
+      <style:table-column-properties style:column-width="1.529cm"
+      style:rel-column-width="867*" />
     </style:style>
     <style:style style:name="Table1.G" style:family="table-column">
-      <style:table-column-properties style:column-width="0.566in" />
+      <style:table-column-properties style:column-width="0.755cm"
+      style:rel-column-width="428*" />
+    </style:style>
+    <style:style style:name="Table1.A1" style:family="table-cell">
+      <style:table-cell-properties fo:padding="0cm"
+      fo:border="none" />
     </style:style>
     <style:style style:name="P1" style:family="paragraph"
     style:parent-style-name="Normal">
@@ -85,49 +92,76 @@ xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2">
     <style:style style:name="P2" style:family="paragraph"
     style:parent-style-name="Normal">
       <style:text-properties fo:color="#000000"
-      style:font-name="Liberation Serif1" fo:font-size="12pt"
-      fo:language="en" fo:country="US" fo:font-weight="bold" />
+      style:font-name="Liberation Serif1" fo:font-size="9pt"
+      fo:language="en" fo:country="US" fo:font-weight="normal"
+      style:font-size-asian="9pt" style:font-size-complex="9pt" />
     </style:style>
     <style:style style:name="P3" style:family="paragraph"
     style:parent-style-name="Normal">
       <style:text-properties fo:color="#000000"
-      style:font-name="Liberation Serif1" fo:font-size="12pt"
-      fo:language="en" fo:country="US" fo:font-weight="normal" />
+      style:font-name="Liberation Serif1" fo:font-size="9pt"
+      fo:language="en" fo:country="US" fo:font-weight="bold"
+      style:font-size-asian="9pt" style:font-size-complex="9pt" />
     </style:style>
     <style:style style:name="P4" style:family="paragraph"
     style:parent-style-name="Normal">
-      <style:paragraph-properties fo:break-before="page" />
+      <style:text-properties fo:font-size="7.5pt"
+      style:font-size-asian="7.5pt"
+      style:font-size-complex="7.5pt" />
     </style:style>
     <style:style style:name="P5" style:family="paragraph"
     style:parent-style-name="Normal">
-      <style:paragraph-properties fo:text-align="start"
-      style:justify-single-word="false" fo:break-before="page" />
+      <style:paragraph-properties fo:break-before="page" />
       <style:text-properties fo:color="#000000"
-      style:font-name="Liberation Serif1" fo:font-size="12pt" />
+      style:font-name="Liberation Serif1" fo:font-size="9pt"
+      fo:language="en" fo:country="US" fo:font-weight="bold"
+      style:font-size-asian="9pt" style:font-size-complex="9pt" />
     </style:style>
     <style:style style:name="P6" style:family="paragraph"
     style:parent-style-name="Normal">
       <style:paragraph-properties fo:break-before="page" />
       <style:text-properties fo:color="#000000"
-      style:font-name="Liberation Serif1" fo:font-size="12pt"
-      fo:language="en" fo:country="US" fo:font-weight="bold" />
+      style:font-name="Liberation Serif1" fo:font-size="9pt"
+      fo:language="en" fo:country="US" fo:font-weight="normal"
+      style:font-size-asian="9pt" style:font-size-complex="9pt" />
     </style:style>
     <style:style style:name="P7" style:family="paragraph"
     style:parent-style-name="Normal">
       <style:paragraph-properties fo:break-before="page" />
       <style:text-properties fo:color="#000000"
-      style:font-name="Liberation Serif1" fo:font-size="12pt"
-      fo:language="en" fo:country="US" fo:font-weight="normal" />
+      style:font-name="Liberation Serif1" fo:font-size="7.5pt"
+      fo:language="en" fo:country="US" fo:font-weight="normal"
+      style:font-size-asian="7.5pt"
+      style:font-size-complex="7.5pt" />
     </style:style>
     <style:style style:name="P8" style:family="paragraph"
     style:parent-style-name="Normal">
       <style:paragraph-properties fo:break-before="page" />
-      <style:text-properties officeooo:rsid="0019c163"
-      officeooo:paragraph-rsid="0019c163" />
+      <style:text-properties fo:font-size="7.5pt"
+      style:font-size-asian="7.5pt"
+      style:font-size-complex="7.5pt" />
+    </style:style>
+    <style:style style:name="P9" style:family="paragraph"
+    style:parent-style-name="Normal">
+      <style:paragraph-properties fo:break-before="page" />
+      <style:text-properties fo:font-size="7.5pt"
+      officeooo:rsid="0019c163" officeooo:paragraph-rsid="0019c163"
+      style:font-size-asian="7.5pt"
+      style:font-size-complex="7.5pt" />
+    </style:style>
+    <style:style style:name="P10" style:family="paragraph"
+    style:parent-style-name="Heading_20_2"
+    style:master-page-name="">
+      <style:paragraph-properties style:page-number="auto"
+      fo:break-before="page" />
+      <style:text-properties fo:font-size="12pt"
+      style:font-size-asian="12pt"
+      style:font-size-complex="12pt" />
     </style:style>
     <style:style style:name="Sect1" style:family="section">
-      <style:section-properties style:editable="false">
-        <style:columns fo:column-count="1" fo:column-gap="0in" />
+      <style:section-properties fo:margin-left="0cm"
+      fo:margin-right="0.004cm" style:editable="false">
+        <style:columns fo:column-count="1" fo:column-gap="0cm" />
       </style:section-properties>
     </style:style>
   </office:automatic-styles>
@@ -144,86 +178,99 @@ xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2">
         text:name="Drawing" />
       </text:sequence-decls>
       <text:section text:style-name="Sect1" text:name="Section1">
-        <text:p text:style-name="P5">{{ wettkampf_name }}</text:p>
+        <text:h text:style-name="P10" text:outline-level="2">{{
+        wettkampf_name }}</text:h>
         <text:p text:style-name="P1" />
         <table:table table:name="Table1" table:style-name="Table1">
           <table:table-column table:style-name="Table1.A" />
           <table:table-column table:style-name="Table1.B" />
           <table:table-column table:style-name="Table1.C" />
           <table:table-column table:style-name="Table1.D" />
-          <table:table-column table:style-name="Table1.E" />
+          <table:table-column table:style-name="Table1.C" />
           <table:table-column table:style-name="Table1.F" />
           <table:table-column table:style-name="Table1.G" />
           <table:table-header-rows>
             <table:table-row>
-              <table:table-cell office:value-type="string">
-                <text:p text:style-name="P6">Rang</text:p>
+              <table:table-cell table:style-name="Table1.A1"
+              office:value-type="string">
+                <text:p text:style-name="P5">Rang</text:p>
               </table:table-cell>
-              <table:table-cell office:value-type="string">
-                <text:p text:style-name="P6">Name</text:p>
+              <table:table-cell table:style-name="Table1.A1"
+              office:value-type="string">
+                <text:p text:style-name="P5">Name</text:p>
               </table:table-cell>
-              <table:table-cell office:value-type="string">
-                <text:p text:style-name="P6">Jg.</text:p>
+              <table:table-cell table:style-name="Table1.A1"
+              office:value-type="string">
+                <text:p text:style-name="P5">Jg.</text:p>
               </table:table-cell>
-              <table:table-cell office:value-type="string">
-                <text:p text:style-name="P6">Verein</text:p>
+              <table:table-cell table:style-name="Table1.A1"
+              office:value-type="string">
+                <text:p text:style-name="P5">Verein</text:p>
               </table:table-cell>
-              <table:table-cell office:value-type="string">
-                <text:p text:style-name="P2">Land</text:p>
+              <table:table-cell table:style-name="Table1.A1"
+              office:value-type="string">
+                <text:p text:style-name="P3">Land</text:p>
               </table:table-cell>
-              <table:table-cell office:value-type="string">
-                <text:p text:style-name="P2">Punkte</text:p>
+              <table:table-cell table:style-name="Table1.A1"
+              office:value-type="string">
+                <text:p text:style-name="P3">Punkte</text:p>
               </table:table-cell>
-              <table:table-cell office:value-type="string">
-                <text:p text:style-name="P6">Bem.</text:p>
+              <table:table-cell table:style-name="Table1.A1"
+              office:value-type="string">
+                <text:p text:style-name="P5">Bem.</text:p>
               </table:table-cell>
             </table:table-row>
           </table:table-header-rows>
-          <table:table-rows>
-            <table:table-row>
-              <table:table-cell office:value-type="string">
-                <text:p text:style-name="P7">{% xmlfor rang, start in rangliste.get %}{{ rang }}</text:p>
-              </table:table-cell>
-              <table:table-cell office:value-type="string">
-                <text:p text:style-name="P7">{{ start.name }}</text:p>
-              </table:table-cell>
-              <table:table-cell office:value-type="string">
-                <text:p text:style-name="P7">{{ start.jahrgang }}</text:p>
-              </table:table-cell>
-              <table:table-cell office:value-type="string">
-                <text:p text:style-name="P3">{{ start.verein }}</text:p>
-              </table:table-cell>
-              <table:table-cell office:value-type="string">
-                <text:p text:style-name="P3">{{ start.land }}</text:p>
-              </table:table-cell>
-              <table:table-cell office:value-type="string">
-                <text:p text:style-name="P7">{{ start.punkte }}</text:p>
-              </table:table-cell>
-              <table:table-cell office:value-type="string">
-                <text:p text:style-name="P7">{{ start.bem }}</text:p>
-              </table:table-cell>
-            </table:table-row>
-            <table:table-row>
-              <table:table-cell office:value-type="string">
-                <text:p text:style-name="Normal" />
-              </table:table-cell>
-              <table:table-cell table:number-columns-spanned="3"
-              office:value-type="string">
-                <text:p text:style-name="P8">{{ start.disziplinen_list_text }}</text:p>
-              </table:table-cell>
-              <table:covered-table-cell />
-              <table:covered-table-cell />
-              <table:table-cell office:value-type="string">
-                <text:p text:style-name="P4" />
-              </table:table-cell>
-              <table:table-cell office:value-type="string">
-                <text:p text:style-name="Normal" />
-              </table:table-cell>
-              <table:table-cell office:value-type="string">
-                <text:p text:style-name="P7">{% endxmlfor %}</text:p>
-              </table:table-cell>
-            </table:table-row>
-          </table:table-rows>
+          <table:table-row>
+            <table:table-cell office:value-type="string">
+              <text:p text:style-name="P6">{% xmlfor rang, start in
+              rangliste.get %}{{ rang }}</text:p>
+            </table:table-cell>
+            <table:table-cell office:value-type="string">
+              <text:p text:style-name="P6">{{ start.name
+              }}</text:p>
+            </table:table-cell>
+            <table:table-cell office:value-type="string">
+              <text:p text:style-name="P6">{{ start.jahrgang
+              }}</text:p>
+            </table:table-cell>
+            <table:table-cell office:value-type="string">
+              <text:p text:style-name="P2">{{ start.verein
+              }}</text:p>
+            </table:table-cell>
+            <table:table-cell office:value-type="string">
+              <text:p text:style-name="P2">{{ start.land
+              }}</text:p>
+            </table:table-cell>
+            <table:table-cell office:value-type="string">
+              <text:p text:style-name="P6">{{ start.punkte
+              }}</text:p>
+            </table:table-cell>
+            <table:table-cell office:value-type="string">
+              <text:p text:style-name="P6">{{ start.bem }}</text:p>
+            </table:table-cell>
+          </table:table-row>
+          <table:table-row>
+            <table:table-cell office:value-type="string">
+              <text:p text:style-name="P4" />
+            </table:table-cell>
+            <table:table-cell table:number-columns-spanned="3"
+            office:value-type="string">
+              <text:p text:style-name="P9">{{
+              start.disziplinen_list_text }}</text:p>
+            </table:table-cell>
+            <table:covered-table-cell />
+            <table:covered-table-cell />
+            <table:table-cell office:value-type="string">
+              <text:p text:style-name="P8" />
+            </table:table-cell>
+            <table:table-cell office:value-type="string">
+              <text:p text:style-name="P4" />
+            </table:table-cell>
+            <table:table-cell office:value-type="string">
+              <text:p text:style-name="P7">{% endxmlfor %}</text:p>
+            </table:table-cell>
+          </table:table-row>
         </table:table>
         <text:p text:style-name="P1" />
       </text:section>
