@@ -87,7 +87,7 @@ xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2">
       <style:paragraph-properties fo:text-align="start"
       style:justify-single-word="false" />
       <style:text-properties fo:color="#000000"
-      style:font-name="Liberation Serif1" fo:font-size="12pt" />
+      style:font-name="Liberation Serif1" fo:font-size="11pt" />
     </style:style>
     <style:style style:name="P2" style:family="paragraph"
     style:parent-style-name="Normal">
@@ -154,9 +154,9 @@ xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2">
     style:master-page-name="">
       <style:paragraph-properties style:page-number="auto"
       fo:break-before="page" />
-      <style:text-properties fo:font-size="12pt"
-      style:font-size-asian="12pt"
-      style:font-size-complex="12pt" />
+      <style:text-properties fo:font-size="11pt"
+      style:font-size-asian="11pt"
+      style:font-size-complex="11pt" />
     </style:style>
     <style:style style:name="Sect1" style:family="section">
       <style:section-properties fo:margin-left="0cm"
