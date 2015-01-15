@@ -22,8 +22,8 @@ class Anlage(models.Model):
 class Stadion(models.Model):
     id = models.AutoField(db_column='xStadion', primary_key=True)
     name = models.CharField(db_column='Name', max_length=50)
-    bahnen = models.IntegerField(db_column='Bahnen')
-    bahnengerade = models.IntegerField(db_column='BahnenGerade')
+    bahnen = models.IntegerField(db_column='Bahnen', default=6)
+    bahnengerade = models.IntegerField(db_column='BahnenGerade', default=6)
     ueber1000m = models.CharField(db_column='Ueber1000m', max_length=1,
                                   choices=(('y', True), ('n', False)),
                                   default='n')
