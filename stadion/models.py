@@ -14,7 +14,6 @@ class Anlage(models.Model):
         return self.bezeichnung
 
     class Meta:
-        managed = False
         db_table = 'anlage'
         verbose_name_plural = "anlagen"
         ordering = ["bezeichnung"]
@@ -38,6 +37,5 @@ class Stadion(models.Model):
         return reverse('stadion:index')
 
     class Meta:
-        managed = False
         db_table = 'stadion'
         verbose_name_plural = "stadien"

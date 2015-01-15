@@ -35,7 +35,6 @@ class Anmeldung(models.Model):
         return "%s %s" % (self.startnummer, self.athlet)
 
     class Meta:
-        managed = False
         db_table = 'anmeldung'
         verbose_name_plural = "anmeldungen"
 
@@ -65,7 +64,6 @@ class Athlet(models.Model):
         return "%s %s" % (self.vorname, self.name)
 
     class Meta:
-        managed = False
         db_table = 'athlet'
         verbose_name_plural = "athleten"
 
@@ -78,7 +76,6 @@ class BaseAccount(models.Model):
     lg = models.CharField(max_length=100)
 
     class Meta:
-        managed = False
         db_table = 'base_account'
 
 
@@ -97,7 +94,6 @@ class BaseAthlete(models.Model):
     account_info = models.CharField(max_length=150)
 
     class Meta:
-        managed = False
         db_table = 'base_athlete'
 
 
@@ -108,7 +104,6 @@ class BaseLog(models.Model):
     global_last_change = models.DateField()
 
     class Meta:
-        managed = False
         db_table = 'base_log'
 
 
@@ -129,7 +124,6 @@ class BasePerformance(models.Model):
     season = models.CharField(max_length=1)
 
     class Meta:
-        managed = False
         db_table = 'base_performance'
 
 
@@ -142,7 +136,6 @@ class BaseRelay(models.Model):
     account_code = models.IntegerField()
 
     class Meta:
-        managed = False
         db_table = 'base_relay'
 
 
@@ -154,7 +147,6 @@ class BaseSvm(models.Model):
     account_code = models.IntegerField()
 
     class Meta:
-        managed = False
         db_table = 'base_svm'
 
 
@@ -174,7 +166,6 @@ class DisziplinDe(models.Model):
     aktiv = models.CharField(max_length=1)
 
     class Meta:
-        managed = False
         db_table = 'disziplin_de'
 
 
@@ -194,7 +185,6 @@ class DisziplinFr(models.Model):
     aktiv = models.CharField(max_length=1)
 
     class Meta:
-        managed = False
         db_table = 'disziplin_fr'
 
 
@@ -214,7 +204,6 @@ class DisziplinIt(models.Model):
     aktiv = models.CharField(max_length=1)
 
     class Meta:
-        managed = False
         db_table = 'disziplin_it'
 
 
@@ -233,7 +222,6 @@ class Faq(models.Model):
     farbehg = models.CharField(db_column='FarbeHG', max_length=6)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'faq'
 
 
@@ -244,7 +232,6 @@ class Hoehe(models.Model):
     xserie = models.IntegerField(db_column='xSerie')  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'hoehe'
 
 
@@ -263,7 +250,6 @@ class Kategorie(models.Model):
         return self.name
 
     class Meta:
-        managed = False
         db_table = 'kategorie'
         verbose_name_plural = "kategorien"
 
@@ -274,7 +260,6 @@ class KategorieSvm(models.Model):
     code = models.CharField(db_column='Code', max_length=5)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'kategorie_svm'
 
 
@@ -287,7 +272,6 @@ class Land(models.Model):
         return self.name
 
     class Meta:
-        managed = False
         db_table = 'land'
         verbose_name_plural = "länder"
 
@@ -315,7 +299,6 @@ class Layout(models.Model):
     xmeeting = models.IntegerField(db_column='xMeeting')  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'layout'
 
 
@@ -325,7 +308,6 @@ class OmegaTyp(models.Model):
     omega_kurzname = models.CharField(db_column='OMEGA_Kurzname', max_length=4)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'omega_typ'
 
 
@@ -337,7 +319,6 @@ class Region(models.Model):
     ukc = models.CharField(db_column='UKC', max_length=1, blank=True)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'region'
 
 
@@ -352,7 +333,6 @@ class Resultat(models.Model):
         return "%s,%s" % (self.leistung, self.punkte)
 
     class Meta:
-        managed = False
         db_table = 'resultat'
         verbose_name_plural = "resultate"
 
@@ -389,7 +369,6 @@ class Runde(models.Model):
         return value
 
     class Meta:
-        managed = False
         db_table = 'runde'
         verbose_name_plural = "runden"
 
@@ -401,7 +380,6 @@ class Rundenlog(models.Model):
     runde = models.ForeignKey("Runde", db_column='xRunde')
 
     class Meta:
-        managed = False
         db_table = 'rundenlog'
 
 
@@ -412,7 +390,6 @@ class Rundenset(models.Model):
     hauptrunde = models.IntegerField(db_column='Hauptrunde')  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'rundenset'
 
 
@@ -424,7 +401,6 @@ class RundentypDe(models.Model):
     code = models.CharField(db_column='Code', max_length=2)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'rundentyp_de'
 
 
@@ -436,7 +412,6 @@ class RundentypFr(models.Model):
     code = models.CharField(db_column='Code', max_length=2)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'rundentyp_fr'
 
 
@@ -448,7 +423,6 @@ class RundentypIt(models.Model):
     code = models.CharField(db_column='Code', max_length=2)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'rundentyp_it'
 
 
@@ -468,7 +442,6 @@ class Serie(models.Model):
         return "%s (%s)" % (self.bezeichnung, self.runde)
 
     class Meta:
-        managed = False
         db_table = 'serie'
         verbose_name_plural = "serien"
 
@@ -489,7 +462,6 @@ class Serienstart(models.Model):
     starthoehe = models.IntegerField(db_column='Starthoehe', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'serienstart'
 
 
@@ -504,7 +476,6 @@ class Staffel(models.Model):
     startnummer = models.IntegerField(db_column='Startnummer')  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'staffel'
 
 
@@ -515,7 +486,6 @@ class Staffelathlet(models.Model):
     position = models.IntegerField(db_column='Position')  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'staffelathlet'
 
 
@@ -536,7 +506,6 @@ class Start(models.Model):
         return "%s: %s" % (self.anmeldung, self.wettkampf)
 
     class Meta:
-        managed = False
         db_table = 'start'
 
 
@@ -550,7 +519,6 @@ class Team(models.Model):
     xkategorie_svm = models.IntegerField(db_column='xKategorie_svm')  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'team'
 
 
@@ -567,7 +535,6 @@ class Teamsm(models.Model):
     leistung = models.IntegerField(db_column='Leistung')  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'teamsm'
 
 
@@ -576,7 +543,6 @@ class Teamsmathlet(models.Model):
     xanmeldung = models.IntegerField(db_column='xAnmeldung')  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'teamsmathlet'
 
 
@@ -591,7 +557,6 @@ class Verein(models.Model):
         return self.name
 
     class Meta:
-        managed = False
         db_table = 'verein'
         verbose_name_plural = "vereine"
 
@@ -610,7 +575,6 @@ class Videowand(models.Model):
     bildnr = models.IntegerField(db_column='Bildnr')  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'videowand'
 
 
@@ -619,7 +583,6 @@ class Wertungstabelle(models.Model):
     name = models.CharField(db_column='Name', max_length=255)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'wertungstabelle'
 
 
@@ -632,7 +595,6 @@ class WertungstabellePunkte(models.Model):
     punkte = models.FloatField(db_column='Punkte')  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'wertungstabelle_punkte'
 
 
@@ -661,7 +623,6 @@ class Wettkampf(models.Model):
         return "%s (%s)" % (self.punkteformel, self.info)
 
     class Meta:
-        managed = False
         db_table = 'wettkampf'
         verbose_name_plural = "wettkämpfe"
 
@@ -685,5 +646,4 @@ class Zeitmessung(models.Model):
     xmeeting = models.IntegerField(db_column='xMeeting')  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'zeitmessung'

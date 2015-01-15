@@ -26,5 +26,4 @@ class Meeting(models.Model):
         return "%s %d" % (self.name, self.datumvon.year)
 
     class Meta:
-        managed = False
         db_table = 'meeting'
