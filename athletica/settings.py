@@ -92,7 +92,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-TEST_RUNNER = 'testtool.ManagedModelTestRunner'
-
 WEBODT_CONVERTER = 'webodt.converters.abiword.AbiwordODFConverter'
 WEBODT_TEMPLATE_PATH = ''
