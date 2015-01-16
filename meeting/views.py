@@ -9,13 +9,6 @@ from main.models import Wettkampf
 from meeting.models import Meeting
 from meeting.rangliste import RanglistenItem, Rangliste
 import os
-from reportlab.lib import colors
-from reportlab.lib.enums import TA_LEFT, TA_RIGHT, TA_CENTER, TA_JUSTIFY
-from reportlab.lib.pagesizes import A3, A4, landscape, portrait
-from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
-from reportlab.lib.units import cm
-from reportlab.pdfgen import canvas
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Frame, Spacer
 from webodt.cache import CacheManager
 from webodt.helpers import get_mimetype
 import webodt.shortcuts
@@ -80,44 +73,6 @@ def rangliste(request, meeting_id, wettkampf_info, kategorie_name):
                    kategorie_name=kategorie_name,
                    wettkampf_name=wettkampf_name, rangliste=rangliste)
     return render(request, "meeting/rangliste.html", context)
-
-def rangliste_pdf(request, meeting_id, wettkampf_info, kategorie_name):
-    meeting_wettkaempfe = Wettkampf.objects.filter(meeting_id=meeting_id)
-    wettkaempfe = meeting_wettkaempfe.filter(
-        info=wettkampf_info, kategorie__name=kategorie_name)
-    num_wettkaempfe = wettkaempfe.count()
-    wettkampf_name = "%s, %skampf" % (
-        kategorie_name, _num_wettkaempfe_info_mapping[num_wettkaempfe])
-
-    meeting_starts = Start.objects.filter(wettkampf__meeting_id=meeting_id)
-    wettkampf_starts = meeting_starts.filter(
-        wettkampf__info=wettkampf_info,
-        wettkampf__kategorie__name=kategorie_name)
-    rangliste = Rangliste()
-    rangliste.add_starts(wettkampf_starts)
-
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="rangliste.pdf"'
-
-    doc = SimpleDocTemplate(response, pagesize=A4)
-
-    elements = []
-    styles=getSampleStyleSheet()
-    styleN = styles["Normal"]
-
-    headings = ["Rang", "Name", "Jg", "Verein", "Land", "Punkte", "Bem"]
-    data = [headings]
-    for rang, start in rangliste.get():
-        data.append([rang, start.name, start.jahrgang, start.verein,
-                     start.land, start.punkte, start.bem])
-                     #start.disziplinen_list_text])
-
-    tableThatSplitsOverPages = Table(data, [2.5 * cm, 2.5 * cm], repeatRows=1)
-    elements.append(tableThatSplitsOverPages)
-
-    doc.build(elements)
-
-    return response
 
 def rangliste_odt(request, meeting_id, wettkampf_info, kategorie_name):
     meeting_wettkaempfe = Wettkampf.objects.filter(meeting_id=meeting_id)
