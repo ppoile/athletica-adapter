@@ -10,7 +10,7 @@ class AnlagenTests(TestCase):
         self.assertEqual(anlage.bezeichnung, "")
         self.assertEqual(anlage.homologiert, "y")
         self.assertEqual(anlage.stadion_id, None)
-        self.assertEqual(anlage.stadion, None)
+        #self.assertEqual(anlage.stadion, None)
 
     def test_bezeichnung(self):
         bezeichnung = "UMM"
@@ -53,5 +53,6 @@ class StadionTests(TestCase):
 
         anlage = Anlage(bezeichnung="Weitsprung")
         stadion.anlagen.add(anlage)
+        self.assertEqual(stadion, anlage.stadion)
         self.assertEqual(stadion.anlagen.count(), 2)
         self.assertIn(anlage, list(stadion.anlagen.all()))
