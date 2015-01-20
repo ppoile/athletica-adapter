@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 
+import unittest
+import doctest
+import meeting.models
+
+def load_tests(loader, tests, ignore):
+    tests.addTests(doctest.DocTestSuite(meeting.models))
+    return tests
 
 
 def test_meeting():
