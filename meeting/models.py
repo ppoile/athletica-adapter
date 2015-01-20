@@ -1,6 +1,14 @@
 from django.db import models
 
 class Meeting(models.Model):
+    """
+    The meeting class
+
+    # create a meeting
+    >>> Meeting.objects.create()
+
+    """
+
     id = models.AutoField(db_column='xMeeting', primary_key=True)
     name = models.CharField(db_column='Name', max_length=60)  # Field name made lowercase.
     ort = models.CharField(db_column='Ort', max_length=20)  # Field name made lowercase.
