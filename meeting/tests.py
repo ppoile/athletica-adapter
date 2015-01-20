@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from django.test import TestCase
 
 
 def test_meeting():
