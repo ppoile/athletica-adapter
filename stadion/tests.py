@@ -1,4 +1,4 @@
-from django.test import TestCase
+from unittest import TestCase
 from stadion.models import Anlage
 from stadion.models import Stadion
 
