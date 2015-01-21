@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.template import Context
 from django.views import generic
+from main.models import Runde
 from main.models import Start
 from main.models import Wettkampf
 from meeting.models import Meeting
@@ -97,7 +98,6 @@ def rangliste_odt(request, meeting_id, wettkampf_info, kategorie_name):
         template_name='meeting/templates/meeting/rangliste.odt',
         dictionary=context)
 
-
 def render_to_response(template_name, dictionary=None, context_instance=None,
                        filename=None, format='odt', cache=CacheManager,
                        preprocessors=None, inline=None):
@@ -117,3 +117,33 @@ def render_to_response(template_name, dictionary=None, context_instance=None,
         inline and 'inline' or 'attachment; filename="%s"' % filename
     )
     return response
+
+def zeitplan(request, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id)
+    meeting_name="%s (%d)" % (meeting.name, meeting.datumvon.year)
+    meeting_runden = Runde.objects.filter(
+        wettkampf__meeting_id=meeting_id).order_by("datum", "stellzeit").all()
+    runden = list()
+    for runde in meeting_runden:
+        runden.append(dict(datum=runde.datum,
+                            zeit=runde.startzeit,
+                            kategorie=runde.wettkampf.kategorie.name,
+                            gruppe=runde.gruppe,
+                            disziplin=runde.wettkampf.punkteformel))
+    context = dict(meeting_id=meeting_id, meeting_name=meeting_name,
+                   runden=runden)
+    return render(request, "meeting/zeitplan.html", context)
+
+    meeting = get_object_or_404(Meeting, pk=meeting_id)
+    meeting_name="%s (%d)" % (meeting.name, meeting.datumvon.year)
+    wettkaempfe = dict()
+    for wettkampf in meeting.wettkaempfe.all():
+        wettkampf_name = "%s (%s)" % (wettkampf.info, wettkampf.kategorie.name)
+        try:
+            wettkaempfe[wettkampf_name]
+        except KeyError:
+            wettkaempfe[wettkampf_name] = []
+        wettkaempfe[wettkampf_name].append(wettkampf)
+    context = dict(meeting_id=meeting_id, meeting_name=meeting_name,
+                   wettkaempfe=wettkaempfe)
+    return render(request, "meeting/wettkaempfe.html", context)
