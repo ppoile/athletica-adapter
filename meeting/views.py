@@ -133,17 +133,3 @@ def zeitplan(request, meeting_id):
     context = dict(meeting_id=meeting_id, meeting_name=meeting_name,
                    runden=runden)
     return render(request, "meeting/zeitplan.html", context)
-
-    meeting = get_object_or_404(Meeting, pk=meeting_id)
-    meeting_name="%s (%d)" % (meeting.name, meeting.datumvon.year)
-    wettkaempfe = dict()
-    for wettkampf in meeting.wettkaempfe.all():
-        wettkampf_name = "%s (%s)" % (wettkampf.info, wettkampf.kategorie.name)
-        try:
-            wettkaempfe[wettkampf_name]
-        except KeyError:
-            wettkaempfe[wettkampf_name] = []
-        wettkaempfe[wettkampf_name].append(wettkampf)
-    context = dict(meeting_id=meeting_id, meeting_name=meeting_name,
-                   wettkaempfe=wettkaempfe)
-    return render(request, "meeting/wettkaempfe.html", context)
