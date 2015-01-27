@@ -124,12 +124,18 @@ def zeitplan(request, meeting_id):
     meeting_runden = Runde.objects.filter(
         wettkampf__meeting_id=meeting_id).order_by("datum", "stellzeit").all()
     runden = list()
+    kategorien = dict()
     for runde in meeting_runden:
+        kategorie = runde.wettkampf.kategorie
+        kategorien[(kategorie.geschlecht, kategorie.alterslimite)] = \
+            kategorie.name
         runden.append(dict(datum=runde.datum,
-                            zeit=runde.startzeit,
-                            kategorie=runde.wettkampf.kategorie.name,
-                            gruppe=runde.gruppe,
-                            disziplin=runde.wettkampf.punkteformel))
+                           zeit=runde.startzeit,
+                           kategorie=kategorie.name,
+                           gruppe=runde.gruppe,
+                           disziplin=runde.wettkampf.punkteformel))
+    keys = sorted(kategorien, reverse=True)
+    kategorien_labels = [kategorien[k] for k in keys]
     context = dict(meeting_id=meeting_id, meeting_name=meeting_name,
-                   runden=runden)
+                   runden=runden, kategorien=kategorien_labels)
     return render(request, "meeting/zeitplan.html", context)
