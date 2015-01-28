@@ -2,8 +2,8 @@
 
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
-from django.template import Context
-from django.views import generic
+from django.views.generic import DetailView
+from django.views.generic import ListView
 from main.models import Runde
 from main.models import Start
 from main.models import Wettkampf
@@ -15,12 +15,12 @@ from webodt.helpers import get_mimetype
 import webodt.shortcuts
 
 
-class Index(generic.ListView):
+class Index(ListView):
     model = Meeting
     context_object_name = "meetings"
     template_name = "meeting/index.html"
 
-class Detail(generic.DetailView):
+class Detail(DetailView):
     model = Meeting
     template_name = "meeting/detail.html"
 
@@ -117,25 +117,3 @@ def render_to_response(template_name, dictionary=None, context_instance=None,
         inline and 'inline' or 'attachment; filename="%s"' % filename
     )
     return response
-
-def zeitplan(request, meeting_id):
-    meeting = get_object_or_404(Meeting, pk=meeting_id)
-    meeting_name="%s (%d)" % (meeting.name, meeting.datumvon.year)
-    meeting_runden = Runde.objects.filter(
-        wettkampf__meeting_id=meeting_id).order_by("datum", "stellzeit").all()
-    runden = list()
-    kategorien = dict()
-    for runde in meeting_runden:
-        kategorie = runde.wettkampf.kategorie
-        kategorien[(kategorie.geschlecht, kategorie.alterslimite)] = \
-            kategorie.name
-        runden.append(dict(datum=runde.datum,
-                           zeit=runde.startzeit,
-                           kategorie=kategorie.name,
-                           gruppe=runde.gruppe,
-                           disziplin=runde.wettkampf.punkteformel))
-    keys = sorted(kategorien, reverse=True)
-    kategorien_labels = [kategorien[k] for k in keys]
-    context = dict(meeting_id=meeting_id, meeting_name=meeting_name,
-                   runden=runden, kategorien=kategorien_labels)
-    return render(request, "meeting/zeitplan.html", context)
