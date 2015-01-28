@@ -8,7 +8,7 @@
   <p>{{ runde.datum }}, {{ runde.zeit }}, {{ runde.kategorie }}, {{ runde.gruppe }}, {{ runde.disziplin }} </p>
 {% endfor %}
 
-{{ kategorien }}
+<p>{{ kategorien }}</p>
 
 <a href="{% url 'meeting:detail' meeting_id %}">Back to Meeting</a>
 
