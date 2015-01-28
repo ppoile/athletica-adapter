@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import datetime
 from django.db import models
 
@@ -20,7 +22,10 @@ class Meeting(models.Model):
                                 default=datetime.date.today())
     datumbis = models.DateField(db_column='DatumBis', blank=True, null=True)
     nummer = models.CharField(db_column='Nummer', max_length=20, default="")
-    programmmodus = models.IntegerField(db_column='ProgrammModus', default=0)
+    programmmodus = models.IntegerField(
+        db_column='ProgrammModus', choices=(
+            (0, "Wettkampfbüro"), (1, "dezentral"),
+            (2, "dezentral mit Rangierung")), default=0)
     online = models.CharField(db_column='Online', max_length=1,
                               choices=(('y', True), ('n', False)), default='n')
     organisator = models.CharField(db_column='Organisator', max_length=200)
@@ -33,9 +38,11 @@ class Meeting(models.Model):
     startgeldreduktion = models.FloatField(db_column='StartgeldReduktion',
                                            default=0)
     haftgeld = models.FloatField(db_column='Haftgeld', default=0)
-    saison = models.CharField(db_column='Saison', max_length=1)
+    saison = models.CharField(db_column='Saison', max_length=1,
+                              choices=(('I', 'Indoor'), ('O', 'Outdoor')), default='O')
     autorangieren = models.CharField(db_column='AutoRangieren', max_length=1)
-    ukc = models.CharField(db_column='UKC', max_length=1, blank=True)
+    ukc = models.CharField(db_column='UKC', max_length=1,
+                           choices=(('y', 'UBS Kids Cup'), ('n', 'Meeting')), default='n')
     statuschanged = models.CharField(db_column='StatusChanged', max_length=1)
 
     def __str__(self):
