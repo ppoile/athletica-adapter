@@ -8,8 +8,7 @@ Overview
 
 Athletica-adapter is a Django project.
 
-It is named 'athletica-adapter'.
-It consists of the following apps:
+It is named 'athletica-adapter' since it uses and extends athletica.
 
 Doc
 ---
@@ -35,3 +34,5 @@ mysql> show variables like "general_log%";
 2 rows in set (0.00 sec)
 
 mysql> 
+
+> sudo tail -f /var/lib/mysql/andi-xubuntu.log
