@@ -5,13 +5,15 @@
 
 <h2>{{ wettkampf_name }}</h2>
 
-<table border=1>
-  <tbody>
+<table class="table table-bordered">
+  <thead>
     <tr>
       {% for item in headings %}
         <th>{{ item }}</th>
       {% endfor %}
     </tr>
+  </thead>
+  <body>
     {% for columns in data %}
       <tr>
         {% for column in columns %}
