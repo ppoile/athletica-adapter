@@ -377,7 +377,7 @@ class Rundenlog(models.Model):
     id = models.AutoField(db_column='xRundenlog', primary_key=True)
     zeit = models.DateTimeField(db_column='Zeit')  # Field name made lowercase.
     ereignis = models.CharField(db_column='Ereignis', max_length=255)  # Field name made lowercase.
-    runde = models.ForeignKey("Runde", db_column='xRunde')
+    runde = models.ForeignKey("Runde", db_column='xRunde', related_name="rundenlog")
 
     class Meta:
         db_table = 'rundenlog'
