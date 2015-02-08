@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.shortcuts import get_object_or_404, render
 from django.views import generic
 from main.models import Runde
@@ -53,14 +54,14 @@ class Zeitplan(generic.View):
         return [k.name for k in sorted_kategorien]
 
     def _get_info(self, runde):
-        info = runde.wettkampf.punkteformel
-        if info[0].isalpha():
-            info = info.capitalize()
-        gruppe = runde.wettkampf.info
+        info = runde.wettkampf.disziplin.kurzname
+        if runde.gruppe:
+            info += " g%s" % runde.gruppe
+        num_starts = runde.serien.aggregate(num_starts=Count("serienstarts"))["num_starts"]
+        info += " (%d)" % num_starts
+        wettkampf = runde.wettkampf.info
         match = re.match(r"(\d+K)", runde.wettkampf.info)
         if match:
-            gruppe = match.group(0)
-        if runde.gruppe:
-            gruppe += " G%s" % runde.gruppe
-        info += " (%s)" % gruppe
+            wettkampf = match.group(0)
+        info += " %s" % wettkampf
         return info
