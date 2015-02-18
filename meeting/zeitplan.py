@@ -57,7 +57,8 @@ class Zeitplan(generic.View):
         info = runde.wettkampf.disziplin.kurzname
         if runde.gruppe:
             info += " g%s" % runde.gruppe
-        num_starts = runde.serien.aggregate(num_starts=Count("serienstarts"))["num_starts"]
+        #num_starts = runde.serien.aggregate(num_starts=Count("serienstarts"))["num_starts"]
+        num_starts = runde.wettkampf.starts.filter(gruppe=runde.gruppe).count()
         info += " (%d)" % num_starts
         wettkampf = runde.wettkampf.info
         match = re.match(r"(\d+K)", runde.wettkampf.info)
