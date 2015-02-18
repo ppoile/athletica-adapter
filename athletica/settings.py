@@ -95,3 +95,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "collected-staticfiles")
 
 WEBODT_CONVERTER = 'webodt.converters.abiword.AbiwordODFConverter'
 WEBODT_TEMPLATE_PATH = ''
+
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, "athletica/templates"),
+)

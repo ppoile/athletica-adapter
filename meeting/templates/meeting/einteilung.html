@@ -1,45 +1,39 @@
-{% load staticfiles %}
+{% extends "base.html" %}
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>jQuery UI Sortable - Default functionality</title>
-    <link rel="stylesheet" media="screen" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'code.jquery.com/jquery-ui-themes-1.11.3/themes/smoothness/jquery-ui.css' %} ">
-    <script src="{% static 'code.jquery.com/jquery-1.11.2.min.js' %}"></script>
-    <script src="{% static 'code.jquery.com/jquery-ui-1.11.3/jquery-ui.js' %}"></script>
-    <script>
-      $(function() {
-        $( "#sortable" ).sortable();
-        $( "#sortable" ).disableSelection();
-      });
-    </script>
-  </head>
-  <body>
-    <h1>Einteilung für {{ wettkampf_name }}</h1>
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>Vorname</th>
-          <th>Name</th>
-          <th>Verein</th>
-          <th>Bestleistung</th>
-          <th>Gruppe</th>
-        </tr>
-      </thead>
-      <tbody id="sortable">
-        {% for item in anmeldungen %}
-          <tr>
-            <td>{{ item.vorname }}</td>
-            <td>{{ item.name }}</td>
-            <td>{{ item.verein }}</td>
-            <td>{{ item.bestleistung }}</td>
-            <td>{{ item.gruppe }}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <a href="{% url 'meeting:detail' meeting_id %}">Back to Meeting</a>
-  </body>
-</html>
+{% block content %}
+<h1>Einteilung für {{ wettkampf_name }}</h1>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Vorname</th>
+      <th>Name</th>
+      <th>Verein</th>
+      <th>Bestleistung</th>
+      <th>Gruppe</th>
+    </tr>
+  </thead>
+  <tbody id="sortable">
+    {% for item in anmeldungen %}
+      <tr>
+        <td>{{ item.vorname }}</td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.verein }}</td>
+        <td>{{ item.bestleistung }}</td>
+        <td>{{ item.gruppe }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<a href="{% url 'meeting:detail' meeting_id %}">Back to Meeting</a>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+  $(function() {
+    $( "#sortable" ).sortable();
+    $( "#sortable" ).disableSelection();
+  });
+</script>
+{% endblock scripts %}
