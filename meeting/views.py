@@ -10,6 +10,7 @@ from main.models import Wettkampf
 from meeting.models import Meeting
 from meeting.rangliste import RanglistenItem, Rangliste
 import os
+import re
 from webodt.cache import CacheManager
 from webodt.helpers import get_mimetype
 import webodt.shortcuts
@@ -36,7 +37,11 @@ def wettkaempfe(request, meeting_id):
     meeting_name="%s (%d)" % (meeting.name, meeting.datumvon.year)
     wettkaempfe = dict()
     for wettkampf in meeting.wettkaempfe.all():
-        wettkampf_name = "%s (%s)" % (wettkampf.info, wettkampf.kategorie.name)
+        wettkampf_name = wettkampf.info
+        match = re.match(r"(\d+K)", wettkampf_name)
+        if match:
+            wettkampf_name = match.group(0)
+        wettkampf_name += " (%s)" % wettkampf.kategorie.name
         try:
             wettkaempfe[wettkampf_name]
         except KeyError:
