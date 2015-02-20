@@ -12,7 +12,8 @@ class Zeitplan(generic.View):
         meeting = get_object_or_404(Meeting, pk=meeting_id)
         meeting_name="%s (%d)" % (meeting.name, meeting.datumvon.year)
         meeting_runden = Runde.objects.filter(
-            wettkampf__meeting_id=meeting_id).order_by("datum", "stellzeit").all()
+            wettkampf__meeting_id=meeting_id).order_by(
+                "datum", "stellzeit").all()
         runden = list()
         kategorien = set()
         for runde in meeting_runden:
@@ -57,8 +58,10 @@ class Zeitplan(generic.View):
         info = runde.wettkampf.disziplin.kurzname
         if runde.gruppe:
             info += " g%s" % runde.gruppe
-        #num_starts = runde.serien.aggregate(num_starts=Count("serienstarts"))["num_starts"]
-        num_starts = runde.wettkampf.starts.filter(gruppe=runde.gruppe).count()
+            num_starts = runde.wettkampf.starts.filter(
+                anmeldung__gruppe=runde.gruppe).count()
+        else:
+            num_starts = runde.wettkampf.starts.all().count()
         info += " (%d)" % num_starts
         wettkampf = runde.wettkampf.info
         match = re.match(r"(\d+K)", runde.wettkampf.info)
