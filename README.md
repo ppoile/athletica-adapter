@@ -38,4 +38,16 @@ TODO
 ----
 
 The following tasks are to be done:
+- Check runden-status:
+    0:  Appell hängig
+    1:  Appell abgeschlossen
+    2:  Serien in Bearbeitung
+    3:  Serien eingeteilt
+    4:  Resultate aus Zeitmerssung
+    5:  Resultate in Bearbeitung
+    6:  LIVE-Resultate
+    7:  Resultate erfasst/rangiert
+    8:  Resultatverkündigung
+    9:  Resultate ausgerufen
+    10: Siegerehrung durchgefuehrt
 - Implement Serieneinteilung and order by Rangliste
