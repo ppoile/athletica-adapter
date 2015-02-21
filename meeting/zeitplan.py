@@ -11,6 +11,7 @@ class Zeitplan(generic.View):
     def get(self, request, meeting_id):
         meeting = get_object_or_404(Meeting, pk=meeting_id)
         meeting_name="%s (%d)" % (meeting.name, meeting.datumvon.year)
+
         meeting_runden = Runde.objects.filter(
             wettkampf__meeting_id=meeting_id).order_by(
                 "datum", "stellzeit").all()
@@ -21,7 +22,7 @@ class Zeitplan(generic.View):
             runden.append(dict(datum=runde.datum,
                                zeit=runde.startzeit,
                                kategorie=kategorie.name,
-                               info=self._get_info(runde)))
+                               info=self._get_runden_info(runde)))
             kategorien.add(kategorie)
         kategorien_labels = self._get_sorted_kategorien_labels(kategorien)
 
@@ -54,7 +55,7 @@ class Zeitplan(generic.View):
             reverse=True)
         return [k.name for k in sorted_kategorien]
 
-    def _get_info(self, runde):
+    def _get_runden_info(self, runde):
         info = runde.wettkampf.disziplin.kurzname
         if runde.gruppe:
             info += " g%s" % runde.gruppe
