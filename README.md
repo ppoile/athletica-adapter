@@ -1,10 +1,7 @@
 athletica-adapter
 =================
 
-Adapter to Athletica
-
-Overview
---------
+Mehrkampf-Adapter to Athletica
 
 Athletica-adapter is a Django project.
 
@@ -33,6 +30,12 @@ mysql> show variables like "general_log%";
 +------------------+----------------------------------+
 2 rows in set (0.00 sec)
 
-mysql> 
+mysql>
 
 > sudo tail -f /var/lib/mysql/andi-xubuntu.log
+
+TODO
+----
+
+The following tasks are to be done:
+- Implement Serieneinteilung and order by Rangliste
