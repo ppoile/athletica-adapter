@@ -1,31 +1,59 @@
-{% extends "base.html" %}
-{% block content %}
+{% load staticfiles %}
 
-<h1>Einteilung für {{ wettkampf_name }}</h1>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>jQuery UI Sortable - Default functionality</title>
+    <link rel="stylesheet" href="{% static 'code.jquery.com/jquery-ui-themes-1.11.3/themes/smoothness/jquery-ui.css' %} ">
+    <script src="{% static 'code.jquery.com/jquery-1.11.2.min.js' %}"></script>
+    <script src="{% static 'code.jquery.com/jquery-ui-1.11.3/jquery-ui.js' %}"></script>
+    <style>
+      #sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+      #sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
+      #sortable li span { position: absolute; margin-left: -1.3em; }
+    </style>
+    <script>
+      $(function() {
+        $( "#sortable" ).sortable();
+        $( "#sortable" ).disableSelection();
+      });
+    </script>
+  </head>
+  <body>
+    <h1>Einteilung für {{ wettkampf_name }}</h1>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Vorname</th>
+          <th>Name</th>
+          <th>Verein</th>
+          <th>Bestleistung</th>
+          <th>Gruppe</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in anmeldungen %}
+          <tr>
+            <td>{{ item.vorname }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.verein }}</td>
+            <td>{{ item.bestleistung }}</td>
+            <td>{{ item.gruppe }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <a href="{% url 'meeting:detail' meeting_id %}">Back to Meeting</a>
 
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>Vorname</th>
-      <th>Name</th>
-      <th>Verein</th>
-      <th>Bestleistung</th>
-      <th>Gruppe</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for item in anmeldungen %}
-      <tr>
-        <td>{{ item.vorname }}</td>
-        <td>{{ item.name }}</td>
-        <td>{{ item.verein }}</td>
-        <td>{{ item.bestleistung }}</td>
-        <td>{{ item.gruppe }}</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
-<a href="{% url 'meeting:detail' meeting_id %}">Back to Meeting</a>
-
-{% endblock %}
+    <ul id="sortable">
+      <li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 1</li>
+      <li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 2</li>
+      <li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 3</li>
+      <li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 4</li>
+      <li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 5</li>
+      <li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 6</li>
+      <li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 7</li>
+    </ul>
+  </body>
+</html>
