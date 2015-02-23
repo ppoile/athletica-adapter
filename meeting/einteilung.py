@@ -20,7 +20,7 @@ class Einteilung(generic.View):
             anmeldungen.append(dict(
                 vorname=start.anmeldung.athlet.vorname,
                 name=start.anmeldung.athlet.name,
-                verein=start.anmeldung.athlet.verein.name,
+                verein=start.anmeldung.athlet.verein.sortierwert,
                 bestleistung=start.anmeldung.bestleistungmk,
                 gruppe=start.anmeldung.gruppe))
 

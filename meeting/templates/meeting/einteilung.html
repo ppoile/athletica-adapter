@@ -3,7 +3,7 @@
 {% block content %}
 <h1>Einteilung für {{ wettkampf_name }}</h1>
 
-<table class="table table-bordered">
+<table id="tablesorter" class="table table-bordered">
   <thead>
     <tr>
       <th>Vorname</th>
@@ -34,6 +34,7 @@
   $(function() {
     $( "#sortable" ).sortable();
     $( "#sortable" ).disableSelection();
+    $( "#tablesorter" ).tablesorter();
   });
 </script>
 {% endblock scripts %}
