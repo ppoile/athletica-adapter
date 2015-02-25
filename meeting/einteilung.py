@@ -8,10 +8,9 @@ from meeting.models import Meeting
 class GruppenEinteilung(generic.View):
     def get(self, request, meeting_id, wettkampf_info, kategorie_name):
         meeting = get_object_or_404(Meeting, pk=meeting_id)
-        wettkaempfe = meeting.wettkaempfe.filter(
-            info=wettkampf_info, kategorie__name=kategorie_name).all()
-        import pdb; pdb.set_trace()
-        starts = wettkaempfe[0].starts.order_by(
+        wettkampf = meeting.wettkaempfe.filter(
+            info=wettkampf_info, kategorie__name=kategorie_name).first()
+        starts = wettkampf.starts.order_by(
             "anmeldung__athlet__verein__sortierwert",
             "anmeldung__athlet__name",
             "anmeldung__athlet__vorname")
