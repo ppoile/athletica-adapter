@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Einteilung für {{ wettkampf_name }}</h1>
+<h1>Gruppeneinteilung für {{ wettkampf_name }}</h1>
 
 <table id="tablesorter" class="table table-bordered">
   <thead>
@@ -26,7 +26,7 @@
   </tbody>
 </table>
 
-<a href="{% url 'meeting:detail' meeting_id %}">Back to Meeting</a>
+<p><a href="{% url 'meeting:wettkaempfe' meeting_id %}">Back to Wettkämpfe</a></p>
 {% endblock content %}
 
 {% block scripts %}

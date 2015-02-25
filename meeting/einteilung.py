@@ -5,7 +5,7 @@ from django.views import generic
 from meeting.models import Meeting
 
 
-class Einteilung(generic.View):
+class GruppenEinteilung(generic.View):
     def get(self, request, meeting_id, wettkampf_info, kategorie_name):
         meeting = get_object_or_404(Meeting, pk=meeting_id)
         wettkampf = meeting.wettkaempfe.filter(
@@ -27,4 +27,4 @@ class Einteilung(generic.View):
         context = dict(meeting_id=meeting_id, wettkampf_info=wettkampf_info,
                        kategorie_name=kategorie_name, anmeldungen=anmeldungen)
 
-        return render(request, "meeting/einteilung.html", context)
+        return render(request, "meeting/gruppen-einteilung.html", context)
