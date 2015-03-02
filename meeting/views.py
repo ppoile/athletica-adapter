@@ -32,25 +32,6 @@ def anmeldungen(request, meeting_id):
     context = dict(meeting_name=meeting_name, anmeldungen=anmeldungen)
     return render(request, "meeting/anmeldungen.html", context)
 
-def wettkaempfe(request, meeting_id):
-    meeting = get_object_or_404(Meeting, pk=meeting_id)
-    meeting_name="%s (%d)" % (meeting.name, meeting.datumvon.year)
-    wettkaempfe = dict()
-    for wettkampf in meeting.wettkaempfe.all():
-        wettkampf_name = wettkampf.info
-        match = re.match(r"(\d+K)", wettkampf_name)
-        if match:
-            wettkampf_name = match.group(0)
-        wettkampf_name += " (%s)" % wettkampf.kategorie.name
-        try:
-            wettkaempfe[wettkampf_name]
-        except KeyError:
-            wettkaempfe[wettkampf_name] = []
-        wettkaempfe[wettkampf_name].append(wettkampf)
-    context = dict(meeting_id=meeting_id, meeting_name=meeting_name,
-                   wettkaempfe=wettkaempfe)
-    return render(request, "meeting/wettkaempfe.html", context)
-
 _num_wettkaempfe_info_mapping = {
     4: "Vier",
     5: u"Fünf",
