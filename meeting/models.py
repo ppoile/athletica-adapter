@@ -41,8 +41,8 @@ class Meeting(models.Model):
     saison = models.CharField(db_column='Saison', max_length=1,
                               choices=(('I', 'Indoor'), ('O', 'Outdoor')), default='O')
     autorangieren = models.CharField(db_column='AutoRangieren', max_length=1)
-    ukc = models.CharField(db_column='UKC', max_length=1,
-                           choices=(('y', 'UBS Kids Cup'), ('n', 'Meeting')), default='n')
+    UBSKidsCup = models.CharField(db_column='UKC', max_length=1,
+                           choices=(('y', True), ('n', False)), default='n')
     statuschanged = models.CharField(db_column='StatusChanged', max_length=1)
 
     def __str__(self):
