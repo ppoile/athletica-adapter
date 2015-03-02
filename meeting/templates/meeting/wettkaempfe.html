@@ -2,16 +2,13 @@
 {% block content %}
 
 <h1>Wettkämpfe für {{ meeting_name }}</h1>
-
+<ul>
 {% for wettkampf_name, wettkampf_liste in wettkaempfe.iteritems %}
-  <h2>{{ wettkampf_name }}</h2>
-  <a href="{% url 'meeting:gruppen-einteilung' meeting_id wettkampf_liste.0.info wettkampf_liste.0.kategorie.name %}">Gruppeneinteilung</a>
-  <a href="{% url 'meeting:rangliste' meeting_id wettkampf_liste.0.info wettkampf_liste.0.kategorie.name %}">Rangliste</a>
-  <ul>
-    {% for wettkampf in wettkampf_liste %}
-      <li>{{ wettkampf.punkteformel }}</li>
-    {% endfor %}
-  </ul>
+  <li>{{ wettkampf_name }}:
+    <a href="{% url 'meeting:wettkampf-details' meeting_id wettkampf_liste.0.info wettkampf_liste.0.kategorie.name %}">Details</a>
+    <a href="{% url 'meeting:gruppen-einteilung' meeting_id wettkampf_liste.0.info wettkampf_liste.0.kategorie.name %}">Gruppeneinteilung</a>
+    <a href="{% url 'meeting:rangliste' meeting_id wettkampf_liste.0.info wettkampf_liste.0.kategorie.name %}">Rangliste</a>
+  </li>
 {% endfor %}
 
 <a href="{% url 'meeting:detail' meeting_id %}">Back to Meeting</a>
