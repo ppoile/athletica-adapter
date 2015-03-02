@@ -89,7 +89,7 @@ class Athlet(models.Model):
 
 
 class BaseAccount(models.Model):
-    account_code = models.CharField(max_length=30)
+    account_code = models.CharField(max_length=30, primary_key=True)
     account_name = models.CharField(max_length=255)
     account_short = models.CharField(max_length=255)
     account_type = models.CharField(max_length=100)
@@ -100,7 +100,7 @@ class BaseAccount(models.Model):
 
 
 class BaseAthlete(models.Model):
-    id = models.AutoField(primary_key=True)
+    id_athlete = models.AutoField(primary_key=True)
     license = models.IntegerField()
     license_paid = models.CharField(max_length=1)
     license_cat = models.CharField(max_length=4)
@@ -118,7 +118,7 @@ class BaseAthlete(models.Model):
 
 
 class BaseLog(models.Model):
-    id = models.AutoField(primary_key=True)
+    id_log = models.AutoField(primary_key=True)
     type = models.CharField(max_length=50)
     update_time = models.DateTimeField()
     global_last_change = models.DateField()
@@ -128,7 +128,7 @@ class BaseLog(models.Model):
 
 
 class BasePerformance(models.Model):
-    id = models.AutoField(primary_key=True)
+    id_performance = models.AutoField(primary_key=True)
     id_athlete = models.IntegerField()
     discipline = models.IntegerField()
     category = models.CharField(max_length=10)
@@ -148,7 +148,7 @@ class BasePerformance(models.Model):
 
 
 class BaseRelay(models.Model):
-    id = models.AutoField(primary_key=True)
+    id_relay = models.AutoField(primary_key=True)
     is_athletica_gen = models.CharField(max_length=1)
     relay_name = models.CharField(max_length=255)
     category = models.CharField(max_length=10)
@@ -160,7 +160,7 @@ class BaseRelay(models.Model):
 
 
 class BaseSvm(models.Model):
-    id = models.AutoField(primary_key=True)
+    id_svm = models.AutoField(primary_key=True)
     is_athletica_gen = models.CharField(max_length=1)
     svm_name = models.CharField(max_length=255)
     svm_category = models.CharField(max_length=10)
@@ -453,10 +453,10 @@ class Rundenlog(models.Model):
 
 
 class Rundenset(models.Model):
-    xrundenset = models.IntegerField(db_column='xRundenset')  # Field name made lowercase.
-    xmeeting = models.IntegerField(db_column='xMeeting')  # Field name made lowercase.
-    xrunde = models.IntegerField(db_column='xRunde')  # Field name made lowercase.
-    hauptrunde = models.IntegerField(db_column='Hauptrunde')  # Field name made lowercase.
+    id = models.AutoField(db_column='xRundenset', primary_key=True)
+    meeting = models.ForeignKey("Meeting", db_column='xMeeting')
+    runde = models.ForeignKey("Runde", db_column='xRunde', related_name="-")
+    hauptrunde = models.ForeignKey("Runde", db_column='Hauptrunde')
 
     class Meta:
         db_table = 'rundenset'
@@ -571,7 +571,7 @@ class Staffel(models.Model):
 
 
 class Staffelathlet(models.Model):
-    xstaffelstart = models.IntegerField(db_column='xStaffelstart')  # Field name made lowercase.
+    xstaffelstart = models.IntegerField(db_column='xStaffelstart', primary_key=True)
     xathletenstart = models.IntegerField(db_column='xAthletenstart')  # Field name made lowercase.
     xrunde = models.IntegerField(db_column='xRunde')  # Field name made lowercase.
     position = models.IntegerField(db_column='Position')  # Field name made lowercase.
@@ -630,8 +630,8 @@ class Teamsm(models.Model):
 
 
 class Teamsmathlet(models.Model):
-    xteamsm = models.IntegerField(db_column='xTeamsm')  # Field name made lowercase.
-    xanmeldung = models.IntegerField(db_column='xAnmeldung')  # Field name made lowercase.
+    xteamsm = models.IntegerField(db_column='xTeamsm', primary_key=True)
+    xanmeldung = models.IntegerField(db_column='xAnmeldung', primary_key=True)
 
     class Meta:
         db_table = 'teamsmathlet'
