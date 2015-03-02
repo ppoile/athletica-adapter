@@ -34,7 +34,7 @@ class SerienEinteilung(generic.View):
     def get(self, request, meeting_id, wettkampf_id):
         meeting = get_object_or_404(Meeting, pk=meeting_id)
         wettkampf = meeting.wettkaempfe.get(pk=wettkampf_id)
-        starts = wettkampf.starts.order_by("bestleistung")
+        starts = wettkampf.starts.order_by("-bestleistung")
 
         anmeldungen = []
         for start in starts:
