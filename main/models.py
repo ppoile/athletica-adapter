@@ -69,7 +69,7 @@ class Athlet(models.Model):
     lizenznummer = models.IntegerField(db_column='Lizenznummer')  # Field name made lowercase.
     geschlecht = models.CharField(db_column='Geschlecht', max_length=1, choices=(('m', 'Männlich'), ('w', 'Weiblich')))
     land = models.CharField(db_column='Land', max_length=3)  # Field name made lowercase.
-    geburtstag = models.DateField(db_column='Geburtstag')  # Field name made lowercase.
+    geburtstag = models.DateField(db_column='Geburtstag', null=True)
     athleticagen = models.CharField(db_column='Athleticagen', max_length=1)  # Field name made lowercase.
     bezahlt = models.CharField(db_column='Bezahlt', max_length=1)  # Field name made lowercase.
     xregion = models.IntegerField(db_column='xRegion')  # Field name made lowercase.
@@ -110,7 +110,7 @@ class BaseAthlete(models.Model):
     nationality = models.CharField(max_length=3)
     account_code = models.CharField(max_length=30)
     second_account_code = models.CharField(max_length=30)
-    birth_date = models.DateField()
+    birth_date = models.DateField(null=True)
     account_info = models.CharField(max_length=150)
 
     class Meta:
@@ -133,13 +133,13 @@ class BasePerformance(models.Model):
     discipline = models.IntegerField()
     category = models.CharField(max_length=10)
     best_effort = models.CharField(max_length=15)
-    best_effort_date = models.DateField()
+    best_effort_date = models.DateField(null=True)
     best_effort_event = models.CharField(max_length=100)
     season_effort = models.CharField(max_length=15)
-    season_effort_date = models.DateField()
+    season_effort_date = models.DateField(null=True)
     season_effort_event = models.CharField(max_length=100)
     notification_effort = models.CharField(max_length=15)
-    notification_effort_date = models.DateField()
+    notification_effort_date = models.DateField(null=True)
     notification_effort_event = models.CharField(max_length=100)
     season = models.CharField(max_length=1)
 
@@ -453,7 +453,7 @@ class Rundenlog(models.Model):
 
 
 class Rundenset(models.Model):
-    id = models.AutoField(db_column='xRundenset', primary_key=True)
+    id = models.IntegerField(db_column='xRundenset', primary_key=True)
     meeting = models.ForeignKey("Meeting", db_column='xMeeting')
     runde = models.ForeignKey("Runde", db_column='xRunde', related_name="-")
     hauptrunde = models.ForeignKey("Runde", db_column='Hauptrunde')
@@ -588,7 +588,7 @@ class Start(models.Model):
     erstserie = models.CharField(db_column='Erstserie', max_length=1)  # Field name made lowercase.
     wettkampf = models.ForeignKey("Wettkampf", db_column='xWettkampf', related_name="starts")
     anmeldung = models.ForeignKey("Anmeldung", db_column='xAnmeldung', related_name="starts")
-    staffel = models.ForeignKey("Staffel", db_column='xStaffel')  # Field name made lowercase.
+    staffel = models.ForeignKey("Staffel", db_column='xStaffel', blank=True, null=True)
     baseeffort = models.CharField(db_column='BaseEffort', max_length=1)  # Field name made lowercase.
     vorjahrleistung = models.IntegerField(db_column='VorjahrLeistung', blank=True, null=True)  # Field name made lowercase.
     gruppe = models.CharField(db_column='Gruppe', max_length=2, blank=True)  # Field name made lowercase.
@@ -631,7 +631,7 @@ class Teamsm(models.Model):
 
 class Teamsmathlet(models.Model):
     xteamsm = models.IntegerField(db_column='xTeamsm', primary_key=True)
-    xanmeldung = models.IntegerField(db_column='xAnmeldung', primary_key=True)
+    xanmeldung = models.IntegerField(db_column='xAnmeldung')
 
     class Meta:
         db_table = 'teamsmathlet'
