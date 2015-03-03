@@ -69,7 +69,7 @@ class Athlet(models.Model):
     lizenznummer = models.IntegerField(db_column='Lizenznummer')  # Field name made lowercase.
     geschlecht = models.CharField(db_column='Geschlecht', max_length=1, choices=(('m', 'Männlich'), ('w', 'Weiblich')))
     land = models.CharField(db_column='Land', max_length=3)  # Field name made lowercase.
-    geburtstag = models.DateField(db_column='Geburtstag', null=True)
+    geburtstag = models.DateField(db_column='Geburtstag', blank=True, null=True)
     athleticagen = models.CharField(db_column='Athleticagen', max_length=1)  # Field name made lowercase.
     bezahlt = models.CharField(db_column='Bezahlt', max_length=1)  # Field name made lowercase.
     xregion = models.IntegerField(db_column='xRegion')  # Field name made lowercase.
