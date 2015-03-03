@@ -19,6 +19,7 @@ class Rangliste(object):
         last_disziplin = start.wettkampf.mehrkampfende
 
         resultate = serienstart.resultate.order_by("-punkte").all()
+        leistung = None
         for resultat in resultate:
             leistung = resultat.leistung
             wind = ""
@@ -29,7 +30,8 @@ class Rangliste(object):
             punkte = int(resultat.punkte)
             if not resultat.info.lower().endswith("x"):
                 break
-
+        if leistung is None:
+            return
         item = self._get_item(start.anmeldung.athlet)
         item.add_disziplin(disziplin, reihenfolge, last_disziplin, leistung,
                            wind, punkte)
@@ -51,7 +53,7 @@ class Rangliste(object):
         items = sorted(self._items.values(), reverse=True)
         rangliste = []
         for item in items:
-            if item._num_valid_disziplinen() < len(item._disziplinen):
+            if item._num_valid_disziplinen() == -1:
                 rang = ""
             elif len(rangliste) > 0 and item == rangliste[-1][1]:
                 rang = rangliste[-1][0]
@@ -144,11 +146,10 @@ class RanglistenItem(object):
         return value
 
     def _num_valid_disziplinen(self):
-        num = 0
         for disziplin in self._disziplinen.values():
-            if disziplin.leistung not in [-1, -3]:
-                num += 1
-        return num
+            if disziplin.leistung in [-1, -3]:
+                return -1
+        return 1
 
 
 class DisziplinBase(object):
