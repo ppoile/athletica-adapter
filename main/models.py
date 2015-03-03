@@ -396,7 +396,7 @@ class Resultat(models.Model):
     leistung = models.IntegerField(db_column='Leistung')  # Field name made lowercase.
     info = models.CharField(db_column='Info', max_length=5)  # Field name made lowercase.
     punkte = models.FloatField(db_column='Punkte')  # Field name made lowercase.
-    serienstart = models.ForeignKey("Serienstart", db_column='xSerienstart', related_name="resultat")  # Field name made lowercase.
+    serienstart = models.ForeignKey("Serienstart", db_column='xSerienstart', related_name="resultate")
 
     def __unicode__(self):
         return "%s,%s" % (self.leistung, self.punkte)

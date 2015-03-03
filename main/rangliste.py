@@ -18,7 +18,7 @@ class Rangliste(object):
         windmessung = start.wettkampf.windmessung
         last_disziplin = start.wettkampf.mehrkampfende
 
-        resultate = serienstart.resultat.order_by("-punkte").all()
+        resultate = serienstart.resultate.order_by("-punkte").all()
         for resultat in resultate:
             leistung = resultat.leistung
             wind = ""
