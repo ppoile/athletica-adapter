@@ -590,9 +590,9 @@ class Migration(migrations.Migration):
             name='Rundenset',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='xRundenset')),
+                ('hauptrunde', models.IntegerField(default=0, db_column='Hauptrunde', choices=[('y', 1), ('n', 0)])),
                 ('runde', models.ForeignKey(related_name='-', db_column='xRunde', to='main.Runde')),
                 ('meeting', models.ForeignKey(to='main.Meeting', db_column='xMeeting')),
-                ('hauptrunde', models.ForeignKey(to='main.Runde', db_column='Hauptrunde')),
             ],
             options={
                 'db_table': 'rundenset',
