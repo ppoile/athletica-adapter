@@ -2,7 +2,7 @@ from django.db.models import Count
 from django.shortcuts import get_object_or_404, render
 from django.views import generic
 from main.models import Runde
-from meeting.models import Meeting
+from main.models import Meeting
 from operator import attrgetter
 import re
 
@@ -47,7 +47,7 @@ class Zeitplan(generic.View):
                        meeting_name=meeting_name,
                        headings = headings,
                        data=data)
-        return render(request, "meeting/zeitplan.html", context)
+        return render(request, "main/zeitplan.html", context)
 
     def _get_sorted_kategorien_labels(self, kategorien):
         sorted_kategorien = sorted(

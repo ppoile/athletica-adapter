@@ -2,17 +2,86 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+import datetime
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stadion', '0002_auto_20150115_2129'),
-        ('meeting', '0002_auto_20150115_2129'),
         ('main', '0002_auto_20141105_0556'),
     ]
 
     operations = [
+        migrations.CreateModel(
+            name='Anlage',
+            fields=[
+                ('id', models.AutoField(serialize=False, primary_key=True, db_column='xAnlage')),
+                ('bezeichnung', models.CharField(max_length=20, db_column='Bezeichnung')),
+                ('homologiert', models.CharField(default='y', max_length=1, db_column='Homologiert', choices=[('y', 'Yes'), ('n', 'No')])),
+            ],
+            options={
+                'ordering': ['bezeichnung'],
+                'db_table': 'anlage',
+                'verbose_name_plural': 'anlagen',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Meeting',
+            fields=[
+                ('id', models.AutoField(serialize=False, primary_key=True, db_column='xMeeting')),
+                ('name', models.CharField(max_length=60, null=True, db_column='Name')),
+                ('ort', models.CharField(max_length=20, db_column='Ort')),
+                ('datumvon', models.DateField(default=datetime.date(2015, 3, 6), db_column='DatumVon')),
+                ('datumbis', models.DateField(null=True, db_column='DatumBis', blank=True)),
+                ('nummer', models.CharField(default='', max_length=20, db_column='Nummer')),
+                ('programmmodus', models.IntegerField(default=0, db_column='ProgrammModus', choices=[(0, 'Wettkampfb\xfcro'), (1, 'dezentral'), (2, 'dezentral mit Rangierung')])),
+                ('online', models.CharField(default='n', max_length=1, db_column='Online', choices=[('y', True), ('n', False)])),
+                ('organisator', models.CharField(max_length=200, db_column='Organisator')),
+                ('zeitmessung', models.CharField(max_length=5, db_column='Zeitmessung')),
+                ('passwort', models.CharField(max_length=50, db_column='Passwort')),
+                ('xcontrol', models.IntegerField(default=0, db_column='xControl')),
+                ('startgeld', models.FloatField(default=0, db_column='Startgeld')),
+                ('startgeldreduktion', models.FloatField(default=0, db_column='StartgeldReduktion')),
+                ('haftgeld', models.FloatField(default=0, db_column='Haftgeld')),
+                ('saison', models.CharField(default='O', max_length=1, db_column='Saison', choices=[('I', 'Indoor'), ('O', 'Outdoor')])),
+                ('autorangieren', models.CharField(max_length=1, db_column='AutoRangieren')),
+                ('UBSKidsCup', models.CharField(default='n', max_length=1, db_column='UKC', choices=[('y', True), ('n', False)])),
+                ('statuschanged', models.CharField(max_length=1, db_column='StatusChanged')),
+            ],
+            options={
+                'db_table': 'meeting',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Stadion',
+            fields=[
+                ('id', models.AutoField(serialize=False, primary_key=True, db_column='xStadion')),
+                ('name', models.CharField(max_length=50, db_column='Name')),
+                ('bahnen', models.IntegerField(default=6, db_column='Bahnen')),
+                ('bahnengerade', models.IntegerField(default=6, db_column='BahnenGerade')),
+                ('ueber1000m', models.CharField(default='n', max_length=1, db_column='Ueber1000m', choices=[('y', True), ('n', False)])),
+                ('halle', models.CharField(default='n', max_length=1, db_column='Halle', choices=[('y', True), ('n', False)])),
+            ],
+            options={
+                'db_table': 'stadion',
+                'verbose_name_plural': 'stadien',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.AddField(
+            model_name='meeting',
+            name='stadion',
+            field=models.ForeignKey(related_name='meetings', db_column='xStadion', to='main.Stadion'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='anlage',
+            name='stadion',
+            field=models.ForeignKey(related_name='anlagen', db_column='xStadion', to='main.Stadion'),
+            preserve_default=True,
+        ),
         migrations.DeleteModel(
             name='Anmeldung',
         ),
@@ -32,7 +101,7 @@ class Migration(migrations.Migration):
                 ('kidid', models.IntegerField(null=True, db_column='KidID', blank=True)),
                 ('angemeldet', models.CharField(max_length=1, db_column='Angemeldet', blank=True)),
                 ('vorjahrleistungmk', models.IntegerField(null=True, db_column='VorjahrLeistungMK', blank=True)),
-                ('meeting', models.ForeignKey(related_name='anmeldungen', db_column='xMeeting', to='meeting.Meeting')),
+                ('meeting', models.ForeignKey(related_name='anmeldungen', db_column='xMeeting', to='main.Meeting')),
             ],
             options={
                 'db_table': 'anmeldung',
@@ -525,7 +594,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(serialize=False, primary_key=True, db_column='xRundenlog')),
                 ('zeit', models.DateTimeField(db_column='Zeit')),
                 ('ereignis', models.CharField(max_length=255, db_column='Ereignis')),
-                ('runde', models.ForeignKey(to='main.Runde', db_column='xRunde')),
+                ('runde', models.ForeignKey(related_name='rundenlog', db_column='xRunde', to='main.Runde')),
             ],
             options={
                 'db_table': 'rundenlog',
@@ -615,7 +684,7 @@ class Migration(migrations.Migration):
                 ('tvname', models.CharField(max_length=70, db_column='TVName', blank=True)),
                 ('maxathlet', models.IntegerField(db_column='MaxAthlet')),
                 ('runde', models.ForeignKey(related_name='serien', db_column='xRunde', to='main.Runde')),
-                ('anlage', models.ForeignKey(db_column='xAnlage', blank=True, to='stadion.Anlage', null=True)),
+                ('anlage', models.ForeignKey(db_column='xAnlage', blank=True, to='main.Anlage', null=True)),
             ],
             options={
                 'db_table': 'serie',
@@ -879,7 +948,7 @@ class Migration(migrations.Migration):
                 ('xkategorie_svm', models.IntegerField(db_column='xKategorie_svm')),
                 ('onlineid', models.IntegerField(db_column='OnlineId')),
                 ('typaenderung', models.CharField(max_length=50, db_column='TypAenderung')),
-                ('meeting', models.ForeignKey(related_name='wettkaempfe', db_column='xMeeting', to='meeting.Meeting')),
+                ('meeting', models.ForeignKey(related_name='wettkaempfe', db_column='xMeeting', to='main.Meeting')),
                 ('kategorie', models.ForeignKey(to='main.Kategorie', db_column='xKategorie')),
                 ('disziplin', models.ForeignKey(to='main.DisziplinDe', db_column='xDisziplin')),
             ],

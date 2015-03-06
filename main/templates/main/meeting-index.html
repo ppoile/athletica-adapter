@@ -5,13 +5,13 @@
     <h1>Meetings:</h1>
     <ul>
     {% for meeting in meetings %}
-        <li><a href="{% url 'meeting:detail' meeting.id %}">{{ meeting.name }} ({{ meeting.datumvon.year }})</a></li>
+        <li><a href="{% url 'main:meeting-detail' meeting.id %}">{{ meeting.name }} ({{ meeting.datumvon.year }})</a></li>
     {% endfor %}
     </ul>
 {% else %}
     <p>No meetings are available.</p>
 {% endif %}
 
-<a href="{% url 'root-index' %}">Back</a>
+<a href="{% url 'main:index' %}">Back</a>
 
 {% endblock %}

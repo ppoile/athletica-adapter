@@ -8,8 +8,6 @@ def index(request):
 <nav>
   <ul>
     <li><a href="/admin">Administration</a></li>
-    <li><a href="/stadion">Stadien</a></li>
-    <li><a href="/meeting">Meetings</a></li>
     <li><a href="/main">Main</a></li>
   </ul>
 </nav>
@@ -18,9 +16,7 @@ def index(request):
 
 urlpatterns = patterns(
     '',
-    url(r'^$', index, name='root-index'),
+    url(r'^$', index, name='index'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^main/', include('main.urls', namespace="main")),
-    url(r'^meeting/', include('meeting.urls', namespace="meeting")),
-    url(r'^stadion/', include('stadion.urls', namespace="stadion")),
 )

@@ -2,12 +2,11 @@
 
 from django.shortcuts import get_object_or_404, render
 from django.views import generic
+from main.models import Meeting
 import re
 
-from meeting.models import Meeting
 
-
-class WettkampfList(generic.View):
+class WettkampfIndex(generic.View):
     def get(self, request, meeting_id):
         meeting = get_object_or_404(Meeting, pk=meeting_id)
         meeting_name="%s (%d)" % (meeting.name, meeting.datumvon.year)
@@ -25,14 +24,14 @@ class WettkampfList(generic.View):
             wettkaempfe[wettkampf_name].append(wettkampf)
         context = dict(meeting_id=meeting_id, meeting_name=meeting_name,
                        wettkaempfe=wettkaempfe)
-        return render(request, "meeting/wettkaempfe.html", context)
+        return render(request, "main/wettkampf-index.html", context)
 
 
-class WettkampfDetails(generic.View):
+class WettkampfDetail(generic.View):
     def get(self, request, meeting_id, wettkampf_info, kategorie_name):
         meeting = get_object_or_404(Meeting, pk=meeting_id)
         wettkaempfe = meeting.wettkaempfe.filter(
             info=wettkampf_info, kategorie__name=kategorie_name).all()
         context = dict(meeting_id=meeting_id, wettkampf_info=wettkampf_info,
                        kategorie_name=kategorie_name,wettkaempfe=wettkaempfe)
-        return render(request, "meeting/wettkampf-details.html", context)
+        return render(request, "main/wettkampf-detail.html", context)

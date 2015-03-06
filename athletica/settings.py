@@ -41,8 +41,6 @@ INSTALLED_APPS = (
     'inplaceeditform',
     'webodt',
     'main',
-    'meeting',
-    'stadion',
 )
 
 MIDDLEWARE_CLASSES = (

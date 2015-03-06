@@ -1,3 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+
 <h1>Anmeldungen für {{ meeting.name }}</h1>
 <ul>
   <table class="table table-striped table-condensed">
@@ -12,12 +15,16 @@
     <tbody>
       {% for anmeldung in anmeldungen %}
         <tr>
-          <td>{{ anmeldung.0 }}</td>
-          <td>{{ anmeldung.1 }}</td>
-          <td>{{ anmeldung.2 }}</td>
-          <td>{{ anmeldung.3 }}</td>
+          <td>{{ anmeldung.startnummer }}</td>
+          <td>{{ anmeldung.athlet.vorname }}</td>
+          <td>{{ anmeldung.athlet.name }}</td>
+          <td>{{ anmeldung.athlet.verein.name }}</td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
 </ul>
+
+<a href="{% url 'main:meeting-detail' meeting_id %}">Back to Meeting</a>
+
+{% endblock %}

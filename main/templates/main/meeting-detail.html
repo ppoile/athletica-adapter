@@ -10,11 +10,11 @@
   <li>Stadion: {{ meeting.stadion }}</li>
   <li>DatumVon: {{ meeting.datumvon }}</li>
   <li>DatumBis: {{ meeting.datumbis }}</li>
-  <li><a href="{% url 'meeting:anmeldungen' meeting.id %}">Anmeldungen</a></li>
-  <li><a href="{% url 'meeting:wettkaempfe' meeting.id %}">Wettkämpfe</a></li>
-  <li><a href="{% url 'meeting:zeitplan' meeting.id %}">Zeitplan</a></li>
+  <li><a href="{% url 'main:anmeldungen' meeting.id %}">Anmeldungen</a></li>
+  <li><a href="{% url 'main:wettkampf-index' meeting.id %}">Wettkämpfe</a></li>
+  <li><a href="{% url 'main:zeitplan' meeting.id %}">Zeitplan</a></li>
 </ul>
 
-<a href="{% url 'meeting:index' %}">Back to list</a>
+<a href="{% url 'main:meeting-index' %}">Back to list</a>
 
 {% endblock %}

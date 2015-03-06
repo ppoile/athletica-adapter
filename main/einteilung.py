@@ -2,7 +2,7 @@
 
 from django.shortcuts import get_object_or_404, render
 from django.views import generic
-from meeting.models import Meeting
+from main.models import Meeting
 
 
 class GruppenEinteilung(generic.View):

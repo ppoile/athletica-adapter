@@ -5,18 +5,18 @@
 {% if stadien %}
   <ul>
     {% for stadion in stadien %}
-      <li><a href="{% url 'stadion:detail' stadion.id %}">{{ stadion.name }}</a></li>
+      <li><a href="{% url 'main:stadion-detail' stadion.id %}">{{ stadion.name }}</a></li>
     {% endfor %}
   </ul>
 {% else %}
   <p>No stadions are available.</p>
 {% endif %}
 
-<form action="{% url 'stadion:add' %}" method="get">
+<form action="{% url 'main:stadion-add' %}" method="get">
   {% csrf_token %}
   <input type="submit" value="Add new Stadion..." />
 </form>
 
-<a href="{% url 'root-index' %}">Back</a>
+<a href="{% url 'main:index' %}">Back</a>
 
 {% endblock %}

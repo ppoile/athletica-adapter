@@ -5,7 +5,7 @@
   <li>Bahnen: {{ stadion.bahnen }}</li>
 </ul>
 
-<form action="{% url 'stadion:delete' stadion.id %}" method="post">
+<form action="{% url 'main:stadion-delete' stadion.id %}" method="post">
   {% csrf_token %}
   <input type="submit" value="Delete" />
 </form>
@@ -15,7 +15,7 @@
 {% endif %}
 
 <h2>Anlagen:</h2>
-<form action="{% url 'stadion:vote' stadion.id %}" method="post">
+<form action="{% url 'main:stadion-vote' stadion.id %}" method="post">
   {% csrf_token %}
   {% for anlage in stadion.anlagen.all %}
     <input type="radio" name="anlage" id="choice{{ forloop.counter }}" value="{{ anlage.xanlage }}" />
@@ -24,4 +24,4 @@
   <input type="submit" value="Vote" />
 </form>
 
-<a href="{% url 'stadion:index' %}">Back to list</a>
+<a href="{% url 'main:stadion-index' %}">Back to list</a>

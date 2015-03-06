@@ -8,9 +8,29 @@
 #
 # Also note: You'll have to insert the output of 'django-admin.py sqlcustom [app_label]'
 # into your database.
-from __future__ import unicode_literals
 
+from __future__ import unicode_literals
+import datetime
+from django.core.urlresolvers import reverse
 from django.db import models
+
+
+class Anlage(models.Model):
+    id = models.AutoField(db_column='xAnlage', primary_key=True)
+    bezeichnung = models.CharField(db_column='Bezeichnung', max_length=20)
+    homologiert = models.CharField(db_column='Homologiert', max_length=1,
+                                   choices=(('y', 'Yes'), ('n', 'No')),
+                                   default='y')
+    stadion = models.ForeignKey('Stadion', db_column='xStadion',
+                                related_name="anlagen")
+
+    def __unicode__(self):
+        return self.bezeichnung
+
+    class Meta:
+        db_table = 'anlage'
+        verbose_name_plural = "anlagen"
+        ordering = ["bezeichnung"]
 
 
 class Anmeldung(models.Model):
@@ -22,7 +42,7 @@ class Anmeldung(models.Model):
     bestleistungmk = models.FloatField(db_column='BestleistungMK')  # Field name made lowercase.
     vereinsinfo = models.CharField(db_column='Vereinsinfo', max_length=150)  # Field name made lowercase.
     athlet = models.ForeignKey("Athlet", db_column='xAthlet', related_name="anmeldungen")
-    meeting = models.ForeignKey("meeting.Meeting", db_column='xMeeting', related_name="anmeldungen")
+    meeting = models.ForeignKey("Meeting", db_column='xMeeting', related_name="anmeldungen")
     kategorie = models.ForeignKey("Kategorie", db_column='xKategorie', related_name="-")
     xteam = models.IntegerField(db_column='xTeam')  # Field name made lowercase.
     baseeffortmk = models.CharField(db_column='BaseEffortMK', max_length=1)  # Field name made lowercase.
@@ -302,6 +322,55 @@ class Layout(models.Model):
         db_table = 'layout'
 
 
+class Meeting(models.Model):
+    """
+    The meeting class
+
+    # create a meeting
+    >>> from main.models import Stadion
+    >>> stadion = Stadion.objects.create(name="Buchholz")
+    >>> #Meeting.objects.create(name="UMM", stadion=stadion)
+    >>> stadion.meetings.create(name="UMM")
+    <Meeting: UMM 2015>
+    """
+
+    id = models.AutoField(db_column='xMeeting', primary_key=True)
+    name = models.CharField(db_column='Name', max_length=60, null=True)
+    ort = models.CharField(db_column='Ort', max_length=20)
+    datumvon = models.DateField(db_column='DatumVon',
+                                default=datetime.date.today())
+    datumbis = models.DateField(db_column='DatumBis', blank=True, null=True)
+    nummer = models.CharField(db_column='Nummer', max_length=20, default="")
+    programmmodus = models.IntegerField(
+        db_column='ProgrammModus', choices=(
+            (0, "Wettkampfbüro"), (1, "dezentral"),
+            (2, "dezentral mit Rangierung")), default=0)
+    online = models.CharField(db_column='Online', max_length=1,
+                              choices=(('y', True), ('n', False)), default='n')
+    organisator = models.CharField(db_column='Organisator', max_length=200)
+    zeitmessung = models.CharField(db_column='Zeitmessung', max_length=5)
+    passwort = models.CharField(db_column='Passwort', max_length=50)
+    stadion = models.ForeignKey("Stadion", db_column='xStadion',
+                                related_name="meetings")
+    xcontrol = models.IntegerField(db_column='xControl', default=0)
+    startgeld = models.FloatField(db_column='Startgeld', default=0)
+    startgeldreduktion = models.FloatField(db_column='StartgeldReduktion',
+                                           default=0)
+    haftgeld = models.FloatField(db_column='Haftgeld', default=0)
+    saison = models.CharField(db_column='Saison', max_length=1,
+                              choices=(('I', 'Indoor'), ('O', 'Outdoor')), default='O')
+    autorangieren = models.CharField(db_column='AutoRangieren', max_length=1)
+    UBSKidsCup = models.CharField(db_column='UKC', max_length=1,
+                           choices=(('y', True), ('n', False)), default='n')
+    statuschanged = models.CharField(db_column='StatusChanged', max_length=1)
+
+    def __str__(self):
+        return "%s %d" % (self.name, self.datumvon.year)
+
+    class Meta:
+        db_table = 'meeting'
+
+
 class OmegaTyp(models.Model):
     xomega_typ = models.IntegerField(db_column='xOMEGA_Typ', primary_key=True)  # Field name made lowercase.
     omega_name = models.CharField(db_column='OMEGA_Name', max_length=15)  # Field name made lowercase.
@@ -434,7 +503,7 @@ class Serie(models.Model):
     status = models.IntegerField(db_column='Status')  # Field name made lowercase.
     handgestoppt = models.IntegerField(db_column='Handgestoppt')  # Field name made lowercase.
     runde = models.ForeignKey("Runde", db_column='xRunde', related_name="serien")
-    anlage = models.ForeignKey("stadion.Anlage", db_column='xAnlage', blank=True, null=True)  # Field name made lowercase.
+    anlage = models.ForeignKey("Anlage", db_column='xAnlage', blank=True, null=True)  # Field name made lowercase.
     tvname = models.CharField(db_column='TVName', max_length=70, blank=True)  # Field name made lowercase.
     maxathlet = models.IntegerField(db_column='MaxAthlet')  # Field name made lowercase.
 
@@ -463,6 +532,28 @@ class Serienstart(models.Model):
 
     class Meta:
         db_table = 'serienstart'
+
+
+class Stadion(models.Model):
+    id = models.AutoField(db_column='xStadion', primary_key=True)
+    name = models.CharField(db_column='Name', max_length=50)
+    bahnen = models.IntegerField(db_column='Bahnen', default=6)
+    bahnengerade = models.IntegerField(db_column='BahnenGerade', default=6)
+    ueber1000m = models.CharField(db_column='Ueber1000m', max_length=1,
+                                  choices=(('y', True), ('n', False)),
+                                  default='n')
+    halle = models.CharField(db_column='Halle', max_length=1,
+                             choices=(('y', True), ('n', False)), default='n')
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('stadion:index')
+
+    class Meta:
+        db_table = 'stadion'
+        verbose_name_plural = "stadien"
 
 
 class Staffel(models.Model):
@@ -611,7 +702,7 @@ class Wettkampf(models.Model):
     zeitmessungauto = models.IntegerField(db_column='ZeitmessungAuto')  # Field name made lowercase.
     kategorie = models.ForeignKey("Kategorie", db_column='xKategorie')  # Field name made lowercase.
     disziplin = models.ForeignKey("DisziplinDe", db_column='xDisziplin')
-    meeting = models.ForeignKey("meeting.Meeting", db_column='xMeeting', related_name="wettkaempfe")
+    meeting = models.ForeignKey("Meeting", db_column='xMeeting', related_name="wettkaempfe")
     mehrkampfcode = models.IntegerField(db_column='Mehrkampfcode')  # Field name made lowercase.
     mehrkampfende = models.IntegerField(db_column='Mehrkampfende')  # Field name made lowercase.
     mehrkampfreihenfolge = models.IntegerField(db_column='Mehrkampfreihenfolge')  # Field name made lowercase.
