@@ -1,3 +1,10 @@
 from django.test import TestCase
 
-# Create your tests here.
+class MeetingTestCase(TestCase):
+    fixtures = ['umm_2014_before.json']
+
+    def setUp(self):
+	pass
+
+    def test1(self):
+        import pdb; pdb.set_trace()
