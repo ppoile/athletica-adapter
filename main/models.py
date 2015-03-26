@@ -691,7 +691,10 @@ class WertungstabellePunkte(models.Model):
 
 class Wettkampf(models.Model):
     id = models.AutoField(db_column='xWettkampf', primary_key=True)
-    typ = models.IntegerField(db_column='Typ')  # Field name made lowercase.
+    TYP_EINZEL = 0
+    TYP_MEHRKAMPF = 1
+    typ = models.IntegerField(db_column='Typ', choices=((TYP_EINZEL, 'Einzel'),
+                                                         (TYP_MEHRKAMPF, 'Mehrkampf')))
     haftgeld = models.FloatField(db_column='Haftgeld')  # Field name made lowercase.
     startgeld = models.FloatField(db_column='Startgeld')  # Field name made lowercase.
     punktetabelle = models.IntegerField(db_column='Punktetabelle')  # Field name made lowercase.
