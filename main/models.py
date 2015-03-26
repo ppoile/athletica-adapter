@@ -456,7 +456,7 @@ class Rundenset(models.Model):
     rundenset = models.IntegerField(db_column='xRundenset')
     meeting = models.ForeignKey("Meeting", db_column='xMeeting')
     runde = models.ForeignKey("Runde", db_column='xRunde', related_name="-")
-    hauptrunde = models.IntegerField(db_column='Hauptrunde', choices=(('y', 1), ('n', 0)), default=0)
+    hauptrunde = models.IntegerField(db_column='Hauptrunde', choices=((1, True), (0, False)), default=0)
 
     class Meta:
         db_table = 'rundenset'
