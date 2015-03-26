@@ -453,7 +453,7 @@ class Rundenlog(models.Model):
 
 
 class Rundenset(models.Model):
-    id = models.IntegerField(db_column='xRundenset', primary_key=True)
+    rundenset = models.IntegerField(db_column='xRundenset')
     meeting = models.ForeignKey("Meeting", db_column='xMeeting')
     runde = models.ForeignKey("Runde", db_column='xRunde', related_name="-")
     hauptrunde = models.IntegerField(db_column='Hauptrunde', choices=(('y', 1), ('n', 0)), default=0)
