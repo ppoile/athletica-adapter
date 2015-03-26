@@ -7,7 +7,7 @@ import datetime
 
 class Migration(migrations.Migration):
 
-    replaces = [(b'main', '0001_initial'), (b'main', '0002_auto_20150303_1207'), (b'main', '0003_auto_20150303_1321'), (b'main', '0004_auto_20150303_1413')]
+    replaces = [(b'main', '0001_initial'), (b'main', '0002_auto_20150303_1207'), (b'main', '0003_auto_20150303_1321'), (b'main', '0004_auto_20150303_1413'), (b'main', '0005_auto_20150304_0020')]
 
     dependencies = [
     ]
@@ -485,10 +485,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Rundenset',
             fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='xRundenset')),
-                ('hauptrunde', models.IntegerField(default=0, db_column='Hauptrunde', choices=[('y', 1), ('n', 0)])),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('hauptrunde', models.IntegerField(default=0, db_column='Hauptrunde', choices=[(1, True), (0, False)])),
                 ('runde', models.ForeignKey(related_name='-', db_column='xRunde', to='main.Runde')),
                 ('meeting', models.ForeignKey(to='main.Meeting', db_column='xMeeting')),
+                ('rundenset', models.IntegerField(default=0, db_column='xRundenset')),
             ],
             options={
                 'db_table': 'rundenset',
@@ -785,7 +786,7 @@ class Migration(migrations.Migration):
             name='Wettkampf',
             fields=[
                 ('id', models.AutoField(serialize=False, primary_key=True, db_column='xWettkampf')),
-                ('typ', models.IntegerField(db_column='Typ')),
+                ('typ', models.IntegerField(db_column='Typ', choices=[(0, 'Einzel'), (1, 'Mehrkampf')])),
                 ('haftgeld', models.FloatField(db_column='Haftgeld')),
                 ('startgeld', models.FloatField(db_column='Startgeld')),
                 ('punktetabelle', models.IntegerField(db_column='Punktetabelle')),
@@ -851,5 +852,10 @@ class Migration(migrations.Migration):
             model_name='athlet',
             name='geburtstag',
             field=models.DateField(null=True, db_column='Geburtstag', blank=True),
+        ),
+        migrations.AlterField(
+            model_name='meeting',
+            name='datumvon',
+            field=models.DateField(default=datetime.date(2015, 3, 4), db_column='DatumVon'),
         ),
     ]
