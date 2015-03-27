@@ -3,13 +3,24 @@
 
 <h1>Wettkämpfe für {{ meeting_name }}</h1>
 <ul>
-{% for wettkampf_name, wettkampf_liste in wettkaempfe.iteritems %}
-  <li>{{ wettkampf_name }}:
-    <a href="{% url 'main:wettkampf-detail' meeting_id wettkampf_liste.0.info wettkampf_liste.0.kategorie.name %}">Details</a>
-    <a href="{% url 'main:gruppen-einteilung' meeting_id wettkampf_liste.0.info wettkampf_liste.0.kategorie.name %}">Gruppeneinteilung</a>
-    <a href="{% url 'main:rangliste' meeting_id wettkampf_liste.0.info wettkampf_liste.0.kategorie.name %}">Rangliste</a>
-  </li>
+{% for kategorie, kwettkaempfe in wettkaempfe %}
+  <li>{{ kategorie }}</li>
+  <ul>
+    {% for wettkampf, disziplinen in kwettkaempfe %}
+      <li>{{ wettkampf }}:
+	<a href="{% url 'main:wettkampf-detail' meeting_id disziplinen.0.info kategorie %}">Details</a>
+	<a href="{% url 'main:gruppen-einteilung' meeting_id disziplinen.0.info disziplinen.0.kategorie.name %}">Gruppeneinteilung</a>
+	<a href="{% url 'main:rangliste' meeting_id disziplinen.0.info disziplinen.0.kategorie.name %}">Rangliste</a>
+      </li>
+      <ul>
+        {% for wdisziplin in disziplinen %}
+           <li>{{ wdisziplin.disziplin.kurzname }}</li>
+        {% endfor %}
+      </ul>
+    {% endfor %}
+  </ul>
 {% endfor %}
+</ul>
 
 <a href="{% url 'main:meeting-detail' meeting_id %}">Back to Meeting</a>
 
