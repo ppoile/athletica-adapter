@@ -39,8 +39,16 @@ class WettkampfDetail(generic.View):
                 "mehrkampfende",
                 "mehrkampfreihenfolge",
                 "disziplin__name").all()
+        if wettkaempfe.count() > 0:
+            wettkampf_name = wettkaempfe.first().info
+            match = re.match(r"(\d+K)", wettkampf_name)
+            if match:
+                wettkampf_name = match.group(0)
+        else:
+            wettkampf_name = "<no wettkampf>"
         context = dict(meeting_id=meeting_id, wettkampf_info=wettkampf_info,
-                       kategorie_name=kategorie_name,wettkaempfe=wettkaempfe)
+                       kategorie_name=kategorie_name,
+                       wettkampf_name=wettkampf_name, wettkaempfe=wettkaempfe)
         return render(request, "main/wettkampf-detail.html", context)
 
 
