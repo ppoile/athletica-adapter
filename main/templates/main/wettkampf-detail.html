@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>Wettkampf {{ wettkampf_info }} ({{ kategorie_name }})</h1>
+<h1>Wettkampf {{ wettkampf_name }} ({{ kategorie_name }})</h1>
 <ul>
 {% for wettkampf in wettkaempfe %}
   <li>{{ wettkampf.disziplin.name }}</li>
