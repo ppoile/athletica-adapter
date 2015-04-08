@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from collections import OrderedDict
 from django.shortcuts import get_object_or_404, render
 from django.views import generic
 from main.models import Meeting
@@ -10,9 +11,7 @@ class WettkampfIndex(generic.View):
     def get(self, request, meeting_id):
         meeting = get_object_or_404(Meeting, pk=meeting_id)
         meeting_name="%s (%d)" % (meeting.name, meeting.datumvon.year)
-        wettkaempfe = list()
-        kategorie = None
-        mehrkampfcode = None
+        wettkampf_assembler = WettkampfAssembler()
         for wettkampf in meeting.wettkaempfe.order_by(
                 "-kategorie__geschlecht",
                 "kategorie__alterslimite",
@@ -20,20 +19,15 @@ class WettkampfIndex(generic.View):
                 "mehrkampfende",
                 "mehrkampfreihenfolge",
                 "disziplin__name").all():
-            if kategorie != wettkampf.kategorie.name:
-                kategorie = wettkampf.kategorie.name
-                wettkaempfe.append([kategorie, []])
-                mehrkampfcode = None
-            if mehrkampfcode != wettkampf.mehrkampfcode:
-                mehrkampfcode = wettkampf.mehrkampfcode
-                wettkampf_name = wettkampf.info
-                match = re.match(r"(\d+K)", wettkampf_name)
-                if match:
-                    wettkampf_name = match.group(0)
-                wettkaempfe[-1][1].append([wettkampf_name, []])
-            wettkaempfe[-1][-1][-1][1].append(wettkampf)
+            kategorie = wettkampf.kategorie.name
+            wettkampf_name = wettkampf.info
+            match = re.match(r"(\d+K)", wettkampf_name)
+            if match:
+                wettkampf_name = match.group(0)
+            wettkampf_assembler.addDisziplin(kategorie, wettkampf_name,
+                                             wettkampf)
         context = dict(meeting_id=meeting_id, meeting_name=meeting_name,
-                       wettkaempfe=wettkaempfe)
+                       wettkaempfe=wettkampf_assembler.getWettkaempfe())
         return render(request, "main/wettkampf-index.html", context)
 
 
@@ -45,3 +39,24 @@ class WettkampfDetail(generic.View):
         context = dict(meeting_id=meeting_id, wettkampf_info=wettkampf_info,
                        kategorie_name=kategorie_name,wettkaempfe=wettkaempfe)
         return render(request, "main/wettkampf-detail.html", context)
+
+
+class WettkampfAssembler(object):
+    def __init__(self):
+        self._wettkaempfe = OrderedDict()
+
+    def addDisziplin(self, kategorie, wettkampf_name, disziplin):
+        try:
+            kategorie_wettkaempfe = self._wettkaempfe[kategorie]
+        except KeyError:
+            kategorie_wettkaempfe = OrderedDict()
+            self._wettkaempfe[kategorie] = kategorie_wettkaempfe
+        try:
+            disziplinen = kategorie_wettkaempfe[wettkampf_name]
+        except KeyError:
+            disziplinen = list()
+            kategorie_wettkaempfe[wettkampf_name] = disziplinen
+        disziplinen.append(disziplin)
+
+    def getWettkaempfe(self):
+        return self._wettkaempfe
