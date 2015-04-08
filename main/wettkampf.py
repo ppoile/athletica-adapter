@@ -35,7 +35,10 @@ class WettkampfDetail(generic.View):
     def get(self, request, meeting_id, wettkampf_info, kategorie_name):
         meeting = get_object_or_404(Meeting, pk=meeting_id)
         wettkaempfe = meeting.wettkaempfe.filter(
-            info=wettkampf_info, kategorie__name=kategorie_name).all()
+            info=wettkampf_info, kategorie__name=kategorie_name).order_by(
+                "mehrkampfende",
+                "mehrkampfreihenfolge",
+                "disziplin__name").all()
         context = dict(meeting_id=meeting_id, wettkampf_info=wettkampf_info,
                        kategorie_name=kategorie_name,wettkaempfe=wettkaempfe)
         return render(request, "main/wettkampf-detail.html", context)
