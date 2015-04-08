@@ -27,7 +27,7 @@ class GruppenEinteilung(generic.View):
         context = dict(meeting_id=meeting_id, wettkampf_info=wettkampf_info,
                        kategorie_name=kategorie_name, anmeldungen=anmeldungen)
 
-        return render(request, "meeting/gruppen-einteilung.html", context)
+        return render(request, "main/gruppen-einteilung.html", context)
 
 
 class SerienEinteilung(generic.View):
@@ -48,4 +48,4 @@ class SerienEinteilung(generic.View):
         context = dict(meeting_id=meeting_id, wettkampf_id=wettkampf_id,
                        anmeldungen=anmeldungen)
 
-        return render(request, "meeting/gruppen-einteilung.html", context)
+        return render(request, "main/serien-einteilung.html", context)
