@@ -8,14 +8,9 @@
   <ul>
     {% for wettkampf_name, disziplinen in kategorien_wettkaempfe.iteritems %}
       <li>{{ wettkampf_name }}:
-	<a href="{% url 'main:wettkampf-detail' meeting_id wettkampf_name kategorie_name %}">Details</a>
-	<a href="{% url 'main:gruppen-einteilung' meeting_id wettkampf_name kategorie_name %}">Gruppeneinteilung</a>
-	<a href="{% url 'main:rangliste' meeting_id wettkampf_name kategorie_name %}">Rangliste</a>
-	<ul>
-	{% for d in disziplinen %}
-	  <li>{{ d.disziplin.name}}</li>
-	{% endfor %}
-	</ul>
+	<a href="{% url 'main:wettkampf-detail' meeting_id disziplinen.0.info disziplinen.0.kategorie.name %}">Details</a>
+	<a href="{% url 'main:gruppen-einteilung' meeting_id disziplinen.0.info disziplinen.0.kategorie.name %}">Gruppeneinteilung</a>
+	<a href="{% url 'main:rangliste' meeting_id disziplinen.0.info disziplinen.0.kategorie.name %}">Rangliste</a>
       </li>
       <ul>
       </ul>
