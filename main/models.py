@@ -412,7 +412,25 @@ class Runde(models.Model):
     startzeit = models.TimeField(db_column='Startzeit')  # Field name made lowercase.
     appellzeit = models.TimeField(db_column='Appellzeit')  # Field name made lowercase.
     stellzeit = models.TimeField(db_column='Stellzeit')  # Field name made lowercase.
-    status = models.IntegerField(db_column='Status')  # Field name made lowercase.
+    STATUS_OPEN = 0
+    STATUS_HEATS_IN_PROGRESS = 1
+    STATUS_HEATS_DONE = 2
+    STATUS_RESULTS_IN_PROGRESS = 3
+    STATUS_RESULTS_LIVE = 30
+    STATUS_RESULTS_DONE = 4
+    STATUS_ENROLEMENT_PENDING = 5
+    STATUS_ENROLEMENT_DONE = 6
+    STATUS_RESULTS_SENT = 99
+    status = models.IntegerField(db_column='Status', choices=(
+        (STATUS_OPEN, "Offen"),
+        (STATUS_HEATS_IN_PROGRESS, "Serien in Bearbeitung"),
+        (STATUS_HEATS_DONE, "Serien eingeteilt"),
+        (STATUS_RESULTS_IN_PROGRESS, "Resultate in Bearbeitung"),
+        (STATUS_RESULTS_DONE, "Resultate erfasst / rangiert"),
+        (STATUS_ENROLEMENT_PENDING, "Appell hängig"),
+        (STATUS_ENROLEMENT_DONE, "Appell abgeschlossen"),
+        (STATUS_RESULTS_LIVE, "LIVE-Resultate"),
+        (STATUS_RESULTS_SENT, "Resultate übermittelt")))
     speakerstatus = models.IntegerField(db_column='Speakerstatus')  # Field name made lowercase.
     statuszeitmessung = models.IntegerField(db_column='StatusZeitmessung')  # Field name made lowercase.
     statusupload = models.IntegerField(db_column='StatusUpload')  # Field name made lowercase.
