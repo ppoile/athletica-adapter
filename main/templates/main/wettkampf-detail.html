@@ -4,7 +4,13 @@
 <h1>Wettkampf {{ wettkampf_name }} ({{ kategorie_name }})</h1>
 <ul>
 {% for wettkampf in wettkaempfe %}
-  <li>{{ wettkampf.disziplin.name }}</li>
+  <li>{{ wettkampf.disziplin.name }}
+    {% for runde in wettkampf.runden.all %}
+      {% if wettkampf.runden.count > 1 %}
+        g{{ runde.gruppe }}
+      {% endif %}
+    {% endfor %}
+  </li>
 {% endfor %}
 
 <a href="{% url 'main:wettkampf-index' meeting_id %}">Back to List</a>
