@@ -177,6 +177,16 @@ class DisziplinDe(models.Model):
     anzeige = models.IntegerField(db_column='Anzeige')  # Field name made lowercase.
     seriegroesse = models.IntegerField(db_column='Seriegroesse')  # Field name made lowercase.
     staffellaeufer = models.IntegerField(db_column='Staffellaeufer', blank=True, null=True)  # Field name made lowercase.
+    TYP_UNDEFINIERT = 0
+    TYP_BAHN_MIT_WINDMESSUNG = 1
+    TYP_BAHN_OHNE_WINDMESSUNG = 2
+    TYP_STAFFEL = 3
+    TYP_WEIT_DREI_MIT_WINDMESSUNG = 4
+    TYP_WEIT_DREI_OHNE_WINDMESSUNG = 5
+    TYP_HOCH_STAB = 6
+    TYP_MITTEL_LANGSTRECKEN = 7
+    TYP_WURF = 8
+    TYP_MEHRKAMPF = 9
     typ = models.IntegerField(db_column='Typ')  # Field name made lowercase.
     appellzeit = models.TimeField(db_column='Appellzeit')  # Field name made lowercase.
     stellzeit = models.TimeField(db_column='Stellzeit')  # Field name made lowercase.
