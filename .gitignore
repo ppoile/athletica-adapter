@@ -60,3 +60,4 @@ target/
 /doc/
 cscope.*
 /collected-staticfiles/
+/alge-timing/
