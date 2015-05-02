@@ -13,12 +13,7 @@ class WettkampfIndex(generic.View):
         meeting_name="%s (%d)" % (meeting.name, meeting.datumvon.year)
         wettkampf_assembler = WettkampfAssembler()
         for wettkampf in meeting.wettkaempfe.order_by(
-                "-kategorie__geschlecht",
-                "kategorie__alterslimite",
-                "mehrkampfcode",
-                "mehrkampfende",
-                "mehrkampfreihenfolge",
-                "disziplin__name").all():
+                "-kategorie__geschlecht", "kategorie__alterslimite").all():
             kategorie = wettkampf.kategorie.name
             wettkampf_name = wettkampf.info
             match = re.match(r"(\d+K)", wettkampf_name)
