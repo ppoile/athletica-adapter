@@ -12,15 +12,11 @@ class WettkampfIndex(generic.View):
         meeting = get_object_or_404(Meeting, pk=meeting_id)
         meeting_name="%s (%d)" % (meeting.name, meeting.datumvon.year)
         wettkampf_assembler = WettkampfAssembler()
-        for wettkampf in meeting.wettkaempfe.order_by(
-                "-kategorie__geschlecht", "kategorie__alterslimite").all():
-            kategorie = wettkampf.kategorie.name
-            wettkampf_name = wettkampf.info
-            match = re.match(r"(\d+K)", wettkampf_name)
-            if match:
-                wettkampf_name = match.group(0)
-            wettkampf_assembler.addDisziplin(kategorie, wettkampf_name,
-                                             wettkampf)
+        for kategorie, wettkampf in meeting.wettkaempfe.order_by(
+                "-kategorie__geschlecht",
+                "kategorie__alterslimite").values_list(
+                    "kategorie__name", "info").distinct():
+            wettkampf_assembler.addWettkampf(kategorie, wettkampf)
         context = dict(meeting_id=meeting_id, meeting_name=meeting_name,
                        wettkaempfe=wettkampf_assembler.getWettkaempfe())
         return render(request, "main/wettkampf-index.html", context)
@@ -51,18 +47,17 @@ class WettkampfAssembler(object):
     def __init__(self):
         self._wettkaempfe = OrderedDict()
 
-    def addDisziplin(self, kategorie, wettkampf_name, disziplin):
+    def addWettkampf(self, kategorie, wettkampf):
+        description = wettkampf
+        match = re.match(r"(\d+K)", description)
+        if match:
+            description= match.group(0)
         try:
-            kategorie_wettkaempfe = self._wettkaempfe[kategorie]
+            wettkaempfe = self._wettkaempfe[kategorie]
         except KeyError:
-            kategorie_wettkaempfe = OrderedDict()
-            self._wettkaempfe[kategorie] = kategorie_wettkaempfe
-        try:
-            disziplinen = kategorie_wettkaempfe[wettkampf_name]
-        except KeyError:
-            disziplinen = list()
-            kategorie_wettkaempfe[wettkampf_name] = disziplinen
-        disziplinen.append(disziplin)
+            wettkaempfe = list()
+            self._wettkaempfe[kategorie] = wettkaempfe
+        wettkaempfe.append(dict(description=description, info=wettkampf))
 
     def getWettkaempfe(self):
         return self._wettkaempfe
