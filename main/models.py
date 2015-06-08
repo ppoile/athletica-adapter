@@ -39,17 +39,17 @@ class Anmeldung(models.Model):
     erstserie = models.CharField(db_column='Erstserie', max_length=1)  # Field name made lowercase.
     bezahlt = models.CharField(db_column='Bezahlt', max_length=1)  # Field name made lowercase.
     gruppe = models.CharField(db_column='Gruppe', max_length=2)  # Field name made lowercase.
-    bestleistungmk = models.FloatField(db_column='BestleistungMK')  # Field name made lowercase.
+    bestleistungmk = models.FloatField(db_column='BestleistungMK', default=0.0)
     vereinsinfo = models.CharField(db_column='Vereinsinfo', max_length=150)  # Field name made lowercase.
     athlet = models.ForeignKey("Athlet", db_column='xAthlet', related_name="anmeldungen")
     meeting = models.ForeignKey("Meeting", db_column='xMeeting', related_name="anmeldungen")
     kategorie = models.ForeignKey("Kategorie", db_column='xKategorie', related_name="-")
-    xteam = models.IntegerField(db_column='xTeam')  # Field name made lowercase.
-    baseeffortmk = models.CharField(db_column='BaseEffortMK', max_length=1)  # Field name made lowercase.
+    xteam = models.IntegerField(db_column='xTeam', default=0)
+    baseeffortmk = models.CharField(db_column='BaseEffortMK', max_length=1, default="n")
     anmeldenr_zlv = models.IntegerField(db_column='Anmeldenr_ZLV', blank=True, null=True)  # Field name made lowercase.
     kidid = models.IntegerField(db_column='KidID', blank=True, null=True)  # Field name made lowercase.
     angemeldet = models.CharField(db_column='Angemeldet', max_length=1, blank=True)  # Field name made lowercase.
-    vorjahrleistungmk = models.IntegerField(db_column='VorjahrLeistungMK', blank=True, null=True)  # Field name made lowercase.
+    vorjahrleistungmk = models.IntegerField(db_column='VorjahrLeistungMK', blank=True, null=True, default=0)  # Field name made lowercase.
 
     def __unicode__(self):
         return "%s %s" % (self.startnummer, self.athlet)
