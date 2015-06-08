@@ -610,15 +610,15 @@ class Staffelathlet(models.Model):
 
 class Start(models.Model):
     id = models.AutoField(db_column='xStart', primary_key=True)
-    anwesend = models.IntegerField(db_column='Anwesend')  # Field name made lowercase.
-    bestleistung = models.IntegerField(db_column='Bestleistung')  # Field name made lowercase.
-    bezahlt = models.CharField(db_column='Bezahlt', max_length=1)  # Field name made lowercase.
-    erstserie = models.CharField(db_column='Erstserie', max_length=1)  # Field name made lowercase.
+    anwesend = models.IntegerField(db_column='Anwesend', default=0)
+    bestleistung = models.IntegerField(db_column='Bestleistung', default=0)
+    bezahlt = models.CharField(db_column='Bezahlt', max_length=1, default="n")
+    erstserie = models.CharField(db_column='Erstserie', max_length=1, default="n")
     wettkampf = models.ForeignKey("Wettkampf", db_column='xWettkampf', related_name="starts")
     anmeldung = models.ForeignKey("Anmeldung", db_column='xAnmeldung', related_name="starts")
     staffel = models.ForeignKey("Staffel", db_column='xStaffel', blank=True, null=True)
-    baseeffort = models.CharField(db_column='BaseEffort', max_length=1)  # Field name made lowercase.
-    vorjahrleistung = models.IntegerField(db_column='VorjahrLeistung', blank=True, null=True)  # Field name made lowercase.
+    baseeffort = models.CharField(db_column='BaseEffort', max_length=1, default="y")
+    vorjahrleistung = models.IntegerField(db_column='VorjahrLeistung', blank=True, null=True, default=0)
     gruppe = models.CharField(db_column='Gruppe', max_length=2, blank=True)  # Field name made lowercase.
 
     def __unicode__(self):
