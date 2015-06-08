@@ -65,16 +65,16 @@ class Athlet(models.Model):
     vorname = models.CharField(db_column='Vorname', max_length=50)  # Field name made lowercase.
     jahrgang = models.IntegerField(db_column='Jahrgang', blank=True)  # Field name made lowercase. This field type is a guess.
     verein = models.ForeignKey("Verein", db_column='xVerein', related_name="athleten")
-    xverein2 = models.IntegerField(db_column='xVerein2')  # Field name made lowercase.
-    lizenznummer = models.IntegerField(db_column='Lizenznummer')  # Field name made lowercase.
+    xverein2 = models.IntegerField(db_column='xVerein2', default=0)
+    lizenznummer = models.IntegerField(db_column='Lizenznummer', default=0)
     geschlecht = models.CharField(db_column='Geschlecht', max_length=1, choices=(('m', 'Männlich'), ('w', 'Weiblich')))
-    land = models.CharField(db_column='Land', max_length=3)  # Field name made lowercase.
+    land = models.CharField(db_column='Land', max_length=3, default="-")
     geburtstag = models.DateField(db_column='Geburtstag', blank=True, null=True)
-    athleticagen = models.CharField(db_column='Athleticagen', max_length=1)  # Field name made lowercase.
-    bezahlt = models.CharField(db_column='Bezahlt', max_length=1)  # Field name made lowercase.
-    xregion = models.IntegerField(db_column='xRegion')  # Field name made lowercase.
-    lizenztyp = models.IntegerField(db_column='Lizenztyp')  # Field name made lowercase.
-    manuell = models.IntegerField(db_column='Manuell')  # Field name made lowercase.
+    athleticagen = models.CharField(db_column='Athleticagen', max_length=1, default="n")
+    bezahlt = models.CharField(db_column='Bezahlt', max_length=1, default="n")
+    xregion = models.IntegerField(db_column='xRegion', default=0)
+    lizenztyp = models.IntegerField(db_column='Lizenztyp', default=3)
+    manuell = models.IntegerField(db_column='Manuell', default=0)
     adresse = models.CharField(db_column='Adresse', max_length=50, blank=True)  # Field name made lowercase.
     plz = models.IntegerField(db_column='Plz', blank=True, null=True)  # Field name made lowercase.
     ort = models.CharField(db_column='Ort', max_length=50, blank=True)  # Field name made lowercase.
@@ -670,7 +670,7 @@ class Verein(models.Model):
     name = models.CharField(db_column='Name', unique=True, max_length=100)  # Field name made lowercase.
     sortierwert = models.CharField(db_column='Sortierwert', max_length=100)  # Field name made lowercase.
     xcode = models.CharField(db_column='xCode', max_length=30)  # Field name made lowercase.
-    geloescht = models.IntegerField(db_column='Geloescht')  # Field name made lowercase.
+    geloescht = models.IntegerField(db_column='Geloescht', default=0)  # Field name made lowercase.
 
     def __unicode__(self):
         return self.name
