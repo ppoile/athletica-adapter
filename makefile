@@ -11,8 +11,11 @@ doc/athletica-models.pdf: main/models.py
 clean:
 	rm -rf doc
 
-jsondump:
+jsondump-without-base:
 	python manage.py dumpdata main --exclude main.BaseAccount \
 --exclude main.BaseAthlete --exclude main.BaseLog \
 --exclude main.BasePerformance --exclude main.BaseRelay \
 --exclude main.BaseSvm --indent 2 > data.json
+
+jsondump-all:
+	python manage.py dumpdata main --indent 2 > data.json
