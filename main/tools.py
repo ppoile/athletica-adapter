@@ -13,23 +13,35 @@ from main import models
 import operator
 
 
-def getWettkaempfe(meeting, event):
+def getKategorie(event):
+    kategorie = event.rstrip("*")
+    if len(kategorie) > 3:
+        kategorie = kategorie[:3] + " " + kategorie[3:]
+    try:
+        return models.Kategorie.objects.get(name=kategorie)
+    except ObjectDoesNotExist, e:
+        print "kategorie '%s' not found." % kategorie
+        import pdb; pdb.set_trace()
+        raise
+
+def isLicensedEvent(event):
     licensed_event = False
     if event.endswith("*"):
         if not (event.startswith("U12") or event.startswith("U14")):
             licensed_event = True
-    kategorie = event.rstrip("*")
-    if len(kategorie) > 3:
-        kategorie = kategorie[:3] + " " + kategorie[3:]
+    return licensed_event
+
+def getWettkaempfe(meeting, event):
     kategorien_wettkaempfe = meeting.wettkaempfe.filter(
-        kategorie__name=kategorie)
-    if licensed_event:
+        kategorie=getKategorie(event))
+    if isLicensedEvent(event):
         wettkaempfe = kategorien_wettkaempfe.exclude(
             mehrkampfcode=799)
     else:
         wettkaempfe = kategorien_wettkaempfe.filter(
             mehrkampfcode=799)
     return wettkaempfe
+
 
 class Subscription(object):
     _VEREIN_MAPPING = {
