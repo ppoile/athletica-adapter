@@ -20,7 +20,7 @@ def getKategorie(event):
         kategorie = kategorie[:3] + " " + kategorie[3:]
     try:
         return models.Kategorie.objects.get(name=kategorie)
-    except ObjectDoesNotExist, e:
+    except ObjectDoesNotExist:
         print "kategorie '%s' not found." % kategorie
         import pdb; pdb.set_trace()
         raise
@@ -70,14 +70,17 @@ class Subscription(object):
         self._verein = self._get_verein()
         self._athlet = self._get_or_create_athlet()
         self._kategorie = getKategorie(self._data["kategorie"])
-        self._get_or_create_anmeldung()
+        self._anmeldung = self._get_or_create_anmeldung()
+        self._wettkaempfe = getWettkaempfe(self._meeting,
+                                           self._data["kategorie"])
+        self._get_or_create_starts()
 
     def _get_verein(self):
         name = self._data["verein"]
         name = self._VEREIN_MAPPING.get(name, name)
         try:
             return models.Verein.objects.get(name=name)
-        except ObjectDoesNotExist, e:
+        except ObjectDoesNotExist:
             print "verein '%s' not found." % name
             import pdb; pdb.set_trace()
             raise
@@ -97,14 +100,14 @@ class Subscription(object):
             if not self._verify_athlet(athlet):
                 import pdb; pdb.set_trace()
             return athlet
-        except ObjectDoesNotExist, e:
+        except ObjectDoesNotExist:
             pass
 
         try:
             base_athlete = models.BaseAthlete.objects.get(
                 license=self._data["lizenznr"])
             #print "got BaseAthlete (with license)"
-        except ObjectDoesNotExist, e:
+        except ObjectDoesNotExist:
             print "BaseAthlete not found."
             import pdb; pdb.set_trace()
             raise
@@ -127,28 +130,24 @@ class Subscription(object):
     def _verify_athlet(self, athlet):
         retval = True
         if athlet.vorname.lower() != self._data["vorname"].lower():
-            report = "firstname: %s != %s" % (repr(athlet.vorname),
-                                              repr(self._data["vorname"]))
-            print report
+            print "athlet.firstname: %s != %s" % (repr(athlet.vorname),
+                                                  repr(self._data["vorname"]))
             retval = False
         if athlet.name.lower() != self._data["name"].lower():
-            report = "lastname: %s != %s" % (repr(athlet.name),
-                                             repr(self._data["name"]))
-            print report
+            print "athlet.lastname: %s != %s" % (repr(athlet.name),
+                                                 repr(self._data["name"]))
             retval = False
         return retval
 
     def _verify_base_athlete(self, base_athlete):
         retval = True
         if base_athlete.firstname.lower() != self._data["vorname"].lower():
-            report = "firstname: %s != %s" % (repr(base_athlete.firstname),
-                                              repr(self._data["vorname"]))
-            print report
+            print "base_athlete.firstname: %s != %s" % (
+                repr(base_athlete.firstname), repr(self._data["vorname"]))
             retval = False
         if base_athlete.lastname.lower() != self._data["name"].lower():
-            report = "lastname: %s != %s" % (repr(base_athlete.lastname),
-                                             repr(self._data["name"]))
-            print report
+            print "base_athlete.lastname: %s != %s" % (
+                repr(base_athlete.lastname), repr(self._data["name"]))
             retval = False
         return retval
 
@@ -159,14 +158,13 @@ class Subscription(object):
             name=self._data["name"],
             jahrgang=self._data["jahrgang"],
             geschlecht=geschlecht,
-            verein=self._verein,
-        )
-    
+            verein=self._verein)
+
         try:
             athlet = models.Athlet.objects.get(**arguments)
             print "got Athlet (without license)"
             return athlet
-        except ObjectDoesNotExist, e:
+        except ObjectDoesNotExist:
             athlet = models.Athlet.objects.create(**arguments)
             print "Athlet created (without license)"
             return athlet
@@ -178,10 +176,9 @@ class Subscription(object):
         try:
             anmeldung = self._meeting.anmeldungen.get(**arguments)
             print "got Anmeldung"
-            print "Anmeldung needs verification..."
-            import pdb; pdb.set_trace()
+            self._update_anmeldung(anmeldung)
             return anmeldung
-        except ObjectDoesNotExist, e:
+        except ObjectDoesNotExist:
             arguments.update(dict(
                 kategorie=self._kategorie,
                 gruppe=self._data["gruppe"]))
@@ -192,6 +189,54 @@ class Subscription(object):
             anmeldung = models.Anmeldung.objects.create(**arguments)
             print "Anmeldung created"
             return anmeldung
+
+    def _verify_anmeldung(self, anmeldung):
+        retval = True
+        if anmeldung.athlet != self._athlet:
+            print "anmeldung.athlet: %s != %s" % (anmeldung.athlet, athlet)
+            retval = False
+        if anmeldung.meeting != self._meeting:
+            print "anmeldung.meeting: %s != %s" % (anmeldung.meeting,
+                                                   self._meeting)
+            retval = False
+        return retval
+
+    def _update_anmeldung(self, anmeldung):
+        if anmeldung.kategorie != self._kategorie:
+            print "anmeldung: updating kategorie: '%s' -> '%s'" % (
+                anmeldung.kategorie, self._kategorie)
+            anmeldung.kategorie=self._kategorie
+            anmeldung.save()
+        if anmeldung.gruppe != self._data["gruppe"]:
+            print "anmeldung: updating gruppe... '%s' -> '%s'" % (
+                anmeldung.gruppe, self._data["gruppe"])
+            anmeldung.gruppe=self._data["gruppe"]
+            anmeldung.save()
+        startnummer = self._data["startnummer"]
+        if startnummer == "":
+            startnummer = 0
+        else:
+            startnummer = int(startnummer)
+        if anmeldung.startnummer != startnummer:
+            print "anmeldung: updating startnummer... %s -> %s" % (
+                anmeldung.startnummer, startnummer)
+            anmeldung.startnummer=startnummer
+            anmeldung.save()
+
+    def _get_or_create_starts(self):
+        starts = []
+        for wettkampf in self._wettkaempfe:
+            arguments = dict(wettkampf=wettkampf,
+                             anmeldung=self._anmeldung)
+            try:
+                start = models.Start.objects.get(**arguments)
+                print "got Start"
+            except ObjectDoesNotExist:
+                start = models.Start.objects.create(**arguments)
+                print "Start created"
+            starts.append(start)
+        return starts
+
 
 class CSV_Processor(object):
     _EXPECTED_HEADINGS = [
@@ -229,9 +274,10 @@ if __name__ == "__main__":
     import django
     django.setup()
 
-    if True:
+    if False: #True:
         models.Athlet.objects.all().delete()
         models.Anmeldung.objects.all().delete()
+        models.Start.objects.all().delete()
 
     import argparse
     parser = argparse.ArgumentParser(description='Process subscription.')
