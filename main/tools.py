@@ -4,6 +4,7 @@
 import sys
 sys.path[0] = '/home/andi/var/athletica-adapter.git'
 
+import datetime
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "athletica.settings")
 
@@ -63,8 +64,13 @@ class Subscription(object):
         self._data = data
 
     def subscribe(self):
-        verein = self._get_verein()
-        return self._get_or_create_athlet(verein)
+        self._meeting = models.Meeting.objects.get(
+            name="Uster Mehrkampf Meeting",
+            datumvon=datetime.date(2015, 6, 22))
+        self._verein = self._get_verein()
+        self._athlet = self._get_or_create_athlet()
+        self._kategorie = getKategorie(self._data["kategorie"])
+        self._get_or_create_anmeldung()
 
     def _get_verein(self):
         name = self._data["verein"]
@@ -76,68 +82,116 @@ class Subscription(object):
             import pdb; pdb.set_trace()
             raise
 
-    def _get_or_create_athlet(self, verein):
+    def _get_or_create_athlet(self):
         lizenz = self._data["lizenznr"]
         if lizenz != "":
-            try:
-                athlet = models.Athlet.objects.get(lizenznummer=lizenz)
-                print "got Athlet (with license)"
-                if athlet.name != self._data["name"] or athlet.vorname != self._data["vorname"]:
-                    import pdb; pdb.set_trace()
-                return athlet
-            except ObjectDoesNotExist, e:
-                pass
-
-            try:
-                base_athlete = models.BaseAthlete.objects.get(
-                    license=self._data["lizenznr"])
-                #print "got BaseAthlete (with license)"
-            except ObjectDoesNotExist, e:
-                print "BaseAthlete not found."
-                import pdb; pdb.set_trace()
-                raise
-
-            if base_athlete.firstname.lower() != self._data["vorname"].lower():
-                report = "%s != %s" % (repr(base_athlete.firstname),
-                                       repr(self._data["vorname"]))
-                print report
-                import pdb; pdb.set_trace()
-            if base_athlete.lastname.lower() != self._data["name"].lower():
-                report = "%s != %s" % (repr(base_athlete.lastname),
-                                       repr(self._data["name"]))
-                print report
-                import pdb; pdb.set_trace()
-
-            args = dict(
-                vorname=base_athlete.firstname,
-                name=base_athlete.lastname,
-                jahrgang=base_athlete.birth_date.year,
-                geschlecht=base_athlete.sex,
-                lizenznummer=base_athlete.license,
-                verein=verein,
-            )
-            athlet = models.Athlet.objects.create(**args)
-            print "Athlet created (from BaseAthlete)"
-            return athlet
+            return self._get_or_create_licensed_athlet()
         else:
-            geschlecht = self._GESCHLECHT_MAPPING[self._data["mann_frau"]]
-            args = dict(
-                vorname=self._data["vorname"],
-                name=self._data["name"],
-                jahrgang=self._data["jahrgang"],
-                geschlecht=geschlecht,
-                verein=verein,
-            )
-    
-            try:
-                athlet = models.Athlet.objects.get(**args)
-                print "got Athlet (without license)"
-                return athlet
-            except ObjectDoesNotExist, e:
-                athlet = models.Athlet.objects.create(**args)
-                print "Athlet created (without license)"
-                return athlet
+            return self._get_or_create_unlicensed_athlet()
 
+    def _get_or_create_licensed_athlet(self):
+        lizenz = self._data["lizenznr"]
+        try:
+            athlet = models.Athlet.objects.get(lizenznummer=lizenz)
+            print "got Athlet (with license)"
+            if not self._verify_athlet(athlet):
+                import pdb; pdb.set_trace()
+            return athlet
+        except ObjectDoesNotExist, e:
+            pass
+
+        try:
+            base_athlete = models.BaseAthlete.objects.get(
+                license=self._data["lizenznr"])
+            #print "got BaseAthlete (with license)"
+        except ObjectDoesNotExist, e:
+            print "BaseAthlete not found."
+            import pdb; pdb.set_trace()
+            raise
+
+        if not self._verify_base_athlete(base_athlete):
+            import pdb; pdb.set_trace()
+
+        arguments = dict(
+            vorname=base_athlete.firstname,
+            name=base_athlete.lastname,
+            jahrgang=base_athlete.birth_date.year,
+            geschlecht=base_athlete.sex,
+            lizenznummer=base_athlete.license,
+            verein=self._verein,
+        )
+        athlet = models.Athlet.objects.create(**arguments)
+        print "Athlet created (from BaseAthlete)"
+        return athlet
+
+    def _verify_athlet(self, athlet):
+        retval = True
+        if athlet.vorname.lower() != self._data["vorname"].lower():
+            report = "firstname: %s != %s" % (repr(athlet.vorname),
+                                              repr(self._data["vorname"]))
+            print report
+            retval = False
+        if athlet.name.lower() != self._data["name"].lower():
+            report = "lastname: %s != %s" % (repr(athlet.name),
+                                             repr(self._data["name"]))
+            print report
+            retval = False
+        return retval
+
+    def _verify_base_athlete(self, base_athlete):
+        retval = True
+        if base_athlete.firstname.lower() != self._data["vorname"].lower():
+            report = "firstname: %s != %s" % (repr(base_athlete.firstname),
+                                              repr(self._data["vorname"]))
+            print report
+            retval = False
+        if base_athlete.lastname.lower() != self._data["name"].lower():
+            report = "lastname: %s != %s" % (repr(base_athlete.lastname),
+                                             repr(self._data["name"]))
+            print report
+            retval = False
+        return retval
+
+    def _get_or_create_unlicensed_athlet(self):
+        geschlecht = self._GESCHLECHT_MAPPING[self._data["mann_frau"]]
+        arguments = dict(
+            vorname=self._data["vorname"],
+            name=self._data["name"],
+            jahrgang=self._data["jahrgang"],
+            geschlecht=geschlecht,
+            verein=self._verein,
+        )
+    
+        try:
+            athlet = models.Athlet.objects.get(**arguments)
+            print "got Athlet (without license)"
+            return athlet
+        except ObjectDoesNotExist, e:
+            athlet = models.Athlet.objects.create(**arguments)
+            print "Athlet created (without license)"
+            return athlet
+
+    def _get_or_create_anmeldung(self):
+        arguments = dict(
+            athlet=self._athlet,
+            meeting=self._meeting)
+        try:
+            anmeldung = self._meeting.anmeldungen.get(**arguments)
+            print "got Anmeldung"
+            print "Anmeldung needs verification..."
+            import pdb; pdb.set_trace()
+            return anmeldung
+        except ObjectDoesNotExist, e:
+            arguments.update(dict(
+                kategorie=self._kategorie,
+                gruppe=self._data["gruppe"]))
+            startnummer = self._data["startnummer"]
+            if startnummer != "":
+                arguments["startnummer"] = startnummer
+            #import pdb; pdb.set_trace()
+            anmeldung = models.Anmeldung.objects.create(**arguments)
+            print "Anmeldung created"
+            return anmeldung
 
 class CSV_Processor(object):
     _EXPECTED_HEADINGS = [
@@ -168,17 +222,21 @@ class CSV_Processor(object):
                 fields = map(utf8_encoder, row)
                 #print repr(fields)
                 subscription = Subscription(dict(zip(headings, fields)))
-                athlet = subscription.subscribe()
+                subscription.subscribe()
 
 
 if __name__ == "__main__":
     import django
     django.setup()
 
+    if True:
+        models.Athlet.objects.all().delete()
+        models.Anmeldung.objects.all().delete()
+
     import argparse
     parser = argparse.ArgumentParser(description='Process subscription.')
     parser.add_argument("files", metavar="<csv-file>", nargs="+", help="file to be parsed")
-    args = parser.parse_args()
+    arguments = parser.parse_args()
     processor = CSV_Processor()
-    for filename in args.files:
+    for filename in arguments.files:
         processor.process(filename)
