@@ -35,9 +35,9 @@ class Anlage(models.Model):
 
 class Anmeldung(models.Model):
     id = models.AutoField(db_column='xAnmeldung', primary_key=True)  # Field name made lowercase.
-    startnummer = models.IntegerField(db_column='Startnummer')  # Field name made lowercase.
-    erstserie = models.CharField(db_column='Erstserie', max_length=1)  # Field name made lowercase.
-    bezahlt = models.CharField(db_column='Bezahlt', max_length=1)  # Field name made lowercase.
+    startnummer = models.IntegerField(db_column='Startnummer', default=0)
+    erstserie = models.CharField(db_column='Erstserie', max_length=1, default="n")
+    bezahlt = models.CharField(db_column='Bezahlt', max_length=1, default="n")
     gruppe = models.CharField(db_column='Gruppe', max_length=2)  # Field name made lowercase.
     bestleistungmk = models.FloatField(db_column='BestleistungMK', default=0.0)
     vereinsinfo = models.CharField(db_column='Vereinsinfo', max_length=150)  # Field name made lowercase.
@@ -48,7 +48,7 @@ class Anmeldung(models.Model):
     baseeffortmk = models.CharField(db_column='BaseEffortMK', max_length=1, default="n")
     anmeldenr_zlv = models.IntegerField(db_column='Anmeldenr_ZLV', blank=True, null=True)  # Field name made lowercase.
     kidid = models.IntegerField(db_column='KidID', blank=True, null=True)  # Field name made lowercase.
-    angemeldet = models.CharField(db_column='Angemeldet', max_length=1, blank=True)  # Field name made lowercase.
+    angemeldet = models.CharField(db_column='Angemeldet', max_length=1, blank=True, default="n")
     vorjahrleistungmk = models.IntegerField(db_column='VorjahrLeistungMK', blank=True, null=True, default=0)  # Field name made lowercase.
 
     def __unicode__(self):
