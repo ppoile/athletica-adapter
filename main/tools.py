@@ -14,6 +14,10 @@ from main import models
 import operator
 
 
+class ProcessingError(Exception):
+    pass
+
+
 def getKategorie(event):
     kategorie = event.rstrip("*")
     if len(kategorie) > 3:
@@ -21,9 +25,7 @@ def getKategorie(event):
     try:
         return models.Kategorie.objects.get(name=kategorie)
     except ObjectDoesNotExist:
-        print "kategorie '%s' not found." % kategorie
-        import pdb; pdb.set_trace()
-        raise
+        raise ProcessingError("kategorie '%s' not found." % kategorie)
 
 def isLicensedEvent(event):
     licensed_event = False
@@ -64,6 +66,10 @@ class Subscription(object):
         #print "data: %s" % data
         self._data = data
 
+    @property
+    def data(self):
+        return self._data
+
     def subscribe(self):
         self._meeting = models.Meeting.objects.get(
             name="Uster Mehrkampf Meeting",
@@ -77,14 +83,12 @@ class Subscription(object):
         self._get_or_create_starts()
 
     def _get_verein(self):
-        name = self._data["verein"]
-        name = self._VEREIN_MAPPING.get(name, name)
+        verein = self._data["verein"]
+        verein = self._VEREIN_MAPPING.get(verein, verein)
         try:
-            return models.Verein.objects.get(name=name)
-        except ObjectDoesNotExist:
-            print "verein '%s' not found." % name
-            #import pdb; pdb.set_trace()
-            raise
+            return models.Verein.objects.get(name=verein)
+        except ObjectDoesNotExist, e:
+            raise ProcessingError("verein '%s' not found" % verein)
 
     def _get_or_create_athlet(self):
         if self._data["lizenznr"] == "":
@@ -105,68 +109,6 @@ base_athlete.license
         except ObjectDoesNotExist:
             return False
 
-    def _get_or_create_licensed_athlet(self):
-        lizenz = self._data["lizenznr"]
-        try:
-            athlet = models.Athlet.objects.get(lizenznummer=lizenz)
-            print "got Athlet (with license)"
-            if not self._verify_athlet(athlet):
-                import pdb; pdb.set_trace()
-            return athlet
-        except ObjectDoesNotExist:
-            pass
-
-        try:
-            base_athlete = models.BaseAthlete.objects.get(
-                license=self._data["lizenznr"])
-            #print "got BaseAthlete (with license)"
-        except ObjectDoesNotExist:
-            print "BaseAthlete not found."
-            import pdb; pdb.set_trace()
-            raise
-
-        if not self._verify_base_athlete(base_athlete):
-            import pdb; pdb.set_trace()
-
-        arguments = dict(
-            vorname=base_athlete.firstname,
-            name=base_athlete.lastname,
-            jahrgang=base_athlete.birth_date.year,
-            geschlecht=base_athlete.sex,
-            lizenznummer=base_athlete.license,
-            verein=self._verein,
-        )
-        athlet = models.Athlet.objects.create(**arguments)
-        print "Athlet created (from BaseAthlete)"
-        return athlet
-
-    def _verify_athlet(self, athlet):
-        retval = True
-        if athlet.vorname.lower() != self._data["vorname"].lower():
-            print "athlet.firstname: %s != %s" % (repr(athlet.vorname),
-                                                  repr(self._data["vorname"]))
-            retval = False
-        if athlet.name.lower() != self._data["name"].lower():
-            print "athlet.lastname: %s != %s" % (repr(athlet.name),
-                                                 repr(self._data["name"]))
-            retval = False
-        return retval
-
-    def _verify_base_athlete(self, base_athlete):
-        retval = True
-        if base_athlete.license_paid == "n":
-            print "base_athlete: license not paid!"
-            #retval = False
-        if base_athlete.firstname.lower() != self._data["vorname"].lower():
-            print "base_athlete.firstname: %s != %s" % (
-                repr(base_athlete.firstname), repr(self._data["vorname"]))
-            retval = False
-        if base_athlete.lastname.lower() != self._data["name"].lower():
-            print "base_athlete.lastname: %s != %s" % (
-                repr(base_athlete.lastname), repr(self._data["name"]))
-            retval = False
-        return retval
-
     def _get_or_create_unlicensed_athlet(self):
         geschlecht = self._GESCHLECHT_MAPPING[self._data["mann_frau"]]
         arguments = dict(
@@ -184,6 +126,75 @@ base_athlete.license
             athlet = models.Athlet.objects.create(**arguments)
             print "Athlet created (without license)"
             return athlet
+
+    def _get_or_create_licensed_athlet(self):
+        athlet = self._get_licensed_athlet()
+        if athlet is not None:
+            return athlet
+
+        base_athlet = self._get_base_athlet()
+        athlet = models.Athlet.objects.create(
+            vorname=base_athlete.firstname,
+            name=base_athlete.lastname,
+            jahrgang=base_athlete.birth_date.year,
+            geschlecht=base_athlete.sex,
+            lizenznummer=base_athlete.license,
+            verein=self._verein)
+        print "Athlet created (from BaseAthlete)"
+        return athlet
+
+    def _get_licensed_athlet(self):
+        try:
+            athlet = models.Athlet.objects.get(
+                lizenznummer=self._data["lizenznr"])
+        except ObjectDoesNotExist:
+            return None
+        print "Got Athlet (with license)"
+        self._verify_athlet(athlet)
+        return athlet
+
+    def _get_base_athlet(self):
+        try:
+            base_athlete = models.BaseAthlete.objects.get(
+                license=self._data["lizenznr"])
+        except ObjectDoesNotExist:
+            raise ProcessingError("BaseAthlete: license %d not found" %
+                                  self._data["lizenznr"])
+        print "Got BaseAthlete"
+        self._verify_base_athlete(base_athlete)
+        self._check_license_paid(base_athlete)
+        return base_athlet
+
+    def _verify_athlet(self, athlet):
+        mismatch_items = []
+        if athlet.vorname.lower() != self._data["vorname"].lower():
+            mismatch_items.append("firstname: %s != %s" % (
+                repr(athlet.vorname),  repr(self._data["vorname"])))
+        if athlet.name.lower() != self._data["name"].lower():
+            mismatch_items.append("lastname: %s != %s" % (
+                repr(athlet.name), repr(self._data["name"])))
+        if len(mismatch_items) > 0:
+            raise ProcessingError(
+                "athlet field mismatch (%s)" % ", ".join(mismatch_items))
+
+    def _verify_base_athlete(self, base_athlete):
+        mismatch_items = []
+        if base_athlete.firstname.lower() != self._data["vorname"].lower():
+            mismatch_items.append("firstname: %s != %s" % (
+                repr(base_athlete.firstname), repr(self._data["vorname"])))
+        if base_athlete.lastname.lower() != self._data["name"].lower():
+            mismatch_items.append("lastname: %s != %s" % (
+                repr(base_athlete.lastname), repr(self._data["name"])))
+        if len(mismatch_items) > 0:
+            raise ProcessingError(
+                "base_athlet field mismatch (%s)" % ", ".join(mismatch_items))
+
+    def _check_license_paid(self, base_athlete):
+        if base_athlete.license_paid == "n":
+            print "base_athlete: license not paid!"
+            if self._data["bemerkung"] != "":
+                self._data["bemerkung"] += "; "
+            self._data["bemerkung"] += "license not paid"
 
     def _get_or_create_anmeldung(self):
         arguments = dict(
@@ -258,31 +269,49 @@ class CSV_Processor(object):
         'Verein', 'Lizenznr.', 'Name', 'Vorname', 'Jahrgang', 'Mann/Frau',
         'Kategorie', 'Bemerkung', 'Startnummer', 'Gruppe']
 
-    def get_headings(self, reader):
-        def trim_heading(heading):
-            return heading.lower().replace(".", "").replace("/", "_")
-        headings = None
-        while True:
-            row = reader.next()
-            if row == self._EXPECTED_HEADINGS:
-                return map(trim_heading, row)
-        raise ValueError("headings not found")
-
     def process(self, filename):
         def utf8_encoder(value):
             return unicode(value, encoding="utf-8")
         with open(filename, 'rb') as csvfile:
             dialect = csv.Sniffer().sniff(csvfile.read(1024))
             csvfile.seek(0)
-            reader = csv.reader(csvfile, dialect)
-            headings = self.get_headings(reader)
-            #print "headings: %s" % headings
-            for row in reader:
-                #print ",".join(row)
-                fields = map(utf8_encoder, row)
-                #print repr(fields)
-                subscription = Subscription(dict(zip(headings, map(unicode.strip, fields))))
-                subscription.subscribe()
+            reader = csv.reader(csvfile, dialect=dialect)
+            out_filename = filename + ".out"
+            with open(out_filename, 'wb+') as csv_outfile:
+                headings = self.get_headings(reader, csv_outfile)
+                self._writer = csv.DictWriter(csv_outfile, fieldnames=headings, dialect=dialect)
+                #print "headings: %s" % headings
+                print "processing..."
+                try:
+                    for row in reader:
+                        print ",".join(row)
+                        fields = map(utf8_encoder, row)
+                        #print repr(fields)
+                        subscription = Subscription(
+                            dict(zip(headings, map(unicode.strip, fields))))
+                        subscription.subscribe()
+                        #import pdb; pdb.set_trace()
+                        d = dict()
+                        for k, v in subscription.data.iteritems():
+                            if type(v) == unicode:
+                                d[k] = v.encode("utf-8")
+                            else:
+                                d[k] = v
+                        self._writer.writerow(d)
+                except ProcessingError, e:
+                    print ",".join(row)
+                    print e
+
+    def get_headings(self, reader, outfile):
+        def trim_heading(heading):
+            return heading.lower().replace(".", "").replace("/", "_")
+        headings = None
+        while True:
+            row = reader.next()
+            outfile.write(",".join(row) + "\n")
+            if row == self._EXPECTED_HEADINGS:
+                return map(trim_heading, row)
+        raise ValueError("headings not found")
 
 
 if __name__ == "__main__":
