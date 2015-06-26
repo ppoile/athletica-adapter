@@ -61,6 +61,7 @@ class Subscription(object):
     }
 
     def __init__(self, data):
+        #print "data: %s" % data
         self._data = data
 
     def subscribe(self):
@@ -82,15 +83,27 @@ class Subscription(object):
             return models.Verein.objects.get(name=name)
         except ObjectDoesNotExist:
             print "verein '%s' not found." % name
-            import pdb; pdb.set_trace()
+            #import pdb; pdb.set_trace()
             raise
 
     def _get_or_create_athlet(self):
-        lizenz = self._data["lizenznr"]
-        if lizenz != "":
-            return self._get_or_create_licensed_athlet()
-        else:
-            return self._get_or_create_unlicensed_athlet()
+        if self._data["lizenznr"] == "":
+            if not self._check_and_update_license_with_unlicensed_athlet():
+                return self._get_or_create_unlicensed_athlet()
+        return self._get_or_create_licensed_athlet()
+
+    def _check_and_update_license_with_unlicensed_athlet(self):
+        try:
+            base_athlete = models.BaseAthlete.objects.get(
+                firstname=self._data["vorname"],
+                lastname=self._data["name"],
+                birth_date__year=self._data["jahrgang"])
+            print "Hey, got BaseAthlete (without license): license: %d" % \
+base_athlete.license
+            self._data["lizenznr"] = base_athlete.license
+            return True
+        except ObjectDoesNotExist:
+            return False
 
     def _get_or_create_licensed_athlet(self):
         lizenz = self._data["lizenznr"]
@@ -141,6 +154,9 @@ class Subscription(object):
 
     def _verify_base_athlete(self, base_athlete):
         retval = True
+        if base_athlete.license_paid == "n":
+            print "base_athlete: license not paid!"
+            #retval = False
         if base_athlete.firstname.lower() != self._data["vorname"].lower():
             print "base_athlete.firstname: %s != %s" % (
                 repr(base_athlete.firstname), repr(self._data["vorname"]))
@@ -185,7 +201,6 @@ class Subscription(object):
             startnummer = self._data["startnummer"]
             if startnummer != "":
                 arguments["startnummer"] = startnummer
-            #import pdb; pdb.set_trace()
             anmeldung = models.Anmeldung.objects.create(**arguments)
             print "Anmeldung created"
             return anmeldung
@@ -263,10 +278,10 @@ class CSV_Processor(object):
             headings = self.get_headings(reader)
             #print "headings: %s" % headings
             for row in reader:
-                #print repr(",".join(row))
+                #print ",".join(row)
                 fields = map(utf8_encoder, row)
                 #print repr(fields)
-                subscription = Subscription(dict(zip(headings, fields)))
+                subscription = Subscription(dict(zip(headings, map(unicode.strip, fields))))
                 subscription.subscribe()
 
 
