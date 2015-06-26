@@ -63,7 +63,6 @@ class Subscription(object):
     }
 
     def __init__(self, data):
-        #print "data: %s" % data
         self._data = data
 
     @property
@@ -272,6 +271,14 @@ class CSV_Processor(object):
     def process(self, filename):
         def utf8_encoder(value):
             return unicode(value, encoding="utf-8")
+        def translate_unicode_to_str(d):
+            d2 = dict()
+            for k, v in d.iteritems():
+                if isinstance(v, unicode):
+                    d2[k] = v.encode("utf-8")
+                else:
+                    d2[k] = v
+            return d2
         with open(filename, 'rb') as csvfile:
             dialect = csv.Sniffer().sniff(csvfile.read(1024))
             csvfile.seek(0)
@@ -279,29 +286,21 @@ class CSV_Processor(object):
             out_filename = filename + ".out"
             with open(out_filename, 'wb+') as csv_outfile:
                 headings = self.get_headings(reader, csv_outfile)
-                self._writer = csv.DictWriter(csv_outfile, fieldnames=headings, dialect=dialect)
-                #print "headings: %s" % headings
+                dialect.lineterminator = "\n"
+                writer = csv.DictWriter(csv_outfile, fieldnames=headings, dialect=dialect)
                 print "processing..."
                 try:
                     for row in reader:
                         print ",".join(row)
                         fields = map(utf8_encoder, row)
-                        #print repr(fields)
                         subscription = Subscription(
                             dict(zip(headings, map(unicode.strip, fields))))
                         subscription.subscribe()
-                        #import pdb; pdb.set_trace()
-                        d = dict()
-                        for k, v in subscription.data.iteritems():
-                            if type(v) == unicode:
-                                d[k] = v.encode("utf-8")
-                            else:
-                                d[k] = v
-                        self._writer.writerow(d)
+                        writer.writerow(translate_unicode_to_str(
+                            subscription.data))
                 except ProcessingError, e:
                     print ",".join(row)
                     print e
-
     def get_headings(self, reader, outfile):
         def trim_heading(heading):
             return heading.lower().replace(".", "").replace("/", "_")
