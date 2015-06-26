@@ -84,6 +84,7 @@ class Subscription(object):
     def _get_verein(self):
         verein = self._data["verein"]
         verein = self._VEREIN_MAPPING.get(verein, verein)
+        self._data["verein"] = verein
         try:
             return models.Verein.objects.get(name=verein)
         except ObjectDoesNotExist, e:
