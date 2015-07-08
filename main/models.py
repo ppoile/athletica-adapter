@@ -73,6 +73,9 @@ class Athlet(models.Model):
     athleticagen = models.CharField(db_column='Athleticagen', max_length=1, default="n")
     bezahlt = models.CharField(db_column='Bezahlt', max_length=1, default="n")
     xregion = models.IntegerField(db_column='xRegion', default=0)
+    LIZENZTYP_NORMAL_LIZENZ = 1
+    LIZENZTYP_TAGESLIZENZ = 2
+    LIZENZTYP_NO_LIZENZ = 3
     lizenztyp = models.IntegerField(db_column='Lizenztyp', default=3)
     manuell = models.IntegerField(db_column='Manuell', default=0)
     adresse = models.CharField(db_column='Adresse', max_length=50, blank=True)  # Field name made lowercase.

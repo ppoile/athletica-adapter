@@ -139,6 +139,7 @@ base_athlet.license
             jahrgang=base_athlet.birth_date.year,
             geschlecht=base_athlet.sex,
             lizenznummer=base_athlet.license,
+            lizenztyp=models.Athlet.LIZENZTYP_NORMAL_LIZENZ,
             verein=self._verein)
         print "Athlet created (from BaseAthlete)"
         return athlet
