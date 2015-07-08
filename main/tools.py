@@ -62,8 +62,9 @@ class Subscription(object):
         "M": "m",
     }
 
-    def __init__(self, data):
+    def __init__(self, data, verbose=False):
         self._data = data
+        self._verbose = verbose
 
     @property
     def data(self):
@@ -102,7 +103,8 @@ class Subscription(object):
                 firstname=self._data["vorname"],
                 lastname=self._data["name"],
                 birth_date__year=self._data["jahrgang"])
-            print "Hey, got BaseAthlete (without license): license: %d" % \
+            if self._verbose:
+                print "Hey, got BaseAthlete (without license): license: %d" % \
 base_athlet.license
             self._data["lizenznr"] = base_athlet.license
             return True
@@ -120,11 +122,13 @@ base_athlet.license
 
         try:
             athlet = models.Athlet.objects.get(**arguments)
-            print "got Athlet (without license)"
+            if self._verbose:
+                print "got Athlet (without license)"
             return athlet
         except ObjectDoesNotExist:
             athlet = models.Athlet.objects.create(**arguments)
-            print "Athlet created (without license)"
+            if self._verbose:
+                print "Athlet created (without license)"
             return athlet
 
     def _get_or_create_licensed_athlet(self):
@@ -141,7 +145,8 @@ base_athlet.license
             lizenznummer=base_athlet.license,
             lizenztyp=models.Athlet.LIZENZTYP_NORMAL_LIZENZ,
             verein=self._verein)
-        print "Athlet created (from BaseAthlete)"
+        if self._verbose:
+            print "Athlet created (from BaseAthlete)"
         return athlet
 
     def _get_licensed_athlet(self):
@@ -150,7 +155,8 @@ base_athlet.license
                 lizenznummer=self._data["lizenznr"])
         except ObjectDoesNotExist:
             return None
-        print "Got Athlet (with license)"
+        if self._verbose:
+            print "Got Athlet (with license)"
         self._verify_athlet(athlet)
         return athlet
 
@@ -159,9 +165,10 @@ base_athlet.license
             base_athlet = models.BaseAthlete.objects.get(
                 license=self._data["lizenznr"])
         except ObjectDoesNotExist:
-            raise ProcessingError("BaseAthlete: license %d not found" %
+            raise ProcessingError("BaseAthlete: license %s not found" %
                                   self._data["lizenznr"])
-        print "Got BaseAthlete"
+        if self._verbose:
+            print "Got BaseAthlete"
         self._verify_base_athlet(base_athlet)
         self._check_license_paid(base_athlet)
         return base_athlet
@@ -193,7 +200,8 @@ base_athlet.license
     def _check_license_paid(self, base_athlet):
         if base_athlet.license_paid == "y":
             return
-        print "base_athlet: license not paid!"
+        if self._verbose:
+            print "base_athlet: license not paid!"
         if self._data["bemerkung"] != "":
             self._data["bemerkung"] += " "
         self._data["bemerkung"] += "(license not paid)"
@@ -204,7 +212,8 @@ base_athlet.license
             meeting=self._meeting)
         try:
             anmeldung = self._meeting.anmeldungen.get(**arguments)
-            print "got Anmeldung"
+            if self._verbose:
+                print "got Anmeldung"
             self._update_anmeldung(anmeldung)
             return anmeldung
         except ObjectDoesNotExist:
@@ -215,7 +224,8 @@ base_athlet.license
             if startnummer != "":
                 arguments["startnummer"] = startnummer
             anmeldung = models.Anmeldung.objects.create(**arguments)
-            print "Anmeldung created"
+            if self._verbose:
+                print "Anmeldung created"
             return anmeldung
 
     def _update_anmeldung(self, anmeldung):
@@ -247,10 +257,12 @@ base_athlet.license
                              anmeldung=self._anmeldung)
             try:
                 start = models.Start.objects.get(**arguments)
-                print "got Start"
+                if self._verbose:
+                    print "got Start"
             except ObjectDoesNotExist:
                 start = models.Start.objects.create(**arguments)
-                print "Start created"
+                if self._verbose:
+                    print "Start created"
             starts.append(start)
         return starts
 
@@ -259,6 +271,9 @@ class CSV_Processor(object):
     _EXPECTED_HEADINGS = [
         'Verein', 'Lizenznr.', 'Name', 'Vorname', 'Jahrgang', 'Mann/Frau',
         'Kategorie', 'Bemerkung', 'Startnummer', 'Gruppe']
+
+    def __init__(self, verbose):
+        self._verbose = verbose
 
     def process(self, filename):
         def utf8_encoder(value):
@@ -280,19 +295,22 @@ class CSV_Processor(object):
                 headings = self.get_headings(reader, csv_outfile)
                 dialect.lineterminator = "\n"
                 writer = csv.DictWriter(csv_outfile, fieldnames=headings, dialect=dialect)
-                print "processing..."
+                print "processing '%s'..." %  filename
                 try:
                     for row in reader:
-                        print ",".join(row)
+                        if self._verbose:
+                            print ",".join(row)
                         fields = map(utf8_encoder, row)
                         subscription = Subscription(
-                            dict(zip(headings, map(unicode.strip, fields))))
+                            dict(zip(headings, map(unicode.strip, fields))),
+                            verbose=self._verbose)
                         subscription.subscribe()
                         writer.writerow(translate_unicode_to_str(
                             subscription.data))
                 except ProcessingError, e:
                     print ",".join(row)
                     print e
+                    sys.exit(1)
     def get_headings(self, reader, outfile):
         def trim_heading(heading):
             return heading.lower().replace(".", "").replace("/", "_")
@@ -311,9 +329,12 @@ if __name__ == "__main__":
 
     import argparse
     parser = argparse.ArgumentParser(description='Process subscription.')
-    parser.add_argument("files", metavar="<csv-file>", nargs="+", help="file to be parsed")
+    parser.add_argument("files", metavar="<csv-file>", nargs="+",
+                        help="file to be parsed")
     parser.add_argument("--delete-objects", "-d", action="store_true",
                         help="delete DB objects beforehand")
+    parser.add_argument("--silent", "-s", action="store_true",
+                        help="dont be verbose")
     arguments = parser.parse_args()
 
     if arguments.delete_objects:
@@ -321,6 +342,6 @@ if __name__ == "__main__":
         models.Anmeldung.objects.all().delete()
         models.Start.objects.all().delete()
 
-    processor = CSV_Processor()
+    processor = CSV_Processor(verbose=not arguments.silent)
     for filename in arguments.files:
         processor.process(filename)
