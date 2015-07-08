@@ -98,13 +98,13 @@ class Subscription(object):
 
     def _check_and_update_license_with_unlicensed_athlet(self):
         try:
-            base_athlete = models.BaseAthlete.objects.get(
+            base_athlet = models.BaseAthlete.objects.get(
                 firstname=self._data["vorname"],
                 lastname=self._data["name"],
                 birth_date__year=self._data["jahrgang"])
             print "Hey, got BaseAthlete (without license): license: %d" % \
-base_athlete.license
-            self._data["lizenznr"] = base_athlete.license
+base_athlet.license
+            self._data["lizenznr"] = base_athlet.license
             return True
         except ObjectDoesNotExist:
             return False
@@ -128,17 +128,17 @@ base_athlete.license
             return athlet
 
     def _get_or_create_licensed_athlet(self):
+        base_athlet = self._get_base_athlet()
         athlet = self._get_licensed_athlet()
         if athlet is not None:
             return athlet
 
-        base_athlet = self._get_base_athlet()
         athlet = models.Athlet.objects.create(
-            vorname=base_athlete.firstname,
-            name=base_athlete.lastname,
-            jahrgang=base_athlete.birth_date.year,
-            geschlecht=base_athlete.sex,
-            lizenznummer=base_athlete.license,
+            vorname=base_athlet.firstname,
+            name=base_athlet.lastname,
+            jahrgang=base_athlet.birth_date.year,
+            geschlecht=base_athlet.sex,
+            lizenznummer=base_athlet.license,
             verein=self._verein)
         print "Athlet created (from BaseAthlete)"
         return athlet
@@ -155,14 +155,14 @@ base_athlete.license
 
     def _get_base_athlet(self):
         try:
-            base_athlete = models.BaseAthlete.objects.get(
+            base_athlet = models.BaseAthlete.objects.get(
                 license=self._data["lizenznr"])
         except ObjectDoesNotExist:
             raise ProcessingError("BaseAthlete: license %d not found" %
                                   self._data["lizenznr"])
         print "Got BaseAthlete"
-        self._verify_base_athlete(base_athlete)
-        self._check_license_paid(base_athlete)
+        self._verify_base_athlet(base_athlet)
+        self._check_license_paid(base_athlet)
         return base_athlet
 
     def _verify_athlet(self, athlet):
@@ -177,24 +177,25 @@ base_athlete.license
             raise ProcessingError(
                 "athlet field mismatch (%s)" % ", ".join(mismatch_items))
 
-    def _verify_base_athlete(self, base_athlete):
+    def _verify_base_athlet(self, base_athlet):
         mismatch_items = []
-        if base_athlete.firstname.lower() != self._data["vorname"].lower():
+        if base_athlet.firstname.lower() != self._data["vorname"].lower():
             mismatch_items.append("firstname: %s != %s" % (
-                repr(base_athlete.firstname), repr(self._data["vorname"])))
-        if base_athlete.lastname.lower() != self._data["name"].lower():
+                repr(base_athlet.firstname), repr(self._data["vorname"])))
+        if base_athlet.lastname.lower() != self._data["name"].lower():
             mismatch_items.append("lastname: %s != %s" % (
-                repr(base_athlete.lastname), repr(self._data["name"])))
+                repr(base_athlet.lastname), repr(self._data["name"])))
         if len(mismatch_items) > 0:
             raise ProcessingError(
                 "base_athlet field mismatch (%s)" % ", ".join(mismatch_items))
 
-    def _check_license_paid(self, base_athlete):
-        if base_athlete.license_paid == "n":
-            print "base_athlete: license not paid!"
-            if self._data["bemerkung"] != "":
-                self._data["bemerkung"] += "; "
-            self._data["bemerkung"] += "license not paid"
+    def _check_license_paid(self, base_athlet):
+        if base_athlet.license_paid == "y":
+            return
+        print "base_athlet: license not paid!"
+        if self._data["bemerkung"] != "":
+            self._data["bemerkung"] += " "
+        self._data["bemerkung"] += "(license not paid)"
 
     def _get_or_create_anmeldung(self):
         arguments = dict(
@@ -318,15 +319,18 @@ if __name__ == "__main__":
     import django
     django.setup()
 
-    if False: #True:
+    import argparse
+    parser = argparse.ArgumentParser(description='Process subscription.')
+    parser.add_argument("files", metavar="<csv-file>", nargs="+", help="file to be parsed")
+    parser.add_argument("--delete-objects", "-d", action="store_true",
+                        help="delete DB objects beforehand")
+    arguments = parser.parse_args()
+
+    if arguments.delete_objects:
         models.Athlet.objects.all().delete()
         models.Anmeldung.objects.all().delete()
         models.Start.objects.all().delete()
 
-    import argparse
-    parser = argparse.ArgumentParser(description='Process subscription.')
-    parser.add_argument("files", metavar="<csv-file>", nargs="+", help="file to be parsed")
-    arguments = parser.parse_args()
     processor = CSV_Processor()
     for filename in arguments.files:
         processor.process(filename)
