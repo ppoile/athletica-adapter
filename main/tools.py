@@ -218,17 +218,6 @@ base_athlet.license
             print "Anmeldung created"
             return anmeldung
 
-    def _verify_anmeldung(self, anmeldung):
-        retval = True
-        if anmeldung.athlet != self._athlet:
-            print "anmeldung.athlet: %s != %s" % (anmeldung.athlet, athlet)
-            retval = False
-        if anmeldung.meeting != self._meeting:
-            print "anmeldung.meeting: %s != %s" % (anmeldung.meeting,
-                                                   self._meeting)
-            retval = False
-        return retval
-
     def _update_anmeldung(self, anmeldung):
         if anmeldung.kategorie != self._kategorie:
             print "anmeldung: updating kategorie: '%s' -> '%s'" % (
