@@ -5,7 +5,7 @@
     <h1>Meetings:</h1>
     <ul>
     {% for meeting in meetings %}
-        <li><a href="{% url 'main:meeting-detail' meeting.id %}">{{ meeting.name }} ({{ meeting.datumvon.year }})</a></li>
+        <li><a href="{% url 'main:meeting-detail' meeting.id %}">{{ meeting }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
