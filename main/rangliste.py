@@ -116,14 +116,11 @@ class RanglistenItem(object):
         # acc. to IAAF 200.10
         value = cmp(self._valid_performances(),
                     other._valid_performances())
-        #print "1: cmp(%d, %d) => %d" % (self._valid_performances(),
-        #                                other._valid_performances(), value)
         if value != 0:
             return value
 
         # compare punkte, acc. to IAAF 200.11
         value = cmp(self.punkte, other.punkte)
-        #print "2: cmp(%d, %d) => %d" % (self.punkte, other.punkte, value)
         if value != 0:
             return value
 
@@ -138,7 +135,6 @@ class RanglistenItem(object):
             if tmp < 0:
                 other_wins += 1
         value = cmp(wins, other_wins)
-        #print "3: cmp(%d, %d) => %d" % (wins, other_wins, value)
         if value != 0:
             return value
 
@@ -146,7 +142,6 @@ class RanglistenItem(object):
         punkte = [d.punkte for d in self._disziplinen.values()][:2]
         other_punkte = [d.punkte for d in other._disziplinen.values()][:2]
         value = cmp(punkte, other_punkte)
-        #print "4: cmp(%s, %s) => %d" % (punkte, other_punkte, value)
         return value
 
     def _valid_performances(self):
