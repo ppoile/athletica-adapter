@@ -344,7 +344,7 @@ class Meeting(models.Model):
     >>> stadion = Stadion.objects.create(name="Buchholz")
     >>> #Meeting.objects.create(name="UMM", stadion=stadion)
     >>> stadion.meetings.create(name="UMM")
-    <Meeting: UMM 2015>
+    <Meeting: UMM (2015)>
     """
 
     id = models.AutoField(db_column='xMeeting', primary_key=True)
@@ -378,7 +378,7 @@ class Meeting(models.Model):
     statuschanged = models.CharField(db_column='StatusChanged', max_length=1)
 
     def __str__(self):
-        return "%s %d" % (self.name, self.datumvon.year)
+        return "%s (%d)" % (self.name, self.datumvon.year)
 
     class Meta:
         db_table = 'meeting'
