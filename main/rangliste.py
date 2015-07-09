@@ -53,7 +53,7 @@ class Rangliste(object):
         items = sorted(self._items.values(), reverse=True)
         rangliste = []
         for item in items:
-            if item._num_valid_disziplinen() == -1:
+            if not item._valid_performances():
                 rang = ""
             elif len(rangliste) > 0 and item == rangliste[-1][1]:
                 rang = rangliste[-1][0]
@@ -64,6 +64,10 @@ class Rangliste(object):
 
 
 class RanglistenItem(object):
+    LEISTUNG_NA = -1
+    LEISTUNG_AUFG = -2
+    LEISTUNG_DIS = -3
+
     def __init__(self, name, vorname, jahrgang, verein, land, bem):
         self._name = "%s %s" % (name, vorname)
         self._jahrgang = "%02d" % (jahrgang % 100)
@@ -109,11 +113,10 @@ class RanglistenItem(object):
         return ", ".join([str(d) for d in sorted(self._disziplinen.values())])
 
     def __cmp__(self, other):
-        # compare number of completed disziplines
-        value = cmp(self._num_valid_disziplinen(),
-                    other._num_valid_disziplinen())
-        #print "1: cmp(%d, %d) => %d" % (self._num_valid_disziplinen(),
-        #                                other._num_valid_disziplinen(), value)
+        value = cmp(self._valid_performances(),
+                    other._valid_performances())
+        #print "1: cmp(%d, %d) => %d" % (self._valid_performances(),
+        #                                other._valid_performances(), value)
         if value != 0:
             return value
 
@@ -145,15 +148,21 @@ class RanglistenItem(object):
         #print "4: cmp(%s, %s) => %d" % (punkte, other_punkte, value)
         return value
 
-    def _num_valid_disziplinen(self):
+    def _valid_performances(self):
+        invalid_performances = [self.LEISTUNG_NA, self.LEISTUNG_DIS,
+                                self.LEISTUNG_AUFG]
         for disziplin in self._disziplinen.values():
-            if disziplin.leistung in [-1, -3]:
-                return -1
-        return 1
+            if disziplin.leistung in invalid_performances:
+                return False
+        return True
 
 
 class DisziplinBase(object):
-    _LEISTUNG_MAPPING = { -1: "n.a.", -2: "aufg.", -3: "dis." }
+    LEISTUNG_MAPPING = {
+        RanglistenItem.LEISTUNG_NA: "n.a.",
+        RanglistenItem.LEISTUNG_AUFG: "aufg.",
+        RanglistenItem.LEISTUNG_DIS: "dis.",
+    }
 
     def __init__(self, name, reihenfolge, leistung, wind, punkte,
                  last_disziplin):
@@ -197,8 +206,8 @@ class DisziplinBase(object):
 
     def __str__(self):
         text = "%s" % self.name
-        if self.leistung in self._LEISTUNG_MAPPING:
-            text += " (%s, %s)" % (self.leistung, self._LEISTUNG_MAPPING[self.leistung])
+        if self.leistung in self.LEISTUNG_MAPPING:
+            text += " (%s, %s)" % (self.leistung, self.LEISTUNG_MAPPING[self.leistung])
             assert self.punkte == 0
             return text
         text += " (%s" % self._get_leistung_as_string()
