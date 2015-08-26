@@ -13,7 +13,7 @@ from main.stadion import StadionUpdate
 from main.stadion import voteStadion
 from main.wettkampf import WettkampfDetail
 from main.wettkampf import WettkampfIndex
-from main.zeitplan import Zeitplan
+from main.zeitplan import MeetingZeitplan
 
 
 def index(request):
@@ -39,7 +39,7 @@ urlpatterns = patterns(
     url(r'^meeting/(?P<meeting_id>\d+)/wettkampf/(?P<wettkampf_info>.+?)/(?P<kategorie_name>.+?)/rangliste-odt/$', views.rangliste_odt, name='rangliste-odt'),
     url(r'^meeting/(?P<meeting_id>\d+)/wettkampf/(?P<wettkampf_info>.+?)/(?P<kategorie_name>.+?)/$', WettkampfDetail.as_view(), name='wettkampf-detail'),
     url(r'^meeting/(?P<meeting_id>\d+)/wettkampf/(?P<wettkampf_id>\d+?)/serien-einteilung/$', SerienEinteilung.as_view(), name='serien-einteilung'),
-    url(r'^meeting/(?P<meeting_id>\d+)/zeitplan/$', Zeitplan.as_view(), name='zeitplan'),
+    url(r'^meeting/(?P<meeting_id>\d+)/zeitplan/$', MeetingZeitplan.as_view(), name='zeitplan'),
     url(r'^stadion/$', StadionIndex.as_view(), name='stadion-index'),
     url(r'^stadion/add/$', StadionCreate.as_view(), name='stadion-add'),
     url(r'^stadion/(?P<pk>\d+)/$', StadionDetail.as_view(), name='stadion-detail'),

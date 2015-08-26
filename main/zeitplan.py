@@ -7,7 +7,7 @@ from operator import attrgetter
 import re
 
 
-class Zeitplan(generic.View):
+class MeetingZeitplan(generic.View):
     def get(self, request, meeting_id):
         meeting = get_object_or_404(Meeting, pk=meeting_id)
         meeting_name="%s (%d)" % (meeting.name, meeting.datumvon.year)
