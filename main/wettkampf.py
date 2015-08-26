@@ -37,9 +37,11 @@ class WettkampfDetail(generic.View):
                 wettkampf_name = match.group(0)
         else:
             wettkampf_name = "<no wettkampf>"
+        gruppen = wettkaempfe[0].runden.all().values_list("gruppe", flat=True)
         context = dict(meeting_id=meeting_id, wettkampf_info=wettkampf_info,
                        kategorie_name=kategorie_name,
-                       wettkampf_name=wettkampf_name, wettkaempfe=wettkaempfe)
+                       wettkampf_name=wettkampf_name, wettkaempfe=wettkaempfe,
+                       gruppen=gruppen)
         return render(request, "main/wettkampf-detail.html", context)
 
 
