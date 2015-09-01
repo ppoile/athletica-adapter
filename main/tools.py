@@ -96,6 +96,7 @@ class Subscription(object):
         try:
             return models.Verein.objects.get(name=verein)
         except ObjectDoesNotExist, e:
+            import pdb; pdb.set_trace()
             raise ProcessingError("verein '%s' not found" % verein)
 
     def _get_or_create_athlet(self):
@@ -318,7 +319,7 @@ class CSV_Processor(object):
                             subscription.data))
                 except ProcessingError, e:
                     print ",".join(row)
-                    print e
+                    print unicode(e)
                     sys.exit(1)
     def get_headings(self, reader, outfile):
         def trim_heading(heading):
