@@ -105,11 +105,13 @@ class Subscription(object):
         return self._get_or_create_licensed_athlet()
 
     def _check_and_update_license_with_unlicensed_athlet(self):
+        arguments = dict(
+            firstname=self._data["vorname"],
+            lastname=self._data["name"])
+        if self._data["jahrgang"] != "":
+            arguments.update(birth_date__year=self._data["jahrgang"])
         try:
-            base_athlet = models.BaseAthlete.objects.get(
-                firstname=self._data["vorname"],
-                lastname=self._data["name"],
-                birth_date__year=self._data["jahrgang"])
+            base_athlet = models.BaseAthlete.objects.get(**arguments)
             if self._verbose:
                 print "Hey, got BaseAthlete (without license): license: %d" % \
 base_athlet.license
