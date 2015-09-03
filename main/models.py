@@ -69,7 +69,7 @@ class Athlet(models.Model):
     lizenznummer = models.IntegerField(db_column='Lizenznummer', default=0)
     geschlecht = models.CharField(db_column='Geschlecht', max_length=1, choices=(('m', 'Männlich'), ('w', 'Weiblich')))
     land = models.CharField(db_column='Land', max_length=3, default="-")
-    geburtstag = models.DateField(db_column='Geburtstag', blank=True, null=True)
+    geburtstag = models.DateField(db_column='Geburtstag', blank=True, default=datetime.date(1900, 1, 1))
     athleticagen = models.CharField(db_column='Athleticagen', max_length=1, default="n")
     bezahlt = models.CharField(db_column='Bezahlt', max_length=1, default="n")
     xregion = models.IntegerField(db_column='xRegion', default=0)
@@ -619,7 +619,7 @@ class Start(models.Model):
     erstserie = models.CharField(db_column='Erstserie', max_length=1, default="n")
     wettkampf = models.ForeignKey("Wettkampf", db_column='xWettkampf', related_name="starts")
     anmeldung = models.ForeignKey("Anmeldung", db_column='xAnmeldung', related_name="starts")
-    staffel = models.ForeignKey("Staffel", db_column='xStaffel', blank=True, null=True)
+    staffel = models.IntegerField("Staffel", db_column='xStaffel', blank=True, default=0)
     baseeffort = models.CharField(db_column='BaseEffort', max_length=1, default="y")
     vorjahrleistung = models.IntegerField(db_column='VorjahrLeistung', blank=True, null=True, default=0)
     gruppe = models.CharField(db_column='Gruppe', max_length=2, blank=True)  # Field name made lowercase.
