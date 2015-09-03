@@ -19,15 +19,20 @@ class ProcessingError(Exception):
 
 
 def getKategorie(event):
-    kategorie = event.rstrip("*")
-    if len(kategorie) > 3:
-        kategorie = kategorie[:3] + " " + kategorie[3:]
+    if event == "WOM-10K":
+        kategorie = "WOM"
+    else:
+        kategorie = event.rstrip("*")
+        if len(kategorie) > 3:
+            kategorie = kategorie[:3] + " " + kategorie[3:]
     try:
         return models.Kategorie.objects.get(name=kategorie)
     except ObjectDoesNotExist:
         raise ProcessingError("kategorie '%s' not found." % kategorie)
 
 def isLicensedEvent(event):
+    if event == "WOM-10K":
+        return True
     licensed_event = False
     if event.endswith("*"):
         if not (event.startswith("U12") or event.startswith("U14")):
