@@ -55,11 +55,13 @@ class Subscription(object):
     _VEREIN_MAPPING = {
         "TV Neue Sektion Winterthur": "TV NS Winterthur",
         "LCR": "LC Regensdorf",
-        "TV Kloten - LA": "TV Kloten LA",
+        "TV Kloten-LA": "TV Kloten LA",
         "ATT Adliswil": "Adliswil Track Team",
-        "LCZ": u"LC Zürich",
+        "LCZ": u"Leichtathletik Club Zürich",
+        u"LC Zürich": u"Leichtathletik Club Zürich",
         "Satus Oerlikon": u"SATUS Zürich-Oerlikon",
-        u"LG Küsnacht - Erlenbach": u"LG Küsnacht-Erlenbach",
+        u"LG Küsnacht - Erlenbach": u"LGKE Küsnacht-Erlenbach",
+        "BTV Aarau": "BTV Aarau LA",
     }
 
     _GESCHLECHT_MAPPING = {
