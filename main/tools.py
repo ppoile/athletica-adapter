@@ -80,7 +80,7 @@ class Subscription(object):
     def subscribe(self):
         self._meeting = models.Meeting.objects.get(
             name="Uster Mehrkampf Meeting",
-            datumvon=datetime.date(2015, 6, 22))
+            datumvon=datetime.date(2015, 9, 26))
         self._verein = self._get_verein()
         self._athlet = self._get_or_create_athlet()
         self._kategorie = getKategorie(self._data["kategorie"])
