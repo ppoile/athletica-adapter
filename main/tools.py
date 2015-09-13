@@ -91,11 +91,13 @@ class Subscription(object):
         self._get_or_create_starts()
 
     def _get_verein(self):
-        verein = self._data["verein"]
-        verein = self._VEREIN_MAPPING.get(verein, verein)
-        self._data["verein"] = verein
+        verein_name = self._data["verein"]
+        verein_name = self._VEREIN_MAPPING.get(verein_name, verein_name)
+        self._data["verein"] = verein_name
         try:
-            return models.Verein.objects.get(name=verein)
+            verein = models.Verein.objects.get(name=verein_name)
+            self._data["verein"] = verein.sortierwert
+            return verein
         except ObjectDoesNotExist, e:
             import pdb; pdb.set_trace()
             raise ProcessingError("verein '%s' not found" % verein)
