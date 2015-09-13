@@ -42,12 +42,13 @@ def isLicensedEvent(event):
 def getWettkaempfe(meeting, event):
     kategorien_wettkaempfe = meeting.wettkaempfe.filter(
         kategorie=getKategorie(event))
-    if isLicensedEvent(event):
+    if event == "WOM-10K":
+        wettkaempfe = kategorien_wettkaempfe.filter(mehrkampfcode=413)
+    elif isLicensedEvent(event):
         wettkaempfe = kategorien_wettkaempfe.exclude(
-            mehrkampfcode=799)
+            mehrkampfcode__in=[413, 799])
     else:
-        wettkaempfe = kategorien_wettkaempfe.filter(
-            mehrkampfcode=799)
+        wettkaempfe = kategorien_wettkaempfe.filter(mehrkampfcode=799)
     return wettkaempfe
 
 
