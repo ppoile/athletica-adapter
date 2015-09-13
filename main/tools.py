@@ -212,9 +212,10 @@ base_athlet.license
             return
         if self._verbose:
             print "base_athlet: license not paid!"
-        if self._data["bemerkung"] != "":
-            self._data["bemerkung"] += " "
-        self._data["bemerkung"] += "(license not paid)"
+        if not self._data["bemerkung"].endswith("(license not paid)"):
+            if self._data["bemerkung"] != "":
+                self._data["bemerkung"] += " "
+            self._data["bemerkung"] += "(license not paid)"
 
     def _get_or_create_anmeldung(self):
         arguments = dict(
