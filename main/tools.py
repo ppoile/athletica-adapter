@@ -254,13 +254,16 @@ base_athlet.license
         startnummer = self._data["startnummer"]
         if startnummer == "":
             startnummer = 0
+            print "anmeldung: updating startnummer... %s -> %s" % (
+                startnummer, anmeldung.startnummer)
+            self._data["startnummer"] = anmeldung.startnummer
         else:
             startnummer = int(startnummer)
-        if anmeldung.startnummer != startnummer:
-            print "anmeldung: updating startnummer... %s -> %s" % (
-                anmeldung.startnummer, startnummer)
-            anmeldung.startnummer=startnummer
-            anmeldung.save()
+            if anmeldung.startnummer != startnummer:
+                print "anmeldung: updating startnummer... %s -> %s" % (
+                    anmeldung.startnummer, startnummer)
+                anmeldung.startnummer = startnummer
+                anmeldung.save()
 
     def _get_or_create_starts(self):
         starts = []
