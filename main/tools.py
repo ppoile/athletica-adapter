@@ -249,7 +249,7 @@ base_athlet.license
         if anmeldung.gruppe != self._data["gruppe"]:
             print "anmeldung: updating gruppe... '%s' -> '%s'" % (
                 anmeldung.gruppe, self._data["gruppe"])
-            anmeldung.gruppe=self._data["gruppe"]
+            anmeldung.gruppe = self._data["gruppe"]
             anmeldung.save()
         startnummer = self._data["startnummer"]
         if startnummer == "":
