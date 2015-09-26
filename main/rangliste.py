@@ -165,7 +165,7 @@ class DisziplinBase(object):
         self._name = name
         self._reihenfolge = reihenfolge
         self._leistung = leistung
-        if wind not in ["", "----"]:
+        if wind not in ["", "-", "----"]:
             wind = wind.rstrip(" m*")
             wind = wind.replace(",", ".")
             wind = float(wind)
