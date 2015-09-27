@@ -129,11 +129,10 @@ class RanglistenItem(object):
         other_wins = 0
         for disziplin, resultat in self._disziplinen.iteritems():
             try:
-                other_leistung = other._disziplinen[disziplin].leistung
+                other_punkte = other._disziplinen[disziplin].punkte
             except KeyError:
-                other_leistung = 0
-            tmp = cmp(resultat.leistung,
-                      other_leistung)
+                other_punkte = 0
+            tmp = cmp(resultat.punkte, other_punkte)
             if tmp > 0:
                 wins += 1
             if tmp < 0:
