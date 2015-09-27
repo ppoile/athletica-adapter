@@ -232,6 +232,8 @@ class MilliSecondsLeistungDisziplin(DisziplinBase):
 
     @property
     def leistung(self):
+        if self._leistung in self.LEISTUNG_MAPPING:
+            return self._leistung
         seconds = float(self._leistung) / self._leistung_divisor
         rounded_seconds = math.ceil(seconds * 100) / 100
         return rounded_seconds
