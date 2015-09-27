@@ -231,8 +231,14 @@ class DisziplinBase(object):
 class MilliSecondsLeistungDisziplin(DisziplinBase):
     _leistung_divisor = 1000
 
+    @property
+    def leistung(self):
+        seconds = float(self._leistung) / self._leistung_divisor
+        rounded_seconds = math.ceil(seconds * 100) / 100
+        return rounded_seconds
+
     def _get_leistung_as_string(self):
-        hours, rem = divmod(float(self.leistung) / self._leistung_divisor, 3600)
+        hours, rem = divmod(float(self._leistung) / self._leistung_divisor, 3600)
         minutes, seconds = divmod(rem, 60)
         # round to next hundredth of a second
         rounded_seconds = math.ceil(seconds * 100) / 100
