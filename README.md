@@ -11,13 +11,13 @@ Doc
 ---
 
 Model dependencies can be generated as follows:
-> python manage.py graph_models stadion meeting main | dot -T pdf > athletica-models.pdf
+$ python manage.py graph_models stadion meeting main | dot -T pdf > athletica-models.pdf
 
 SQL-Monitoring
 --------------
 
 Enable SQL monitoring as follows:
-> mysql --user root --password
+$ mysql --user root --password
 mysql> SET GLOBAL general_log = "ON";
 Query OK, 0 rows affected (0.00 sec)
 
@@ -32,7 +32,7 @@ mysql> show variables like "general_log%";
 
 mysql>
 
-> sudo tail -f /var/lib/mysql/andi-xubuntu.log
+$ sudo tail -f /var/lib/mysql/andi-xubuntu.log
 
 TODO
 ----
