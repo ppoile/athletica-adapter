@@ -40,3 +40,12 @@ TODO
 The following tasks are to be done:
 - Unittest Rangliste
 - Implement Serieneinteilung ordered by Rangliste
+
+Zeitmessung with Linux
+----------------------
+
+When running the server on linux, zeitmessung needs to be set up as follows:
+$ sudo mkdir -p /mnt/optic2-work
+$ sudo mount -t cifs //192.168.1.112/work /mnt/optic2-work -o username=athletica,password=athletica,uid=www-data,gid=www-data
+
+Under Meeting/Zeitmessung one can now enter path '/mnt/optic2-work'.
