@@ -243,7 +243,7 @@ class MilliSecondsLeistungDisziplin(DisziplinBase):
         minutes, seconds = divmod(rem, 60)
         # round to next hundredth of a second
         rounded_seconds = math.ceil(seconds * 100) / 100
-        timestring = "%d:%d:%.2f" % (hours, minutes, rounded_seconds)
+        timestring = "%d:%02d:%05.2f" % (hours, minutes, rounded_seconds)
         timestring = timestring.lstrip("0:")
         #print "hours=%d, minutes=%d, seconds=%.3f => %s" % (
         #    hours, minutes, seconds, timestring)
