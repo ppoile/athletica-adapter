@@ -144,7 +144,9 @@ class RanglistenItem(object):
         # compare highest punkte, acc. IAAF 200.12(b)
         punkte = [d.punkte for d in self._disziplinen.values()][:2]
         other_punkte = [d.punkte for d in other._disziplinen.values()][:2]
-        value = cmp(punkte, other_punkte)
+        value = cmp(
+            sorted(punkte, reverse=True),
+            sorted(other_punkte, reverse=True))
         return value
 
     def _valid_performances(self):
