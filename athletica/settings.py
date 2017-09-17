@@ -67,7 +67,7 @@ DATABASES = {
         'NAME': 'athletica',
         'USER': 'athletica',
         'PASSWORD': 'athletica',
-        'HOST': '192.168.2.100',
+        'HOST': '192.168.0.144',
     }
 }
 
