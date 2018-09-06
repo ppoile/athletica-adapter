@@ -1,0 +1,9 @@
+
+Installation
+============
+
+$ sudo apt install virtualenv
+$ sudo apt install default-libmysqlclient-dev
+$ virtualenv env
+$ . env/bin/activate
+$ pip install -r requirements.txt
