@@ -13,6 +13,7 @@ from __future__ import unicode_literals
 import datetime
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.utils import timezone
 
 
 class Anlage(models.Model):
@@ -43,7 +44,7 @@ class Anmeldung(models.Model):
     vereinsinfo = models.CharField(db_column='Vereinsinfo', max_length=150)  # Field name made lowercase.
     athlet = models.ForeignKey("Athlet", db_column='xAthlet', related_name="anmeldungen")
     meeting = models.ForeignKey("Meeting", db_column='xMeeting', related_name="anmeldungen")
-    kategorie = models.ForeignKey("Kategorie", db_column='xKategorie', related_name="-")
+    kategorie = models.ForeignKey("Kategorie", db_column='xKategorie', related_name="+")
     xteam = models.IntegerField(db_column='xTeam', default=0)
     baseeffortmk = models.CharField(db_column='BaseEffortMK', max_length=1, default="n")
     anmeldenr_zlv = models.IntegerField(db_column='Anmeldenr_ZLV', blank=True, null=True)  # Field name made lowercase.
@@ -351,7 +352,7 @@ class Meeting(models.Model):
     name = models.CharField(db_column='Name', max_length=60, null=True)
     ort = models.CharField(db_column='Ort', max_length=20)
     datumvon = models.DateField(db_column='DatumVon',
-                                default=datetime.date.today())
+                                default=timezone.now)
     datumbis = models.DateField(db_column='DatumBis', blank=True, null=True)
     nummer = models.CharField(db_column='Nummer', max_length=20, default="")
     programmmodus = models.IntegerField(
