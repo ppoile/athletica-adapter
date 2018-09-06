@@ -21,6 +21,10 @@ class ProcessingError(Exception):
 def getKategorie(event):
     if event == "WOM-10K":
         kategorie = "WOM"
+    elif event == "U20W-10K":
+        kategorie = "U20 W"
+    elif event == "U18W-10K":
+        kategorie = "U18 W"
     else:
         kategorie = event.rstrip("*")
         if len(kategorie) > 3:
