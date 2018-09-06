@@ -127,7 +127,7 @@ base_athlet.license
             return False
 
     def _get_or_create_unlicensed_athlet(self):
-        geschlecht = self._GESCHLECHT_MAPPING[self._data["mann_frau"].upper()]
+        geschlecht = self._GESCHLECHT_MAPPING[self._data["mann_frau"][0].upper()]
         arguments = dict(
             vorname=self._data["vorname"],
             name=self._data["name"],
