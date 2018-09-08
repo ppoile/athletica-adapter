@@ -102,7 +102,6 @@ class Subscription(object):
         try:
             return models.Verein.objects.get(name=verein)
         except ObjectDoesNotExist, e:
-            import pdb; pdb.set_trace()
             raise ProcessingError("verein '%s' not found" % verein)
 
     def _get_or_create_athlet(self):
