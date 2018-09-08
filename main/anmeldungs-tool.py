@@ -70,6 +70,7 @@ class Subscription(object):
     }
 
     _GESCHLECHT_MAPPING = {
+        "W": "w",
         "F": "w",
         "M": "m",
     }
