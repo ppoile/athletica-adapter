@@ -65,8 +65,13 @@ class Subscription(object):
         "LCZ": u"Leichtathletik Club Zürich",
         u"LC Zürich": u"Leichtathletik Club Zürich",
         "Satus Oerlikon": u"SATUS Zürich-Oerlikon",
-        u"LG Küsnacht - Erlenbach": u"LGKE Küsnacht-Erlenbach",
         "BTV Aarau": "BTV Aarau LA",
+        "LA TV Teufen": "TV Teufen",
+        "LAC TV Unterstrass": "LAC TV Unterstrass Zürich",
+        u"LC Dübendorf": u"Leichtathletik-Club Dübendorf",
+        "STBern Leichtathletik": "STB Leichtathletik",
+        "Turnverein Russikon": "TV Russikon",
+        "Turnverein Thalwil": "TV Thalwil",
     }
 
     _GESCHLECHT_MAPPING = {
