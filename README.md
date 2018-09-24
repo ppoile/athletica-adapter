@@ -49,3 +49,12 @@ $ sudo mkdir -p /mnt/optic2-work
 $ sudo mount -t cifs //192.168.1.112/work /mnt/optic2-work -o username=athletica,password=athletica,uid=www-data,gid=www-data
 
 Under Meeting/Zeitmessung one can now enter path '/mnt/optic2-work'.
+
+Docker
+------
+
+Build and tag a new image:
+$ docker build .
+$ docker tag <image-id> ppoile/athletica-adapter
+
+Now the image can be used with ppoile/docker-athletica (docker-compose)...
