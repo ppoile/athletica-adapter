@@ -33,6 +33,13 @@
   </tbody>
 </table>
 
+<h2>Mannschaftswertung:</h2>
+<ul>
+  {% for verein, punkte in rangliste.get_mannschaftswertung %}
+    <li>{{verein}}: {{ punkte }}</li>
+  {% endfor %}
+</ul>
+
 <p><a href="{% url 'main:rangliste-odt' meeting_id wettkampf_info kategorie_name %}">ODT</a></p>
 <p><a href="{% url 'main:wettkampf-index' meeting_id %}">Back to Wettkämpfe</a></p>
 

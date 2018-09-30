@@ -62,6 +62,29 @@ class Rangliste(object):
             rangliste.append((rang, item))
         return rangliste
 
+    def get_mannschaftswertung(self):
+        verein_punkte_mapping = dict()
+        rangliste = self.get()
+        for rang, start in rangliste:
+            if not verein_punkte_mapping.has_key(start.verein):
+                verein_punkte_mapping[start.verein] = [0, 0]
+            num_starts, punkte = verein_punkte_mapping[start.verein]
+            if num_starts < 4:
+                num_starts += 1
+                punkte += start.punkte
+            verein_punkte_mapping[start.verein] = [num_starts, punkte]
+        punkte_and_verein = dict()
+        for verein, entry in verein_punkte_mapping.iteritems():
+            num_starts, punkte = entry
+            if num_starts >= 4:
+                punkte_and_verein[punkte] = [verein, num_starts]
+        sorted_punkte = sorted(punkte_and_verein.keys(), reverse=True)
+        punkte_and_verein_2 = list()
+        for punkte in sorted_punkte:
+            verein, num_starts = punkte_and_verein[punkte]
+            punkte_and_verein_2.append([verein, punkte])
+        return punkte_and_verein_2
+
 
 class RanglistenItem(object):
     LEISTUNG_NA = -1
