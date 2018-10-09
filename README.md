@@ -62,6 +62,15 @@ Now the image can be used with ppoile/docker-athletica (docker-compose)...
 Bash into running container:
 $ docker-compose exec django bash
 
+Deployment
+----------
+
+$ pip install uwsgi
+$ uwsgi --http :8000 --module athletica.wsgi
+
+It might be necessary to:
+$ sudo apt install libmysqlclient-dev
+
 django-webodt
 -------------
 
