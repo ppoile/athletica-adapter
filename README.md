@@ -58,3 +58,9 @@ $ docker build .
 $ docker tag <image-id> ppoile/athletica-adapter
 
 Now the image can be used with ppoile/docker-athletica (docker-compose)...
+
+django-webodt
+-------------
+
+In order to not get deprecation warnings upon server start upgrade django-webodt as follows:
+$ pip install --upgrade git+https://github.com/dimasciput/django-webodt
