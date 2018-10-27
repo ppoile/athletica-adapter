@@ -67,7 +67,7 @@ DATABASES = {
         'NAME': 'athletica',
         'USER': 'athletica',
         'PASSWORD': 'athletica',
-        'HOST': os.environ.get("DB_HOST", "localhost"),
+        'HOST': os.environ.get("DB_HOST", "127.0.0.1"),
     }
 }
 
