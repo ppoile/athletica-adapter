@@ -8,6 +8,8 @@ services:
         tty: true
         ports:
             - "8000:8000"
+        volumes:
+            - ".:/usr/src/app"
         environment:
             - DB_HOST=db
         restart: always
