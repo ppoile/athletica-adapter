@@ -2,7 +2,7 @@ version: "3.5"
 services:
     django:
         build: .
-        image: ppoile/athletica-adapter:latest
+        image: ppoile/athletica-adapter:0.6
         container_name: athletica-adapter
         stdin_open: true
         tty: true
