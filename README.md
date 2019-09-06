@@ -59,6 +59,9 @@ $ docker tag <image-id> ppoile/athletica-adapter
 
 Now the image can be used with ppoile/docker-athletica (docker-compose)...
 
+Bash into running container:
+$ docker-compose exec django bash
+
 django-webodt
 -------------
 
