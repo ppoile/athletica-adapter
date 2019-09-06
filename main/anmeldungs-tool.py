@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 
-# fix module search path
-import sys
-sys.path[0] = '/home/andi/var/athletica-adapter.git'
-
+import csv
 import datetime
 import os
+import sys
+
+# fix module search path
+root_dir = os.path.normpath(os.path.join(os.path.dirname(__file__), os.pardir))
+sys.path[0] = root_dir
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "athletica.settings")
 
-import csv
 from django.core.exceptions import ObjectDoesNotExist
 from main import models
 import operator
