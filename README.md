@@ -54,8 +54,8 @@ Docker
 ------
 
 Build and tag a new image:
-$ docker build .
-$ docker tag <image-id> ppoile/athletica-adapter
+$ docker-compose build
+$ docker-compose push
 
 Now the image can be used with ppoile/docker-athletica (docker-compose)...
 
