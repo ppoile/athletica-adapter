@@ -1,0 +1,17 @@
+version: "3.5"
+services:
+    django:
+        build: .
+        image: ppoile/athletica-adapter:latest
+        container_name: athletica-adapter
+        stdin_open: true
+        tty: true
+        ports:
+            - "8000:8000"
+        environment:
+            - DB_HOST=db
+        restart: always
+networks:
+    default:
+        external: true
+        name: docker-athletica_default
