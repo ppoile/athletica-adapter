@@ -173,8 +173,7 @@ class RanglistenItem(object):
         return value
 
     def _valid_performances(self):
-        invalid_performances = [self.LEISTUNG_NA, self.LEISTUNG_DIS,
-                                self.LEISTUNG_AUFG]
+        invalid_performances = [self.LEISTUNG_NA, self.LEISTUNG_DIS]
         for disziplin in self._disziplinen.values():
             if disziplin.leistung in invalid_performances:
                 return False
