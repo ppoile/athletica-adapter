@@ -1,4 +1,4 @@
-Django==1.8
+Django==2.2.24
 django-bootstrap3==11.0.0
 django-extensions==1.8.0
 django-inplaceedit==1.4.1
