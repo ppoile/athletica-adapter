@@ -91,9 +91,13 @@ class Subscription(object):
         return self._data
 
     def subscribe(self):
-        self._meeting = models.Meeting.objects.get(
-            name="Uster Mehrkampf Meeting",
-            datumvon=datetime.date(2018, 9, 29))
+        meetings = models.Meeting.objects
+        if meetings.all().count() == 1:
+            self._meeting = meetings.first()
+        else:
+            self._meeting = meetings.get(
+                name="Uster Mehrkampf Meeting",
+                datumvon=datetime.date(2018, 9, 29))
         self._verein = self._get_verein()
         self._athlet = self._get_or_create_athlet()
         self._kategorie = getKategorie(self._data["kategorie"])
