@@ -74,7 +74,6 @@ class Subscription(object):
         "STBern Leichtathletik": "STB Leichtathletik",
         "Turnverein Russikon": "TV Russikon",
         "Turnverein Thalwil": "TV Thalwil",
-        "TV Richterswil": "Turnverein Richterswil",
     }
 
     _GESCHLECHT_MAPPING = {
