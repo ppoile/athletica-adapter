@@ -90,6 +90,7 @@ class RanglistenItem(object):
     LEISTUNG_NA = -1
     LEISTUNG_AUFG = -2
     LEISTUNG_DIS = -3
+    LEISTUNG_NM = -4
 
     def __init__(self, name, vorname, jahrgang, verein, land, bem):
         self._name = "%s %s" % (name, vorname)
@@ -185,6 +186,7 @@ class DisziplinBase(object):
         RanglistenItem.LEISTUNG_NA: "n.a.",
         RanglistenItem.LEISTUNG_AUFG: "aufg.",
         RanglistenItem.LEISTUNG_DIS: "dis.",
+        RanglistenItem.LEISTUNG_DIS: "NM",
     }
 
     def __init__(self, name, reihenfolge, leistung, wind, punkte,
